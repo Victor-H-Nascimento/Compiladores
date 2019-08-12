@@ -26,15 +26,21 @@ public class Funcoes implements EncapsulamentoFuncoes {
      }
      
      
-     
-    //getters e setter
+     //getters e setter
+    public int getI() {
+        return i;
+    }
 
-     
+    
+    public void setI(int i) {
+        this.i = i;
+    }
+
     //metodos abstratos
-     
-     @Override
-    public void TESTE(int x) {
-         System.out.println("Tamanho da PIlha = " + x);
+    @Override
+    public void TESTE() {
+        System.out.println("Pilha = " + this.s);
+        System.out.println("Fila = " + this.i);
     }
      
      

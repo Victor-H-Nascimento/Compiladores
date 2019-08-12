@@ -9,10 +9,11 @@ public class MaquinaVirtual {
         c.START();
         c.RD();
         c.RD();
-        c.DIVI();
-        c.PRN();
         
         
+        //sempre que executar uma linha, atualizar o i com a funcao setI
+        
+        c.TESTE();
     }
     
 }

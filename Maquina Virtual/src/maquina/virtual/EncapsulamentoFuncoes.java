@@ -11,7 +11,7 @@ package maquina.virtual;
  */
 public interface EncapsulamentoFuncoes {
     
-    public abstract void TESTE(int x);
+    public abstract void TESTE();
     
     public abstract void LDC(int k);
     public abstract void LDV(int n);
