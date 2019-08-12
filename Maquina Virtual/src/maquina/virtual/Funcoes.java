@@ -14,13 +14,15 @@ public class Funcoes implements EncapsulamentoFuncoes {
    
     
     //atributos
-    private int s;
+    private int s;//topo da plha
+    private int i;//indice proxima instrucao
     Pilha pilha = new Pilha();
+    Fila fila = new Fila();
     Scanner scanner = new Scanner(System.in);
     //construtor
      public Funcoes() 
      {
-      
+      this.i = 0;
      }
      
      
@@ -55,13 +57,12 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void ADD() {  //somar  
     //M[s-1]:=M[s-1] + M[s]; s:=s - 1
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
+    int primeiroValor = this.pilha.retornaTopo();
+     this.pilha.remove();//remove o topo
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     int soma = primeiroValor + segundoValor;
-    
-    this.pilha.remove();//remove o topo
-    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     this.pilha.insere(soma);
     
@@ -72,13 +73,12 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void SUB() {
         //M[s-1]:=M[s-1] - M[s]; s:=s - 1
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
+    int primeiroValor = this.pilha.retornaTopo();
+     this.pilha.remove();//remove o topo
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     int subtracao = primeiroValor - segundoValor;
-    
-    this.pilha.remove();//remove o topo
-    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     this.pilha.insere(subtracao);
     
@@ -88,13 +88,12 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void MULT() {
         //M[s-1]:=M[s-1] * M[s]; s:=s - 1
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
+    int primeiroValor = this.pilha.retornaTopo();
+     this.pilha.remove();//remove o topo
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     int multiplicacao = primeiroValor * segundoValor;
-    
-    this.pilha.remove();//remove o topo
-    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     this.pilha.insere(multiplicacao);
     
@@ -104,13 +103,13 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void DIVI() {
         //M[s-1]:=M[s-1] / M[s]; s:=s - 1
-    int primeiroValor = this.pilha.busca(s-1);
-    int segundoValor = this.pilha.busca(s);
+        
+    int primeiroValor = this.pilha.retornaTopo();
+    this.pilha.remove();//remove o topo
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     int divisao = primeiroValor / segundoValor;
-    
-    this.pilha.remove();//remove o topo
-    this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     this.pilha.insere(divisao);
     
@@ -120,7 +119,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void INV() {
     // M[s]:= -M[s] 
-        int primeiroValor = this.pilha.busca(s);
+        int primeiroValor = this.pilha.retornaTopo();
         int valor = primeiroValor * -1;//inverte
         this.pilha.remove();//remove o topo
         this.pilha.insere(valor);
@@ -130,11 +129,12 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void AND() {
         //se M [s-1] = 1 e M[s] = 1  então M[s-1]:=1  senão M[s-1]:=0;  s:=s - 1 
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-   
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//remove o topo
+    int segundoValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores 
+   
+    
     
     if(primeiroValor == segundoValor && primeiroValor == 1)
     {
@@ -159,11 +159,12 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void OR() {
     //e M[s-1] = 1  ou M[s] = 1  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1 
     
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-   
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//remove o topo
+    int segundoValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores 
+    
+    
     
     if(primeiroValor == 1 )
     {
@@ -191,11 +192,12 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void CME() {
         //se M[s-1] < M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1 
         
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-    
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//remove o topo
+    int segundoValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    
+    
     
     if(segundoValor < primeiroValor)
     {
@@ -213,11 +215,11 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void CMA() {
         //se M[s-1] > M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-    
-    this.pilha.remove();//remove o topo
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    
     
     if(segundoValor > primeiroValor)
     {
@@ -235,10 +237,9 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void CEQ() {
         //se M[s-1] = M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
         
-        int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-    
-    this.pilha.remove();//remove o topo
+    int primeiroValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    int segundoValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores somados
     
     if(primeiroValor == segundoValor)
@@ -257,11 +258,11 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void CDIF() {
         //se M[s-1] != M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
         
-        int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-    
-    this.pilha.remove();//remove o topo
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    
     
     if(primeiroValor != segundoValor)
     {
@@ -279,11 +280,11 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void CMEQ() {
         //se M[s-1] <= M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
         
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-    
-    this.pilha.remove();//remove o topo
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    
     
     if(segundoValor <= primeiroValor )
     {
@@ -301,11 +302,11 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void CMAQ() {
            //se M[s-1] >= M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
         
-    int primeiroValor = this.pilha.busca(s);
-    int segundoValor = this.pilha.busca(s-1);
-    
-    this.pilha.remove();//remove o topo
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    int segundoValor = this.pilha.retornaTopo();
+    this.pilha.remove();//duas vezes para tirar os 2 valores somados
+    
     
     if(segundoValor >= primeiroValor )
     {
@@ -333,7 +334,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void STR(int n) {
         //M[n]:=M[s]; s:=s-1
-    int primeiroValor = this.pilha.busca(s);
+    int primeiroValor = this.pilha.retornaTopo();
     this.pilha.remove();//remove o topo
     this.pilha.armazena(n,primeiroValor);
     this.s = this.pilha.topo(); //atualiza s
@@ -341,10 +342,22 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public void JMP(int t) {
+        this.i = this.fila.avancaPara(t);
     }
 
     @Override
     public void JMPF(int t) {
+        int primeiroValor = this.pilha.retornaTopo();
+        
+        if (primeiroValor == 0) {
+            this.i = this.fila.avancaPara(t);
+        }
+        
+        else{
+            this.i = this.i + 1;
+        }
+    this.pilha.remove();//remove o topo
+    this.s = this.pilha.topo(); //atualiza s
     }
 
     @Override
@@ -369,19 +382,39 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     @Override
-    public void ALLOC() {
+    public void ALLOC(int m, int n) {
+        //ALLOC     m,n      (Alocar memória): Para k:=0 até n-1 faça {s:=s + 1; M[s]:=M[m+k]}
+        for (int k = 0; k < n - 1; k++) {
+            this.s = this.pilha.topo() + 1;
+            int aux = this.pilha.busca(m + k);
+            this.pilha.insere(aux);  
+        }
     }
 
     @Override
-    public void DALLOC() {
+    public void DALLOC(int m, int n) {
+        //DALLOC  m,n      (Desalocar memória): Para  k:=n-1  até 0  faça       {M[m+k]:=M[s]; s:=s - 1} 
+        for (int k = n-1; k > 0; k--) {
+            int aux = this.pilha.retornaTopo();
+            this.pilha.armazena(m+k,aux);
+            this.pilha.remove();
+            this.s = this.pilha.topo();
+        }
     }
 
     @Override
-    public void CALL() {
+    public void CALL(int t) {
+        //CALL   t   (Chamar procedimento ou função):  S:=s + 1; M[s]:=i + 1; i:=t 
+         this.s = this.pilha.topo() + 1;
+         this.pilha.insere(this.i + 1);
+         this.i = this.fila.avancaPara(t);
     }
 
     @Override
     public void RETURN() {
+        this.i = this.pilha.topo();
+        this.pilha.remove();
+        this.s = this.pilha.topo();
     }
     
     

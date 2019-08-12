@@ -37,9 +37,9 @@ public interface EncapsulamentoFuncoes {
     public abstract void NULL();
     public abstract void RD();
     public abstract void PRN();
-    public abstract void ALLOC();
-    public abstract void DALLOC();
-    public abstract void CALL();
+    public abstract void ALLOC(int m, int n);
+    public abstract void DALLOC(int m, int n);
+    public abstract void CALL(int t);
     public abstract void RETURN();
     
 }
