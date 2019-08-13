@@ -9,31 +9,32 @@ public class MaquinaVirtual {
         Funcoes c = new Funcoes();
         Arquivo arq = new Arquivo();
         String nomeFuncao;
-        Object primeiroParametro,segundoParametro;
+        String primeiroParametro,segundoParametro;
+        String aux;
         arq.Read("/home/victor/Área de Trabalho/assembly.txt",c);
         
         do{
         
        Object retorno = c.anda(c.getI());
        linha = String.valueOf(retorno);
-        System.out.println(linha);
-        
-        
+           // System.out.println(linha);
+            
             if (linha.contains(" ")) {
                 
                 if (linha.contains(",")) {
-                    System.out.println("2 parametros");
+                   //2 parametros
                     
                     nomeFuncao = linha.split(" ")[0];
-                    primeiroParametro = linha.split(" ")[1];
-                    //segundoParametro = linha.split(",")[2];
+                    aux = linha.split(" ")[1];
+                    primeiroParametro = aux.split(",")[0];
+                    segundoParametro = aux.split(",")[1];
                     System.out.println(nomeFuncao);
                     System.out.println(primeiroParametro);
-                    //System.out.println(segundoParametro);
+                    System.out.println(segundoParametro);
                 }
                 
                 else{
-                    System.out.println("1 parametro");
+                    //1 parametro
                     
                     nomeFuncao = linha.split(" ")[0];
                     primeiroParametro = linha.split(" ")[1];
@@ -44,15 +45,18 @@ public class MaquinaVirtual {
             }
             
             else{
-                System.out.println("Sem Parametros");
+                //sem parametros
                 //chamar a funcao
-                
+                System.out.println(linha);
             }
         
         
         
         c.insereNaFila(linha);
         c.setI();
+            System.out.println("");
+            System.out.println("******************************************************************************************");
+            System.out.println("");
         } while(!linha.contains("HLT"));
         
         
