@@ -30,5 +30,9 @@ public class Fila {
         return t;
   }  
     
+  
+  public Object retornaLinha(int x) {
+        return this.fila.get(x); 
+  }
     
 }

@@ -1,8 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//A fazer:
+// Verificar valores de S, pois caso valor seja -1, nenhuma acao de remover pode acontecer
+
 package maquina.virtual;
 import java.util.Scanner;
 /**
@@ -16,9 +14,9 @@ public class Funcoes implements EncapsulamentoFuncoes {
     //atributos
     private int s;//topo da plha
     private int i;//indice proxima instrucao
-    Pilha pilha = new Pilha();
-    Fila fila = new Fila();
-    Scanner scanner = new Scanner(System.in);
+    private Pilha pilha = new Pilha();
+    private Fila fila = new Fila();
+    private Scanner scanner = new Scanner(System.in);
     //construtor
      public Funcoes() 
      {
@@ -32,8 +30,8 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     
-    public void setI(int i) {
-        this.i = i;
+    public void setI() {
+        this.i = this.i + 1;
     }
 
     //metodos abstratos
@@ -380,7 +378,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public void PRN() {
-        
+      
         int primeiroValor = this.pilha.retornaTopo();
         System.out.println(primeiroValor);
         this.pilha.remove();//remove o topo
