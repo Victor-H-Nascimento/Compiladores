@@ -14,6 +14,14 @@ import java.util.ArrayList;
 public class Fila {
     
     ArrayList<Object> fila = new ArrayList();
+
+    public ArrayList<Object> getFila() {
+        return fila;
+    }
+
+    public void setFila(ArrayList<Object> fila) {
+        this.fila = fila;
+    }
     
     public void percorre() {
     

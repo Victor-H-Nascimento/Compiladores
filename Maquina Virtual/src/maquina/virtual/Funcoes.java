@@ -34,6 +34,18 @@ public class Funcoes implements EncapsulamentoFuncoes {
         this.i = this.i + 1;
     }
 
+    
+    
+    //metodos da fila
+    
+    public void insereNaFila(Object x) {
+        this.fila.insere(x);
+  }  
+    
+     public Object anda(int t){
+       return this.fila.retornaLinha(t);
+    }
+    
     //metodos abstratos
     @Override
     public void TESTE() {

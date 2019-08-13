@@ -14,25 +14,14 @@ import java.io.PrintWriter;
  */
 public class Arquivo {
 
-    private Fila filaAuxiliar = new Fila();
+   
 
-    public Fila getFilaAuxiliar() {
-        return filaAuxiliar;
-    }
-
-    public void setFilaAuxiliar(Fila filaAuxiliar) {
-        this.filaAuxiliar = filaAuxiliar;
-    }
-    
-    
     public Arquivo() {//construtor
     }
     
-    public Object anda(int t){
-       return this.filaAuxiliar.retornaLinha(t);
-    }
+   
     
-     public void Read(String Caminho){
+     public void Read(String Caminho, Funcoes c){
         
         try {
             FileReader arq = new FileReader(Caminho);
@@ -42,7 +31,7 @@ public class Arquivo {
                 
                 do{
                 linha = lerArq.readLine();
-                filaAuxiliar.insere(linha);
+                c.insereNaFila(linha);
                 }while(!linha.contains("HLT"));
 
                 arq.close();
@@ -55,7 +44,7 @@ public class Arquivo {
         }
     }
     
-    public static boolean Write(String Caminho,String Texto){
+    /*public static boolean Write(String Caminho,String Texto){
         try {
             FileWriter arq = new FileWriter(Caminho);
             PrintWriter gravarArq = new PrintWriter(arq);
@@ -66,5 +55,5 @@ public class Arquivo {
             System.out.println(e.getMessage());
             return false;
         }
-    }
+    }*/
 }
