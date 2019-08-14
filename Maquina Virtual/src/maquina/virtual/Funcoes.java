@@ -62,7 +62,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         //S:=s + 1 ; M [s]: = k 
         this.s = this.pilha.topo() + 1;//posicao do Topo
         this.pilha.insere(k); //M[s]: = k  
-        System.out.println(k);
     }
 
     @Override
@@ -404,9 +403,10 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void ALLOC(int m, int n) {
         //ALLOC     m,n      (Alocar memória): Para k:=0 até n-1 faça {s:=s + 1; M[s]:=M[m+k]}
-        for (int k = 0; k < n - 1; k++) {
+        for (int k = 0; k <= n - 1; k++) {
             this.s = this.pilha.topo() + 1;
-            int aux = this.pilha.busca(m + k);
+            int aux = this.pilha.procuraM(m + k);
+            System.out.println("Aux " + aux);
             this.pilha.insere(aux);  
         }
         System.out.println("ALLOC");

@@ -48,5 +48,15 @@ public class Pilha {
    public void escrever(String frase) {
         System.out.println(frase);
     }
+   
+  
+    public int procuraM(int t) {
+        
+        if (this.pilha.isEmpty()) {
+         return '#';   
+        }
+        
+        return (int) this.pilha.elementAt(t);
+    }
   
 }
