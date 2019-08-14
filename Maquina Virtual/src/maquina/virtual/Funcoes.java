@@ -1,5 +1,8 @@
 //A fazer:
 // Verificar valores de S, pois caso valor seja -1, nenhuma acao de remover pode acontecer
+//Entender e consertar funcoes Alloc e Dalloc
+//Pensar em como fazer os Labels da funcao NULL
+//Pensar em como estruturar o JMP e o JMPF
 
 package maquina.virtual;
 import java.util.Scanner;
@@ -339,6 +342,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void START() {
         this.s = -1;
+        System.out.println("Funcao START");
     }
 
     @Override
@@ -405,6 +409,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
             int aux = this.pilha.busca(m + k);
             this.pilha.insere(aux);  
         }
+        System.out.println("ALLOC");
     }
 
     @Override
