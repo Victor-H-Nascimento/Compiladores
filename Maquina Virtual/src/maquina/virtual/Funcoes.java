@@ -48,9 +48,9 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public int tamanhoFila(Object x) {
         return this.fila.tamanhoFila();
   }  
-    
-     public Object anda(int t){
-       return this.fila.retornaLinha(t);
+     
+    public String getItemFila(int j) {
+        return this.fila.getItemFila(j);
     }
     
     //metodos abstratos

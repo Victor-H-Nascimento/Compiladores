@@ -26,9 +26,15 @@ public class Fila {
     public void percorre() {
     
         for (int j =0; j< this.fila.size(); j++) {
-            System.out.println(this.fila.get(j));
+            System.out.println("Percorre "+this.fila.get(j));
         }
   }
+    
+     public String getItemFila(int j) {
+        return String.valueOf(this.fila.get(j));
+    }
+     
+     
     
     public int tamanhoFila() {
     return this.fila.size();
@@ -41,10 +47,7 @@ public class Fila {
   public int avancaPara(int t) {
         return t;
   }  
-    
+   
   
-  public Object retornaLinha(int x) {
-        return this.fila.get(x); 
-  }
     
 }

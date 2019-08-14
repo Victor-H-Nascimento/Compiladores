@@ -1,5 +1,7 @@
 package maquina.virtual;
 
+import java.util.ArrayList;
+
 public class MaquinaVirtual {
 
     private static String linha;
@@ -8,15 +10,17 @@ public class MaquinaVirtual {
         
         Funcoes c = new Funcoes();
         Arquivo arq = new Arquivo();
-        Fila filaJMP = new Fila();
+        //Fila filaJMP = new Fila();
+         ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
         String nomeFuncao;
         String primeiroParametro,segundoParametro;
         String aux;
         arq.Read("/home/victor/Área de Trabalho/assembly.txt",c);
-        arq.EnderecaJMP(c,filaJMP,c.tamanhoFila(c));
+        arq.EnderecaJMP(c,filaJMP);
+       
         do{
         
-       Object retorno = c.anda(c.getI());
+       String retorno = c.getItemFila(c.getI());
        linha = String.valueOf(retorno);
            // System.out.println(linha);
             
@@ -60,7 +64,13 @@ public class MaquinaVirtual {
                         c.CALL(Integer.parseInt(primeiroParametro));
                       break;
                     case "JMP":
-                        c.JMP(Integer.parseInt(primeiroParametro));
+                            
+                        for(ListaAuxiliar itemLista : filaJMP){
+                            if (itemLista.getLabel().equals(primeiroParametro) ) {
+                                 System.out.println(itemLista.getLabel() +" " + itemLista.getIndice());
+                                c.JMP(itemLista.getIndice());
+                            }
+                        }
                       break;
                       case "JMPF":
                         c.JMPF(Integer.parseInt(primeiroParametro));
@@ -75,7 +85,7 @@ public class MaquinaVirtual {
                         c.STR(Integer.parseInt(primeiroParametro));
                       break;
                        default:
-                        System.err.println("Erro: Nenhuma funcao com 1 parametro foi chamada");
+                        System.err.println("Erro: Nenhuma funcao com 1 parametro foi chamada " + nomeFuncao + " " + primeiroParametro);
                   }
                     
                     
@@ -167,8 +177,6 @@ public class MaquinaVirtual {
             System.out.println("");
         } while(!linha.contains("HLT"));
         //sempre que executar uma linha, atualizar o i com a funcao setI
-        
-       // c.TESTE();
     }
     
 }
