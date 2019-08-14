@@ -65,7 +65,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
          for (int j = this.s; j >= 0; j--) {
              PRN();
          }
-  
     }
     
     
@@ -439,11 +438,14 @@ public class Funcoes implements EncapsulamentoFuncoes {
         //CALL   t   (Chamar procedimento ou função):  S:=s + 1; M[s]:=i + 1; i:=t 
          this.s = this.pilha.topo() + 1;
          this.pilha.insere(this.i + 1);
+         System.out.println(this.i);
          this.i = this.fila.avancaPara(t);
+         System.out.println(this.i);
     }
 
     @Override
     public void RETURN() {
+        // i:=M[s]; s:=s - 1 
         this.i = this.pilha.topo();
         this.pilha.remove();
         this.s = this.pilha.topo();

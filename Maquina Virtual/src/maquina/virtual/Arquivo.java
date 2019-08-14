@@ -15,8 +15,6 @@ public class Arquivo {
     public Arquivo() {//construtor
     }
 
-     
-    
     public void Read(String Caminho, Funcoes c) {
 
         try {
@@ -50,22 +48,22 @@ public class Arquivo {
                 Transformar os parametros L%d (Ex. L3) em um valor inteiro que aponte para o indice da fila principal
                 Valor de L%d esta em label
              */
-            if (linhaComJMP.contains("JMP")) {
+            if (linhaComJMP.contains("JMP") || linhaComJMP.contains("JMPF")) {
                 String label = linhaComJMP.split(" ")[1];
 
                 for (int i = 0; i < c.tamanhoFila(c); i++) {
                     String a = c.getItemFila(i);
-                    
+
                     if (a.startsWith(label.concat(" "))) {
                         ListaAuxiliar struct = new ListaAuxiliar();
                         struct.setLabel(label);
                         struct.setIndice(i);
-                        System.out.println(struct.getLabel() +" " + struct.getIndice());
+                        System.out.println(struct.getLabel() + " " + struct.getIndice());
                         fila.add(struct);
                     }
                 }
 
-            }
+            } 
 
         }
 

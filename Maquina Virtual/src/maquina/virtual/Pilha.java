@@ -43,9 +43,12 @@ public class Pilha {
    
    
    public void armazena(int n, int valor) {
-    this.pilha.removeElementAt(n); //tira item da posicao n
+       if (n > 0) {
+           this.pilha.removeElementAt(n);
+       }
+   
+     //tira item da posicao n
     this.pilha.insertElementAt(valor, n);// adiciona novamente na posicao n
-     
   }
 
    public void escrever(String frase) {

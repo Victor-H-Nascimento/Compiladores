@@ -19,10 +19,8 @@ public class MaquinaVirtual {
         arq.EnderecaJMP(c,filaJMP);
        
         do{
-        
        String retorno = c.getItemFila(c.getI());
        linha = String.valueOf(retorno);
-           // System.out.println(linha);
             
             if (linha.contains(" ")) {
                 
@@ -58,10 +56,19 @@ public class MaquinaVirtual {
                     System.out.println(nomeFuncao);
                     System.out.println(primeiroParametro);
                    
-                    
                      switch(nomeFuncao) {
                     case "CALL":
-                        c.CALL(Integer.parseInt(primeiroParametro));
+                      //Funcao call nao entra no if, pq nao 
+                        
+                         for(ListaAuxiliar itemLista : filaJMP){
+                              System.out.println("Chegou no call");
+                            if (itemLista.getLabel().equals(primeiroParametro) ) {
+                                 System.out.println(itemLista.getLabel() +" " + itemLista.getIndice());
+                                
+                                c.CALL(itemLista.getIndice());
+                            }
+                        }
+                        
                       break;
                     case "JMP":
                             
@@ -73,7 +80,12 @@ public class MaquinaVirtual {
                         }
                       break;
                       case "JMPF":
-                        c.JMPF(Integer.parseInt(primeiroParametro));
+                        for(ListaAuxiliar itemLista : filaJMP){
+                            if (itemLista.getLabel().equals(primeiroParametro) ) {
+                                 System.out.println(itemLista.getLabel() +" " + itemLista.getIndice());
+                                c.JMPF(itemLista.getIndice());
+                            }
+                        }
                       break;
                       case "LDC":
                         c.LDC(Integer.parseInt(primeiroParametro));
@@ -87,7 +99,6 @@ public class MaquinaVirtual {
                        default:
                         System.err.println("Erro: Nenhuma funcao com 1 parametro foi chamada " + nomeFuncao + " " + primeiroParametro);
                   }
-                    
                     
                 }
             }
