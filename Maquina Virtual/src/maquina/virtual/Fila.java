@@ -30,6 +30,10 @@ public class Fila {
         }
   }
     
+    public int tamanhoFila() {
+    return this.fila.size();
+  }
+    
     public void insere(Object x) {
         this.fila.add(x);
   }  

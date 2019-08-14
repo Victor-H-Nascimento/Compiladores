@@ -8,11 +8,12 @@ public class MaquinaVirtual {
         
         Funcoes c = new Funcoes();
         Arquivo arq = new Arquivo();
+        Fila filaJMP = new Fila();
         String nomeFuncao;
         String primeiroParametro,segundoParametro;
         String aux;
         arq.Read("/home/victor/Área de Trabalho/assembly.txt",c);
-        
+        arq.EnderecaJMP(c,filaJMP,c.tamanhoFila(c));
         do{
         
        Object retorno = c.anda(c.getI());
