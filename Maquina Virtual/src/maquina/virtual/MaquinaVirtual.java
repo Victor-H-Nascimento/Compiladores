@@ -147,6 +147,10 @@ public class MaquinaVirtual {
                       case "SUB":
                       c.SUB();
                       break;
+                      case "PRINTAPILHA":
+                      c.PRINTAPILHA();
+                      break;
+                      
                       
                       default:
                         System.err.println("Erro: Nenhuma funcao sem parametros foi chamada");

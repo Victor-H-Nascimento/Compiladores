@@ -55,7 +55,17 @@ public class Funcoes implements EncapsulamentoFuncoes {
         System.out.println("Pilha = " + this.s);
         System.out.println("Fila = " + this.i);
     }
-     
+    
+     @Override
+    public void PRINTAPILHA() {
+         for (int j = this.s; j >= 0; j--) {
+             PRN();
+         }
+  
+    }
+    
+    
+    
      
     @Override
     public void LDC(int k) {//carrega constante
@@ -341,7 +351,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void START() {
         this.s = -1;
-        System.out.println("Funcao START");
     }
 
     @Override
@@ -395,7 +404,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void PRN() {
       
         int primeiroValor = this.pilha.retornaTopo();
-        System.out.println(primeiroValor);
+        System.out.println(" s-> " + this.s + "       " + "|" + primeiroValor + "|" );
         this.pilha.remove();//remove o topo
         this.s = this.pilha.topo(); //atualiza s
     }
@@ -406,10 +415,8 @@ public class Funcoes implements EncapsulamentoFuncoes {
         for (int k = 0; k <= n - 1; k++) {
             this.s = this.pilha.topo() + 1;
             int aux = this.pilha.procuraM(m + k);
-            System.out.println("Aux " + aux);
             this.pilha.insere(aux);  
         }
-        System.out.println("ALLOC");
     }
 
     @Override

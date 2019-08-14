@@ -20,7 +20,8 @@ public class Pilha {
   }
 
   public Object remove() {
-    return this.pilha.remove(this.pilha.size() - 1);
+    //return this.pilha.remove(this.pilha.size() - 1);
+    return this.pilha.pop();
   }
 
   public boolean vazia() {
@@ -42,7 +43,9 @@ public class Pilha {
    
    
    public void armazena(int n, int valor) {
-     this.pilha.add(n, valor);
+    this.pilha.removeElementAt(n); //tira item da posicao n
+    this.pilha.insertElementAt(valor, n);// adiciona novamente na posicao n
+     
   }
 
    public void escrever(String frase) {
