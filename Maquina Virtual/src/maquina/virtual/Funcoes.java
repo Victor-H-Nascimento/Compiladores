@@ -16,6 +16,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     //atributos
     private int s;//topo da plha
     private int i;//indice proxima instrucao
+    private int numeroNULL;
     private Pilha pilha = new Pilha();
     private Fila fila = new Fila();
     private Scanner scanner = new Scanner(System.in);
@@ -23,6 +24,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     //construtor
     public Funcoes() {
         this.i = 0;
+        this.numeroNULL = -999999;
     }
 
     //getters e setter
@@ -68,8 +70,8 @@ public class Funcoes implements EncapsulamentoFuncoes {
         //S:=s + 1 ; M [s]: = k 
         this.s = this.s + 1;//posicao do Topo
         this.pilha.insere(k); //M[s]: = k
-     //   System.out.println("VALOR S " + this.s);
-       // this.pilha.inserePosicaoEspecifica(k,this.s);
+        //   System.out.println("VALOR S " + this.s);
+        // this.pilha.inserePosicaoEspecifica(k,this.s);
     }
 
     @Override
@@ -375,30 +377,63 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void ALLOC(int m, int n) {
         //ALLOC     m,n      (Alocar memória): Para k:=0 até n-1 faça {s:=s + 1; M[s]:=M[m+k]}
-        for (int k = 0; k <= n - 1; k++) {
+
+        if (!this.pilha.vazia()) {// se nao estiver vazia, entao faca alloc
+
+            for (int k = 0; k < n; k++) {
+                this.s = this.s + 1;
+                int aux = this.pilha.procuraM(m + k);
+                this.pilha.insere(aux);
+                this.pilha.armazena(m + k, -999999);
+                this.PRINTAPILHA();
+            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            }
+        } else {
+            for (int j = 0; j < n; j++) {
+                this.s = this.s + 1;
+                this.pilha.insere(-999999);// -999999 eh o nosso null
+                this.PRINTAPILHA();
+            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            }
+        }
+
+        /* for (int k = 0; k <= n - 1; k++) {
 
             if (!this.pilha.vazia()) {// se nao estiver vazia, entao faca alloc
                 this.s = this.s + 1;
                 int aux = this.pilha.procuraM(m + k);
                 this.pilha.insere(aux);
                 this.PRINTAPILHA();
-            } 
-            else {//se pilha vazia
-             //   this.s = this.s + 1;
+            } else {//se pilha vazia
+
+                for (int j = 0; j < 10; j++) {
+                    this.s = this.s + 1;
+                    this.pilha.insere(null);// -999999 eh o nosso null
+                }
+
             }
 
-        }
+        }*/
     }
 
     @Override
     public void DALLOC(int m, int n) {
         //DALLOC  m,n      (Desalocar memória): Para  k:=n-1  até 0  faça       {M[m+k]:=M[s]; s:=s - 1} 
         for (int k = 0; k <= n - 1; k++) {
-            int aux = this.pilha.retornaTopo();
-            this.pilha.armazena(m + k, aux);
-            this.pilha.remove();
-            this.s = this.pilha.topo();
+
+            if (m + k <= this.pilha.topo()) {
+                int aux = this.pilha.retornaTopo();
+                this.pilha.armazena(m + k, aux);
+                this.pilha.remove();
+                this.s = this.pilha.topo();
+            }
+            
+            else{
+            this.pilha.remove();// excluir o topo caso o m+k seja maior q o topo, pois caso contrario o topo da pilha tera NULL
+            }
             this.PRINTAPILHA();
+            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+
         }
     }
 
