@@ -15,7 +15,7 @@ public class MaquinaVirtual {
         String nomeFuncao;
         String primeiroParametro,segundoParametro;
         String aux;
-        arq.Read("/home/victor/Área de Trabalho/teste.txt",c);
+        arq.Read("/home/victor/Área de Trabalho/assembly.txt",c);
         arq.EnderecaJMP(c,filaJMP);
        
         do{
@@ -66,7 +66,6 @@ public class MaquinaVirtual {
                                 c.CALL(itemLista.getIndice());
                             }
                         }
-                        
                       break;
                     case "JMP":
                             

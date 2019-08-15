@@ -15,8 +15,17 @@ public class Pilha {
 
     Stack pilha = new Stack();
 
+    public Pilha() {
+    }
+    
+    
+
     public void insere(Object objeto) {
         this.pilha.add(objeto);
+    }
+    
+    public void inserePosicaoEspecifica(Object objeto,int x) {
+        this.pilha.add(x, objeto);
     }
 
     public Object remove() {
@@ -50,11 +59,6 @@ public class Pilha {
     }
 
     public int procuraM(int t) {
-
-        if (this.pilha.isEmpty()) {
-            return '#';
-        }
-
         return (int) this.pilha.elementAt(t);
     }
 
