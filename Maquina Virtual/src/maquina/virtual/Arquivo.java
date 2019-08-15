@@ -58,7 +58,6 @@ public class Arquivo {
                         ListaAuxiliar struct = new ListaAuxiliar();
                         struct.setLabel(label);
                         struct.setIndice(i);
-                        System.out.println(struct.getLabel() + " " + struct.getIndice());
                         fila.add(struct);
                     }
                 }

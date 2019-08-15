@@ -56,8 +56,10 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public void PRINTAPILHA() {
-        for (int j = this.s; j >= 0; j--) {
-            PRN();
+        for (int j = this.pilha.topo(); j >= 0; j--) {
+           // PRN();
+           int primeiroValor = this.pilha.busca(j);
+        System.out.println(" s-> " + j + "       " + "|" + primeiroValor + "|");
         }
     }
 
@@ -184,7 +186,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
             this.pilha.insere(segundoValor);
         }
         this.s = this.pilha.topo(); //atualiza s
-    }
+    }   
 
     @Override
     public void NEG() {
@@ -318,11 +320,14 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void STR(int n) {
         //M[n]:=M[s]; s:=s-1
-        if (this.s > 1) {
+        if (this.pilha.topo() >= 1 && n <= this.pilha.topo()) {
             int primeiroValor = this.pilha.retornaTopo();
-            this.pilha.remove();//remove o topo
-            this.pilha.armazena(n, primeiroValor);
+            this.pilha.armazena(n, primeiroValor);// se this.s == 1, entao n tem q ser obrigatoriamente 0
             this.s = this.pilha.topo(); //atualiza s   
+        }
+        
+        else{
+            System.out.println("Nao chamou funcao STR " + this.s);
         }
 
     }

@@ -63,8 +63,6 @@ public class MaquinaVirtual {
                          for(ListaAuxiliar itemLista : filaJMP){
                               System.out.println("Chegou no call");
                             if (itemLista.getLabel().equals(primeiroParametro) ) {
-                                 System.out.println(itemLista.getLabel() +" " + itemLista.getIndice());
-                                
                                 c.CALL(itemLista.getIndice());
                             }
                         }
@@ -74,7 +72,6 @@ public class MaquinaVirtual {
                             
                         for(ListaAuxiliar itemLista : filaJMP){
                             if (itemLista.getLabel().equals(primeiroParametro) ) {
-                                 System.out.println(itemLista.getLabel() +" " + itemLista.getIndice());
                                 c.JMP(itemLista.getIndice());
                             }
                         }
@@ -82,7 +79,6 @@ public class MaquinaVirtual {
                       case "JMPF":
                         for(ListaAuxiliar itemLista : filaJMP){
                             if (itemLista.getLabel().equals(primeiroParametro) ) {
-                                 System.out.println(itemLista.getLabel() +" " + itemLista.getIndice());
                                 c.JMPF(itemLista.getIndice());
                             }
                         }

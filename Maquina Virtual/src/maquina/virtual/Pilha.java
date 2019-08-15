@@ -20,7 +20,6 @@ public class Pilha {
     }
 
     public Object remove() {
-        //return this.pilha.remove(this.pilha.size() - 1);
         return this.pilha.pop();
     }
 
@@ -33,7 +32,6 @@ public class Pilha {
     }
 
     public int busca(int num) {
-
         return (int) this.pilha.elementAt(num);
     }
 
