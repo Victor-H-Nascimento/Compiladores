@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public class Arquivo {
 
+    private boolean jaExiste;
+
     public Arquivo() {//construtor
     }
 
@@ -48,7 +50,7 @@ public class Arquivo {
                 Transformar os parametros L%d (Ex. L3) em um valor inteiro que aponte para o indice da fila principal
                 Valor de L%d esta em label
              */
-            if (linhaComInstrucao.contains("JMP") || linhaComInstrucao.contains("JMPF")|| linhaComInstrucao.contains("CALL")) {
+            if (linhaComInstrucao.contains("JMP") || linhaComInstrucao.contains("JMPF") || linhaComInstrucao.contains("CALL")) {
                 String instrucao = linhaComInstrucao.split(" ")[0];
                 String label = linhaComInstrucao.split(" ")[1];
 
@@ -56,16 +58,26 @@ public class Arquivo {
                     String a = c.getItemFila(i);
 
                     if (a.startsWith(label.concat(" "))) {
-                        ListaAuxiliar struct = new ListaAuxiliar();
-                        struct.setInstrucao(instrucao);
-                        struct.setLabel(label);
-                        struct.setIndice(i);
-                        System.out.println(instrucao + " "+label + " " + i);
-                        fila.add(struct);
+
+                        for (ListaAuxiliar verificacao : fila) {
+                            if (i == verificacao.getIndice()) {
+                                jaExiste = true;
+                            }
+                        }
+
+                        if (!jaExiste) {
+                            ListaAuxiliar struct = new ListaAuxiliar();
+                            struct.setInstrucao(instrucao);
+                            struct.setLabel(label);
+                            struct.setIndice(i);
+                            System.out.println(instrucao + " " + label + " " + i);
+                            fila.add(struct);
+                        }
+
                     }
                 }
 
-            } 
+            }
 
         }
 

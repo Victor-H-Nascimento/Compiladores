@@ -1,5 +1,6 @@
 //OBS:
-//Na funcao Call ao inves de inserirmos o valor i+1, nos inserimos o valor i e funcionou.
+//Na funcao Call ao inves de inserirmos o valor i+1, nos inserimos o valor i e na funcao JMPF nao atualizamos o valor de i dentro da funcao
+// esses comandos continuaram funcionando pq na Maquina Virtual nos atualizamos o i a cada iteraçao
 package maquina.virtual;
 
 import java.util.Scanner;
@@ -339,8 +340,10 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
         if (primeiroValor == 0) {
             this.i = this.fila.avancaPara(t);
+            System.out.println("Entrou if ");
         } else {
-            this.i = this.i + 1;
+            //this.i = this.i + 1;
+            System.out.println("Entrou else");
         }
         this.pilha.remove();//remove o topo
         this.s = this.pilha.topo(); //atualiza s
