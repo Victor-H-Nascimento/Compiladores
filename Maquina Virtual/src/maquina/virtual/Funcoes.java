@@ -4,6 +4,7 @@
 package maquina.virtual;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  *
@@ -18,6 +19,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     private Pilha pilha = new Pilha();
     private Fila fila = new Fila();
     private Scanner scanner = new Scanner(System.in);
+    Stack pilhaCall = new Stack();
 
     //construtor
     public Funcoes() {
@@ -48,8 +50,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     //metodos abstratos
-  
-
     @Override
     public void PRINTAPILHA() {
         for (int j = this.pilha.topo(); j >= 0; j--) {
@@ -401,10 +401,8 @@ public class Funcoes implements EncapsulamentoFuncoes {
                 this.pilha.armazena(m + k, aux);
                 this.pilha.remove();
                 this.s = this.pilha.topo();
-            }
-            
-            else{
-            this.pilha.remove();// excluir o topo caso o m+k seja maior q o topo, pois caso contrario o topo da pilha tera NULL
+            } else {
+                this.pilha.remove();// excluir o topo caso o m+k seja maior q o topo, pois caso contrario o topo da pilha tera NULL
             }
         }
     }
@@ -412,19 +410,31 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void CALL(int t) {
         //CALL   t   (Chamar procedimento ou função):  S:=s + 1; M[s]:=i + 1; i:=t 
-        this.s = this.pilha.topo() + 1;
-        this.pilha.insere(this.i); // no noso caso inserimos a posicao i, ao inves de i+1.
-        System.out.println(this.i);
-        this.i = this.fila.avancaPara(t);
-        System.out.println(this.i);
+        //this.s = this.pilha.topo() + 1;
+        //this.pilha.insere(this.i); // no noso caso inserimos a posicao i, ao inves de i+1.
+        boolean add = pilhaCall.add(this.i);
+        if (add) {
+            System.out.println(this.i);
+            this.i = this.fila.avancaPara(t);
+            System.out.println(this.i);
+        }
+
     }
 
     @Override
     public void RETURN() {
         // i:=M[s]; s:=s - 1 
-        this.i = this.pilha.retornaTopo();
-        this.pilha.remove();
-        this.s = this.pilha.topo();
+        //this.i = this.pilha.retornaTopo();
+        
+        Object retorno = pilhaCall.lastElement();
+        pilhaCall.remove(retorno); 
+        this.i = (int) retorno;
+         
+         
+         System.out.println("Retorne para linha "+this.i);
+        
+        //this.pilha.remove();
+        //this.s = this.pilha.topo();
     }
 
 }
