@@ -1,8 +1,5 @@
-//A fazer:
-// Verificar valores de S, pois caso valor seja -1, nenhuma acao de remover pode acontecer
-//Entender e consertar funcoes Alloc e Dalloc
-//Pensar em como fazer os Labels da funcao NULL
-//Pensar em como estruturar o JMP e o JMPF
+//OBS:
+//Na funcao Call ao inves de inserirmos o valor i+1, nos inserimos o valor i e funcionou.
 package maquina.virtual;
 
 import java.util.Scanner;
@@ -16,7 +13,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     //atributos
     private int s;//topo da plha
     private int i;//indice proxima instrucao
-    private int numeroNULL;
+    private final int numeroNULL;
     private Pilha pilha = new Pilha();
     private Fila fila = new Fila();
     private Scanner scanner = new Scanner(System.in);
@@ -50,11 +47,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     //metodos abstratos
-    @Override
-    public void TESTE() {
-        System.out.println("Pilha = " + this.s);
-        System.out.println("Fila = " + this.i);
-    }
+  
 
     @Override
     public void PRINTAPILHA() {
@@ -384,36 +377,15 @@ public class Funcoes implements EncapsulamentoFuncoes {
                 this.s = this.s + 1;
                 int aux = this.pilha.procuraM(m + k);
                 this.pilha.insere(aux);
-                this.pilha.armazena(m + k, -999999);
-                this.PRINTAPILHA();
-            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                this.pilha.armazena(m + k, this.numeroNULL);
             }
         } else {
             for (int j = 0; j < n; j++) {
                 this.s = this.s + 1;
-                this.pilha.insere(-999999);// -999999 eh o nosso null
-                this.PRINTAPILHA();
-            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                this.pilha.insere(this.numeroNULL);// -999999 eh o nosso null
             }
         }
 
-        /* for (int k = 0; k <= n - 1; k++) {
-
-            if (!this.pilha.vazia()) {// se nao estiver vazia, entao faca alloc
-                this.s = this.s + 1;
-                int aux = this.pilha.procuraM(m + k);
-                this.pilha.insere(aux);
-                this.PRINTAPILHA();
-            } else {//se pilha vazia
-
-                for (int j = 0; j < 10; j++) {
-                    this.s = this.s + 1;
-                    this.pilha.insere(null);// -999999 eh o nosso null
-                }
-
-            }
-
-        }*/
     }
 
     @Override
@@ -431,9 +403,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             else{
             this.pilha.remove();// excluir o topo caso o m+k seja maior q o topo, pois caso contrario o topo da pilha tera NULL
             }
-            this.PRINTAPILHA();
-            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-
         }
     }
 
@@ -441,7 +410,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void CALL(int t) {
         //CALL   t   (Chamar procedimento ou função):  S:=s + 1; M[s]:=i + 1; i:=t 
         this.s = this.pilha.topo() + 1;
-        this.pilha.insere(this.i + 1);
+        this.pilha.insere(this.i); // no noso caso inserimos a posicao i, ao inves de i+1.
         System.out.println(this.i);
         this.i = this.fila.avancaPara(t);
         System.out.println(this.i);
@@ -450,7 +419,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void RETURN() {
         // i:=M[s]; s:=s - 1 
-        this.i = this.pilha.topo();
+        this.i = this.pilha.retornaTopo();
         this.pilha.remove();
         this.s = this.pilha.topo();
     }

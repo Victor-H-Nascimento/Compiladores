@@ -61,8 +61,8 @@ public class MaquinaVirtual {
                       //Funcao call nao entra no if, pq nao 
                         
                          for(ListaAuxiliar itemLista : filaJMP){
-                              System.out.println("Chegou no call");
-                            if (itemLista.getLabel().equals(primeiroParametro) ) {
+                            if (itemLista.getLabel().equals(primeiroParametro) && itemLista.getInstrucao().contains("CALL") ) {
+                                System.out.println("Call para posicao" + itemLista.getIndice());
                                 c.CALL(itemLista.getIndice());
                             }
                         }
@@ -70,14 +70,14 @@ public class MaquinaVirtual {
                     case "JMP":
                             
                         for(ListaAuxiliar itemLista : filaJMP){
-                            if (itemLista.getLabel().equals(primeiroParametro) ) {
+                            if (itemLista.getLabel().equals(primeiroParametro) && itemLista.getInstrucao().contains("JMP") ) {
                                 c.JMP(itemLista.getIndice());
                             }
                         }
                       break;
                       case "JMPF":
                         for(ListaAuxiliar itemLista : filaJMP){
-                            if (itemLista.getLabel().equals(primeiroParametro) ) {
+                            if (itemLista.getLabel().equals(primeiroParametro)&& itemLista.getInstrucao().contains("JMPF") ) {
                                 c.JMPF(itemLista.getIndice());
                             }
                         }
@@ -92,7 +92,7 @@ public class MaquinaVirtual {
                         c.STR(Integer.parseInt(primeiroParametro));
                       break;
                        default:
-                        System.err.println("Erro: Nenhuma funcao com 1 parametro foi chamada " + nomeFuncao + " " + primeiroParametro);
+                        System.out.println("Erro: Nenhuma funcao com 1 parametro foi chamada " + nomeFuncao + " " + primeiroParametro);
                   }
                     
                 }

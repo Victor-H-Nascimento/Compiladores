@@ -11,11 +11,21 @@ package maquina.virtual;
  */
 public class ListaAuxiliar {
     
+    private String instrucao;
     private String label;
     private int indice;
 
     public ListaAuxiliar() {
     }
+
+    public String getInstrucao() {
+        return instrucao;
+    }
+
+    public void setInstrucao(String instrucao) {
+        this.instrucao = instrucao;
+    }
+    
 
     public String getLabel() {
         return label;

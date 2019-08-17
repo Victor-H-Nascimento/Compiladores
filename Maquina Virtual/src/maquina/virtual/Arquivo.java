@@ -42,22 +42,25 @@ public class Arquivo {
     public void EnderecaJMP(Funcoes c, ArrayList<ListaAuxiliar> fila) {
 
         for (int x = 0; x < c.tamanhoFila(c); x++) {
-            String linhaComJMP = c.getItemFila(x);
+            String linhaComInstrucao = c.getItemFila(x);
 
             /*
                 Transformar os parametros L%d (Ex. L3) em um valor inteiro que aponte para o indice da fila principal
                 Valor de L%d esta em label
              */
-            if (linhaComJMP.contains("JMP") || linhaComJMP.contains("JMPF")) {
-                String label = linhaComJMP.split(" ")[1];
+            if (linhaComInstrucao.contains("JMP") || linhaComInstrucao.contains("JMPF")|| linhaComInstrucao.contains("CALL")) {
+                String instrucao = linhaComInstrucao.split(" ")[0];
+                String label = linhaComInstrucao.split(" ")[1];
 
                 for (int i = 0; i < c.tamanhoFila(c); i++) {
                     String a = c.getItemFila(i);
 
                     if (a.startsWith(label.concat(" "))) {
                         ListaAuxiliar struct = new ListaAuxiliar();
+                        struct.setInstrucao(instrucao);
                         struct.setLabel(label);
                         struct.setIndice(i);
+                        System.out.println(instrucao + " "+label + " " + i);
                         fila.add(struct);
                     }
                 }
