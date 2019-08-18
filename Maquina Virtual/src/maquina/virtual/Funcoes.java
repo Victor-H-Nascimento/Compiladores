@@ -321,6 +321,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
         if (this.pilha.topo() >= 1 && n <= this.pilha.topo()) {
             int primeiroValor = this.pilha.retornaTopo();
             this.pilha.armazena(n, primeiroValor);// se this.s == 1, entao n tem q ser obrigatoriamente 0
+            this.pilha.remove();
             this.s = this.pilha.topo(); //atualiza s   
         } else {
             System.out.println("Nao chamou funcao STR " + this.s);
