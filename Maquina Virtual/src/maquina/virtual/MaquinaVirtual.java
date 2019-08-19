@@ -176,9 +176,8 @@ public class MaquinaVirtual {
 
             c.insereNaFila(linha);
             c.setI();
-            System.out.println("");
-            System.out.println("******************************************************************************************");
-            System.out.println("");
+            System.out.println(""+"******************************************************************************************"+"");
+            c.PRINTAPILHA();
         } while (!linha.contains("HLT"));
         //sempre que executar uma linha, atualizar o i com a funcao setI
     }

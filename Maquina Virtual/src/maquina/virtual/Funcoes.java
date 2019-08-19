@@ -375,7 +375,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void ALLOC(int m, int n) {
         //ALLOC     m,n      (Alocar memória): Para k:=0 até n-1 faça {s:=s + 1; M[s]:=M[m+k]}
 
-        if (!this.pilha.vazia()) {// se nao estiver vazia, entao faca alloc
+        if (!this.pilha.vazia() && m <= this.s) {// se nao estiver vazia, entao faca alloc
 
             for (int k = 0; k < n; k++) {
                 this.s = this.s + 1;
