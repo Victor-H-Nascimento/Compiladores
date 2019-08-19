@@ -53,7 +53,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void PRINTAPILHA() {
         for (int j = this.pilha.topo(); j >= 0; j--) {
-            // PRN();
             int primeiroValor = this.pilha.busca(j);
             System.out.println(" s-> " + j + "       " + "|" + primeiroValor + "|");
         }
@@ -366,7 +365,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void PRN() {
 
         int primeiroValor = this.pilha.retornaTopo();
-        System.out.println(" s-> " + this.s + "       " + "|" + primeiroValor + "|");
+        System.out.println(" PRN s-> " + this.s + "       " + "|" + primeiroValor + "|");
         this.pilha.remove();//remove o topo
         this.s = this.pilha.topo(); //atualiza s
     }
@@ -411,31 +410,31 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public void CALL(int t) {
         //CALL   t   (Chamar procedimento ou função):  S:=s + 1; M[s]:=i + 1; i:=t 
-        //this.s = this.pilha.topo() + 1;
-        //this.pilha.insere(this.i); // no noso caso inserimos a posicao i, ao inves de i+1.
-        boolean add = pilhaCall.add(this.i);
+        this.s = this.pilha.topo() + 1;
+        this.pilha.insere(this.i); // no noso caso inserimos a posicao i, ao inves de i+1.
+       /* boolean add = pilhaCall.add(this.i);
         if (add) {
             System.out.println(this.i);
             this.i = this.fila.avancaPara(t);
             System.out.println(this.i);
-        }
+        }*/
+       
+       this.i = this.fila.avancaPara(t);
 
     }
 
     @Override
     public void RETURN() {
         // i:=M[s]; s:=s - 1 
-        //this.i = this.pilha.retornaTopo();
-        
-        Object retorno = pilhaCall.lastElement();
+
+       /* Object retorno = pilhaCall.lastElement();
         pilhaCall.remove(retorno); 
         this.i = (int) retorno;
-         
-         
-         System.out.println("Retorne para linha "+this.i);
+        System.out.println("Retorne para linha "+this.i);*/
         
-        //this.pilha.remove();
-        //this.s = this.pilha.topo();
+        this.i = this.pilha.retornaTopo();
+        this.pilha.remove();
+        this.s = this.pilha.topo();
     }
 
 }

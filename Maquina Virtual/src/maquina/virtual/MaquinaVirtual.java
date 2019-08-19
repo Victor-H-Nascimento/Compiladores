@@ -15,7 +15,7 @@ public class MaquinaVirtual {
         String nomeFuncao;
         String primeiroParametro, segundoParametro;
         String aux;
-        arq.Read("/home/victor/Área de Trabalho/teste.txt", c);
+        arq.Read("/home/victor/Área de Trabalho/assembly.txt", c);
         arq.EnderecaJMP(c, filaJMP);
 
         do {
@@ -176,8 +176,8 @@ public class MaquinaVirtual {
 
             c.insereNaFila(linha);
             c.setI();
-            System.out.println(""+"******************************************************************************************"+"");
             c.PRINTAPILHA();
+            System.out.println(""+"******************************************************************************************"+"");
         } while (!linha.contains("HLT"));
         //sempre que executar uma linha, atualizar o i com a funcao setI
     }
