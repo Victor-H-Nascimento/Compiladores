@@ -17,28 +17,31 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class InterfaceGrafica extends JFrame{
     private JButton botaoEscolhaArquivo, botaoExecutar;
     private JMenuBar menuBar;
     private JMenu file, executar;
-    private JMenuItem abrir, exportar;
+    private JMenuItem abrir, exportar, teste;
     private JPanel painel;
     private JFrame janela;
     private JRadioButton botaoBreakPoint;
     
     public InterfaceGrafica() {
         super("Maquina virtual");
-        JFileChooser fileChooser = new JFileChooser();//e possivel escolher uma pasta para inicializar (/home/desktop....)
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos txt", "txt"));//alterar para obj
-        int retornoArquivo = fileChooser.showOpenDialog(null);  //abre a pasta para escolher o arquivo
         
-        menuBar = new JMenuBar();
+        //JFileChooser fileChooser = new JFileChooser();//e possivel escolher uma pasta para inicializar (/home/desktop....)
+        //fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos txt", "txt"));//alterar para obj
+        //int retornoArquivo = fileChooser.showOpenDialog(null);  //abre a pasta para escolher o arquivo
+        
+        
         
         //botoes topo da pagina
-        botaoEscolhaArquivo = new JButton("Abrir"); 
-        ActionListener abrirListener = new ActionListener(){
+        //botaoEscolhaArquivo = new JButton("Abrir"); 
+        
+        /*ActionListener abrirListener = new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(retornoArquivo == JFileChooser.APPROVE_OPTION){ //arquivo selecionado
                     File arquivo = fileChooser.getSelectedFile();
@@ -50,27 +53,37 @@ public class InterfaceGrafica extends JFrame{
             }
         };
         botaoEscolhaArquivo.addActionListener(abrirListener);
-        
+        */
         
         botaoExecutar = new JButton("Executar");
-        ActionListener executarListener = new ActionListener(){
+        /*ActionListener executarListener = new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 //executar
             }
         };
         botaoExecutar.addActionListener(executarListener);
-        
-        //menu
+        */
+        //menuBar
+        menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
         //item1 - file
         file = new JMenu("file");
-        menuBar.add(file);
+        executar = new JMenu("executar");
         abrir = new JMenuItem("abrir arquivo");
-        file.add(abrir);
         exportar = new JMenuItem("exportar arquivo");
+        teste = new JMenuItem("testando"); 
+        
+        
+        //this.add(menuBar);
+        menuBar.add(file);
+        menuBar.add(executar);
+        file.add(abrir);
         file.add(exportar);
+        executar.add(teste);
+        
         
         //item2 - botao executar
-        menuBar.add(botaoExecutar); //nao sei se e possivel adicionar botao no menubar.
+        //menuBar.add(botaoExecutar); //nao sei se e possivel adicionar botao no menubar.
         
         //frame
         JFrame janela = new JFrame();
@@ -91,6 +104,7 @@ public class InterfaceGrafica extends JFrame{
             exportar.addActionListener(this);
             botaoExecutar.addActionListener(this);
         }
+        
     };
 }
 
