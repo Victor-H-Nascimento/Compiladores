@@ -5,6 +5,12 @@
  */
 package maquina.virtual;
 
+import static java.lang.String.valueOf;
+import java.lang.reflect.Array;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ettore
@@ -75,33 +81,14 @@ public class Interface extends javax.swing.JFrame {
 
         tabelaExec.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Break point", "Linha", "Instrucao", "parametro1", "parametro2"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Boolean.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 true, false, false, false, false
@@ -118,30 +105,13 @@ public class Interface extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tabelaExec);
         if (tabelaExec.getColumnModel().getColumnCount() > 0) {
             tabelaExec.getColumnModel().getColumn(0).setResizable(false);
+            tabelaExec.getColumnModel().getColumn(0).setPreferredWidth(65);
+            tabelaExec.getColumnModel().getColumn(1).setPreferredWidth(25);
         }
 
         pilhaExec.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null}
+
             },
             new String [] {
                 "Pilha"
@@ -162,26 +132,7 @@ public class Interface extends javax.swing.JFrame {
 
         pilhaJump.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null}
+
             },
             new String [] {
                 "Pilha"
@@ -322,11 +273,61 @@ public class Interface extends javax.swing.JFrame {
         
     }//GEN-LAST:event_menuFileAbrirActionPerformed
 
-      public void preencherTabela(String linha) {                                                 
+      public void preencherTabela(String linha, int numLinha) {
         
-        System.out.println("Entrou preencher " + linha);
-       
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         
+        //System.out.println("Entrou preencher " + linha); //apenas para verificacao
+        String instrucao, param1, param2, aux;
+        DefaultTableModel model = (DefaultTableModel) tabelaExec.getModel();
+        String[] rowData = new String[5];   //para adicionar na tabela
+        
+        for (int i = 0; i < 5; i++) {
+            tabelaExec.getColumnModel().getColumn(i).setCellRenderer( centerRenderer ); //centraliza o conteudo de cada coluna
+        }
+        
+        //coluna 0 contem o breakpoint.
+        if (linha.contains(" ")) {
+
+                if (linha.contains(",")) {
+                    //2 parametros
+
+                    instrucao = linha.split(" ")[0];
+                    aux = linha.split(" ")[1];
+                    param1 = aux.split(",")[0];
+                    param2 = aux.split(",")[1];
+                    
+                    
+                    rowData[1] = valueOf(numLinha);
+                    rowData[2] = instrucao;
+                    rowData[3] = param1;
+                    rowData[4] = param2;
+                    
+                } else {
+                    //1 parametro
+                    
+                    instrucao = linha.split(" ")[0];
+                    param1 = linha.split(" ")[1];
+                    param2 = null;
+                    
+                    rowData[1] = valueOf(numLinha);
+                    rowData[2] = instrucao;
+                    rowData[3] = param1;
+                    rowData[4] = param2;    //null
+                }
+                
+        }else {
+            //sem parametros
+                //instrucao = linha;
+            
+                rowData[1] = valueOf(numLinha);
+                rowData[2] = linha;
+                rowData[3] = null;
+                rowData[4] = null;
+               
+        }
+        model.addRow(rowData);  //adiciona de fato a tabela 
     }
     
     /**
