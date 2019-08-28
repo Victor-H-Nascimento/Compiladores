@@ -6,6 +6,7 @@
 package maquina.virtual;
 
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -289,15 +290,11 @@ public class Interface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -317,13 +314,24 @@ public class Interface extends javax.swing.JFrame {
 
     private void menuFileAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileAbrirActionPerformed
         // TODO add your handling code here:
+        Arquivo arq = new Arquivo();
+        Funcoes c = new Funcoes();
+        
         JFileChooser fileChooser = new JFileChooser();//e possivel escolher uma pasta para inicializar (/home/desktop....)
         fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos txt", "txt"));//alterar para obj
         int retornoArquivo = fileChooser.showOpenDialog(null);  //abre a pasta para escolher o arquivo
-        if(retornoArquivo == JFileChooser.APPROVE_OPTION){ //arquivo selecionado
-                    File arquivo = fileChooser.getSelectedFile();
-                    //chamar arq.read()   
-                }
+            if(retornoArquivo == JFileChooser.APPROVE_OPTION){ //arquivo selecionado
+                File arquivo = fileChooser.getSelectedFile();
+                    arq.Read(arquivo.getAbsolutePath(),c);
+            }
+            
+            ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
+            String nomeFuncao;
+            String primeiroParametro, segundoParametro;
+            String aux;
+            //botao de selecionar arquivo
+            arq.EnderecaJMP(c, filaJMP);
+            //continuacao do codigo
     }//GEN-LAST:event_menuFileAbrirActionPerformed
 
     /**
