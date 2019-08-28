@@ -49,7 +49,7 @@ public class Interface extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaExec = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        pilhaExec = new javax.swing.JTable();
+        pilhaDados = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         pilhaJump = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -109,12 +109,12 @@ public class Interface extends javax.swing.JFrame {
             tabelaExec.getColumnModel().getColumn(1).setPreferredWidth(25);
         }
 
-        pilhaExec.setModel(new javax.swing.table.DefaultTableModel(
+        pilhaDados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Pilha"
+                "Dados"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -125,9 +125,9 @@ public class Interface extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(pilhaExec);
-        if (pilhaExec.getColumnModel().getColumnCount() > 0) {
-            pilhaExec.getColumnModel().getColumn(0).setResizable(false);
+        jScrollPane3.setViewportView(pilhaDados);
+        if (pilhaDados.getColumnModel().getColumnCount() > 0) {
+            pilhaDados.getColumnModel().getColumn(0).setResizable(false);
         }
 
         pilhaJump.setModel(new javax.swing.table.DefaultTableModel(
@@ -135,11 +135,11 @@ public class Interface extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Pilha"
+                "-", "Label", "Indice"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -149,6 +149,8 @@ public class Interface extends javax.swing.JFrame {
         jScrollPane4.setViewportView(pilhaJump);
         if (pilhaJump.getColumnModel().getColumnCount() > 0) {
             pilhaJump.getColumnModel().getColumn(0).setResizable(false);
+            pilhaJump.getColumnModel().getColumn(1).setResizable(false);
+            pilhaJump.getColumnModel().getColumn(2).setResizable(false);
         }
 
         jLabel1.setText("Entrada:");
@@ -179,9 +181,9 @@ public class Interface extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
@@ -189,26 +191,27 @@ public class Interface extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textFIeldEntrada)
                             .addComponent(jScrollPane5)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(botaoContinuar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(18, 18, 18))
+                        .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textFIeldEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,7 +250,7 @@ public class Interface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,17 +283,20 @@ public class Interface extends javax.swing.JFrame {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         
         //System.out.println("Entrou preencher " + linha); //apenas para verificacao
-        String instrucao, param1, param2, aux;
+        String instrucao = null, param1 = null, param2 = null, aux;
         DefaultTableModel model = (DefaultTableModel) tabelaExec.getModel();
-        String[] rowData = new String[5];   //para adicionar na tabela
         
-        for (int i = 0; i < 5; i++) {
+        String[] rowData = new String[tabelaExec.getColumnCount()];   //para adicionar na tabela
+        
+        for (int i = 0; i < tabelaExec.getColumnCount(); i++) {
             tabelaExec.getColumnModel().getColumn(i).setCellRenderer( centerRenderer ); //centraliza o conteudo de cada coluna
         }
         
         //coluna 0 contem o breakpoint.
         if (linha.contains(" ")) {
 
+            
+            
                 if (linha.contains(",")) {
                     //2 parametros
 
@@ -299,38 +305,53 @@ public class Interface extends javax.swing.JFrame {
                     param1 = aux.split(",")[0];
                     param2 = aux.split(",")[1];
                     
-                    
-                    rowData[1] = valueOf(numLinha);
-                    rowData[2] = instrucao;
-                    rowData[3] = param1;
-                    rowData[4] = param2;
-                    
                 } else {
                     //1 parametro
                     
                     instrucao = linha.split(" ")[0];
                     param1 = linha.split(" ")[1];
                     param2 = null;
-                    
-                    rowData[1] = valueOf(numLinha);
-                    rowData[2] = instrucao;
-                    rowData[3] = param1;
-                    rowData[4] = param2;    //null
                 }
                 
         }else {
             //sem parametros
                 //instrucao = linha;
             
-                rowData[1] = valueOf(numLinha);
-                rowData[2] = linha;
-                rowData[3] = null;
-                rowData[4] = null;
-               
+                    instrucao = linha;
+                    param1 = null;
+                    param2 = null;
+                    
         }
+        rowData[1] = valueOf(numLinha);
+        rowData[2] = instrucao;
+        rowData[3] = param1;
+        rowData[4] = param2;
         model.addRow(rowData);  //adiciona de fato a tabela 
     }
     
+      public void preencherJumps(String instrucao, String label, int indice)
+      {
+       DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        
+        //System.out.println("Entrou preencher " + linha); //apenas para verificacao
+       // String instrucao = null, param1 = null, param2 = null, aux;
+        DefaultTableModel model = (DefaultTableModel) pilhaJump.getModel();
+        String[] rowData = new String[pilhaJump.getColumnCount()];   //para adicionar na tabela
+        
+        for (int i = 0; i < pilhaJump.getColumnCount(); i++) {
+            pilhaJump.getColumnModel().getColumn(i).setCellRenderer( centerRenderer ); //centraliza o conteudo de cada coluna
+        }
+        
+        String aux = Integer.toString(indice);
+        
+        
+        rowData[0] = instrucao;
+        rowData[1] = label;
+        rowData[2] = aux;
+        model.addRow(rowData);
+        
+      }
     /**
      * @param args the command line arguments
      */
@@ -377,7 +398,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuFileAbrir;
     private javax.swing.JMenuItem menuFileExportar;
-    private javax.swing.JTable pilhaExec;
+    private javax.swing.JTable pilhaDados;
     private javax.swing.JTable pilhaJump;
     private javax.swing.JTable tabelaExec;
     private javax.swing.JTextField textFIeldEntrada;

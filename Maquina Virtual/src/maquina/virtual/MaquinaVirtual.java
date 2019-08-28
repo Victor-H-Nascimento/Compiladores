@@ -7,7 +7,6 @@ public class MaquinaVirtual {
     private static String linha;
     //private static Funcoes c;
     //private static Arquivo arq;
-    ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
     
     public static void main(String[] args) {
 
@@ -23,12 +22,12 @@ public class MaquinaVirtual {
         
     }
     
-    public void leArquivo(String arquivoSelecionado, Funcoes c, Arquivo arq) {
+    public void leArquivo(String arquivoSelecionado, Funcoes c, Arquivo arq, ArrayList<ListaAuxiliar> filaJMP) {
         arq.Read(arquivoSelecionado,c);
         arq.EnderecaJMP(c, filaJMP);
     }
 
-    public void darNomeBacana(Funcoes c)
+    public void darNomeBacana(Funcoes c, ArrayList<ListaAuxiliar> filaJMP)
     {
         String nomeFuncao;
         String primeiroParametro, segundoParametro;

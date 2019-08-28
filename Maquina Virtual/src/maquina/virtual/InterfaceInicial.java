@@ -6,6 +6,7 @@
 package maquina.virtual;
 
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -157,6 +158,7 @@ public class InterfaceInicial extends javax.swing.JFrame {
         // TODO add your handling code here:
         Arquivo arq = new Arquivo();
         Funcoes c = new Funcoes();
+        ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
         MaquinaVirtual mv = new MaquinaVirtual();
         JFileChooser fileChooser = new JFileChooser();//e possivel escolher uma pasta para inicializar (/home/desktop....)
         fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos txt", "txt"));//alterar para obj
@@ -166,17 +168,23 @@ public class InterfaceInicial extends javax.swing.JFrame {
             File arquivo = fileChooser.getSelectedFile();
  
            String path = arquivo.getAbsolutePath();
-            mv.leArquivo(path, c, arq);
+            mv.leArquivo(path, c, arq,filaJMP);
+            
             
             Interface tabelaPreenchida = new Interface(c);
-            tabelaPreenchida.setSize(615,455);
+            tabelaPreenchida.setSize(922,561);
             tabelaPreenchida.setResizable(false);
             tabelaPreenchida.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             tabelaPreenchida.setVisible(true);
             
             for (int i = 0; i < c.tamanhoFila(); i++) {
                 //System.out.println("*/*/*/*/*/ " + c.getItemFila(i));
-                tabelaPreenchida.preencherTabela(c.getItemFila(i));
+                tabelaPreenchida.preencherTabela(c.getItemFila(i),i+1);
+               // 
+            }
+            
+            for (ListaAuxiliar itemLista : filaJMP) {
+                tabelaPreenchida.preencherJumps(itemLista.getInstrucao(),itemLista.getLabel(),itemLista.getIndice());
             }
             
             dispose();
