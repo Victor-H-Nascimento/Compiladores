@@ -1,6 +1,4 @@
 package maquina.virtual;
-
-import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -9,6 +7,7 @@ public class MaquinaVirtual {
     private static String linha;
     //private static Funcoes c;
     //private static Arquivo arq;
+    ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
     
     public static void main(String[] args) {
 
@@ -17,27 +16,23 @@ public class MaquinaVirtual {
         
         InterfaceInicial inicial = new InterfaceInicial();
         inicial.setSize(615,455);
+        inicial.setResizable(false);
         inicial.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inicial.setVisible(true);
         //Fila filaJMP = new Fila();
         
-        
-
-        
     }
     
     public void leArquivo(String arquivoSelecionado, Funcoes c, Arquivo arq) {
-        
-        ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
+        arq.Read(arquivoSelecionado,c);
+        arq.EnderecaJMP(c, filaJMP);
+    }
+
+    public void darNomeBacana(Funcoes c)
+    {
         String nomeFuncao;
         String primeiroParametro, segundoParametro;
         String aux;
-        
-        arq.Read(arquivoSelecionado,c);
-        arq.EnderecaJMP(c, filaJMP);
-        
-        
-        
        
         do {
             String retorno = c.getItemFila(c.getI());
@@ -200,7 +195,7 @@ public class MaquinaVirtual {
             c.PRINTAPILHA();
             System.out.println(""+"******************************************************************************************"+"");
         } while (!linha.contains("HLT"));
-        //sempre que executar uma linha, atualizar o i com a funcao setI
+        //sempre que executar uma linha, atualizar o i com a funcao setI 
     }
-
+    
 }

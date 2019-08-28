@@ -6,7 +6,6 @@
 package maquina.virtual;
 
 import java.io.File;
-import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -159,20 +158,29 @@ public class InterfaceInicial extends javax.swing.JFrame {
         Arquivo arq = new Arquivo();
         Funcoes c = new Funcoes();
         MaquinaVirtual mv = new MaquinaVirtual();
-        String path = new String();
         JFileChooser fileChooser = new JFileChooser();//e possivel escolher uma pasta para inicializar (/home/desktop....)
         fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos txt", "txt"));//alterar para obj
+        
         int retornoArquivo = fileChooser.showOpenDialog(null);  //abre a pasta para escolher o arquivo
         if(retornoArquivo == JFileChooser.APPROVE_OPTION){ //arquivo selecionado
             File arquivo = fileChooser.getSelectedFile();
  
-            path = arquivo.getAbsolutePath();
+           String path = arquivo.getAbsolutePath();
             mv.leArquivo(path, c, arq);
             
-            Interface tabelaPreenchida = new Interface();
+            Interface tabelaPreenchida = new Interface(c);
             tabelaPreenchida.setSize(615,455);
+            tabelaPreenchida.setResizable(false);
             tabelaPreenchida.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             tabelaPreenchida.setVisible(true);
+            
+            for (int i = 0; i < c.tamanhoFila(); i++) {
+                //System.out.println("*/*/*/*/*/ " + c.getItemFila(i));
+                tabelaPreenchida.preencherTabela(c.getItemFila(i));
+            }
+            
+            dispose();
+            
         }
 
         

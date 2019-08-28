@@ -41,7 +41,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
         this.fila.insere(x);
     }
 
-    public int tamanhoFila(Object x) {
+    public int tamanhoFila() {
         return this.fila.tamanhoFila();
     }
 

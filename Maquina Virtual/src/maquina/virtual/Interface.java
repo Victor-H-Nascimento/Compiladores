@@ -5,11 +5,6 @@
  */
 package maquina.virtual;
 
-import java.io.File;
-import java.util.ArrayList;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 /**
  *
  * @author ettore
@@ -18,11 +13,21 @@ public class Interface extends javax.swing.JFrame {
 
     /**
      * Creates new form Interface
+     * @param c
      */
-    public Interface() {
+  
+
+   
+    public Interface(Funcoes c) {
         initComponents();
     }
 
+    
+    
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -300,6 +305,7 @@ public class Interface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void menuFileExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileExportarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuFileExportarActionPerformed
@@ -316,6 +322,13 @@ public class Interface extends javax.swing.JFrame {
         
     }//GEN-LAST:event_menuFileAbrirActionPerformed
 
+      public void preencherTabela(String linha) {                                                 
+        
+        System.out.println("Entrou preencher " + linha);
+       
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -343,12 +356,7 @@ public class Interface extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Interface().setVisible(true);
-            }
-        });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

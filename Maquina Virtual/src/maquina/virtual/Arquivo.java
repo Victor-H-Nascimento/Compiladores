@@ -43,7 +43,7 @@ public class Arquivo {
 
     public void EnderecaJMP(Funcoes c, ArrayList<ListaAuxiliar> fila) {
 
-        for (int x = 0; x < c.tamanhoFila(c); x++) {
+        for (int x = 0; x < c.tamanhoFila(); x++) {
             String linhaComInstrucao = c.getItemFila(x);
 
             /*
@@ -54,7 +54,7 @@ public class Arquivo {
                 String instrucao = linhaComInstrucao.split(" ")[0];
                 String label = linhaComInstrucao.split(" ")[1];
 
-                for (int i = 0; i < c.tamanhoFila(c); i++) {
+                for (int i = 0; i < c.tamanhoFila(); i++) {
                     String a = c.getItemFila(i);
 
                     if (a.startsWith(label.concat(" "))) {
