@@ -313,25 +313,7 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_textFIeldEntradaActionPerformed
 
     private void menuFileAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileAbrirActionPerformed
-        // TODO add your handling code here:
-        Arquivo arq = new Arquivo();
-        Funcoes c = new Funcoes();
         
-        JFileChooser fileChooser = new JFileChooser();//e possivel escolher uma pasta para inicializar (/home/desktop....)
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos txt", "txt"));//alterar para obj
-        int retornoArquivo = fileChooser.showOpenDialog(null);  //abre a pasta para escolher o arquivo
-            if(retornoArquivo == JFileChooser.APPROVE_OPTION){ //arquivo selecionado
-                File arquivo = fileChooser.getSelectedFile();
-                    arq.Read(arquivo.getAbsolutePath(),c);
-            }
-            
-            ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
-            String nomeFuncao;
-            String primeiroParametro, segundoParametro;
-            String aux;
-            //botao de selecionar arquivo
-            arq.EnderecaJMP(c, filaJMP);
-            //continuacao do codigo
     }//GEN-LAST:event_menuFileAbrirActionPerformed
 
     /**
