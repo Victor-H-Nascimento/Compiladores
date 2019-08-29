@@ -22,6 +22,10 @@ public class InterfaceInicial extends javax.swing.JFrame {
      */
     public InterfaceInicial() {
         initComponents();
+        textFIeldEntrada.setEnabled(false);
+        textFieldSaida.setEnabled(false);
+        botaoExecutar.setEnabled(false);
+        botaoContinuar.setEnabled(false);
     }
 
     /**
@@ -63,8 +67,14 @@ public class InterfaceInicial extends javax.swing.JFrame {
         jScrollPane5.setViewportView(textFieldSaida);
 
         botaoExecutar.setText("Executar");
+        botaoExecutar.setMaximumSize(new java.awt.Dimension(100, 29));
+        botaoExecutar.setMinimumSize(new java.awt.Dimension(100, 29));
+        botaoExecutar.setPreferredSize(new java.awt.Dimension(100, 29));
 
         botaoContinuar.setText("Continuar");
+        botaoContinuar.setMaximumSize(new java.awt.Dimension(100, 29));
+        botaoContinuar.setMinimumSize(new java.awt.Dimension(100, 29));
+        botaoContinuar.setPreferredSize(new java.awt.Dimension(100, 29));
         botaoContinuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoContinuarActionPerformed(evt);
@@ -86,8 +96,8 @@ public class InterfaceInicial extends javax.swing.JFrame {
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
                 .addGap(69, 69, 69)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(botaoExecutar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoContinuar))
+                    .addComponent(botaoExecutar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
         jPanel1Layout.setVerticalGroup(
@@ -97,12 +107,12 @@ public class InterfaceInicial extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textFIeldEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoExecutar))
+                    .addComponent(botaoExecutar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoContinuar))
+                    .addComponent(botaoContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -170,17 +180,14 @@ public class InterfaceInicial extends javax.swing.JFrame {
            String path = arquivo.getAbsolutePath();
             mv.leArquivo(path, c, arq,filaJMP);
             
-            
             Interface tabelaPreenchida = new Interface(c);
-            tabelaPreenchida.setSize(922,561);
             tabelaPreenchida.setResizable(false);
             tabelaPreenchida.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            tabelaPreenchida.setLocationRelativeTo(this);
             tabelaPreenchida.setVisible(true);
             
             for (int i = 0; i < c.tamanhoFila(); i++) {
-                //System.out.println("*/*/*/*/*/ " + c.getItemFila(i));
                 tabelaPreenchida.preencherTabela(c.getItemFila(i),i+1);
-               // 
             }
             
             for (ListaAuxiliar itemLista : filaJMP) {

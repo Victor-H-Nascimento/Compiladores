@@ -70,7 +70,6 @@ public class Arquivo {
                             struct.setInstrucao(instrucao);
                             struct.setLabel(label);
                             struct.setIndice(i);
-                            System.out.println("Instrucao " + instrucao + " Label " + label + " Indice " + i);
                             fila.add(struct);
                         }
 

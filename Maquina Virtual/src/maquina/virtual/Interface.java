@@ -6,7 +6,6 @@
 package maquina.virtual;
 
 import static java.lang.String.valueOf;
-import java.lang.reflect.Array;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -26,14 +25,9 @@ public class Interface extends javax.swing.JFrame {
    
     public Interface(Funcoes c) {
         initComponents();
+        inicializaStatusComponentes();
     }
 
-    
-    
-    
-    
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -84,11 +78,11 @@ public class Interface extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Break point", "Linha", "Instrucao", "parametro1", "parametro2"
+                "Break point", "Linha", "Instrucao", "Parâmetro 1", "Parâmetro 2"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 true, false, false, false, false
@@ -104,8 +98,7 @@ public class Interface extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabelaExec);
         if (tabelaExec.getColumnModel().getColumnCount() > 0) {
-            tabelaExec.getColumnModel().getColumn(0).setResizable(false);
-            tabelaExec.getColumnModel().getColumn(0).setPreferredWidth(65);
+            tabelaExec.getColumnModel().getColumn(0).setPreferredWidth(25);
             tabelaExec.getColumnModel().getColumn(1).setPreferredWidth(25);
         }
 
@@ -168,6 +161,11 @@ public class Interface extends javax.swing.JFrame {
         jScrollPane5.setViewportView(textFieldSaida);
 
         botaoExecutar.setText("Executar");
+        botaoExecutar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botaoExecutarMouseClicked(evt);
+            }
+        });
 
         botaoContinuar.setText("Continuar");
         botaoContinuar.addActionListener(new java.awt.event.ActionListener() {
@@ -208,10 +206,10 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textFIeldEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -276,6 +274,11 @@ public class Interface extends javax.swing.JFrame {
     private void menuFileAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileAbrirActionPerformed
         
     }//GEN-LAST:event_menuFileAbrirActionPerformed
+
+    private void botaoExecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoExecutarMouseClicked
+        // TODO add your handling code here:
+        //mv.executarFuncoes(c, filaJMP); como passar parametros de Interface Inicial para interface?
+    }//GEN-LAST:event_botaoExecutarMouseClicked
 
       public void preencherTabela(String linha, int numLinha) {
         
@@ -343,6 +346,7 @@ public class Interface extends javax.swing.JFrame {
             pilhaJump.getColumnModel().getColumn(i).setCellRenderer( centerRenderer ); //centraliza o conteudo de cada coluna
         }
         
+        indice = indice + 1;
         String aux = Integer.toString(indice);
         
         
@@ -352,6 +356,12 @@ public class Interface extends javax.swing.JFrame {
         model.addRow(rowData);
         
       }
+      
+       public void inicializaStatusComponentes()
+       {
+       //botaoExecutar.setEnabled(false);
+       }
+      
     /**
      * @param args the command line arguments
      */
@@ -368,17 +378,15 @@ public class Interface extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
+        
+        
         
     }
 
