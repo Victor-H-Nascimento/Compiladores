@@ -291,7 +291,7 @@ public class Interface extends javax.swing.JFrame {
         
         String[] rowData = new String[tabelaExec.getColumnCount()];   //para adicionar na tabela
         
-        for (int i = 0; i < tabelaExec.getColumnCount(); i++) {
+        for (int i = 1; i < tabelaExec.getColumnCount(); i++) {//1 pois nao queremos centralizar o break point
             tabelaExec.getColumnModel().getColumn(i).setCellRenderer( centerRenderer ); //centraliza o conteudo de cada coluna
         }
         
