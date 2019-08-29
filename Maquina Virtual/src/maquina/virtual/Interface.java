@@ -6,9 +6,14 @@
 package maquina.virtual;
 
 import static java.lang.String.valueOf;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Stack;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+
 
 /**
  *
@@ -18,14 +23,22 @@ public class Interface extends javax.swing.JFrame {
 
     /**
      * Creates new form Interface
+     *
      * @param c
+     * @param mv
+     * @param filaJMP
      */
-  
-
-   
-    public Interface(Funcoes c) {
+    public MaquinaVirtual mv = new MaquinaVirtual();
+    public ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
+    public Funcoes c = new Funcoes();
+    private Scanner scanner = new Scanner(System.in);
+    
+    public Interface(Funcoes c, MaquinaVirtual mv, ArrayList<ListaAuxiliar> filaJMP) {
         initComponents();
         inicializaStatusComponentes();
+        this.mv = mv;
+        this.filaJMP = filaJMP;
+        this.c = c;
     }
 
     /**
@@ -258,7 +271,7 @@ public class Interface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void menuFileExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileExportarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_menuFileExportarActionPerformed
@@ -272,58 +285,58 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_textFIeldEntradaActionPerformed
 
     private void menuFileAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileAbrirActionPerformed
-        
+
     }//GEN-LAST:event_menuFileAbrirActionPerformed
 
     private void botaoExecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoExecutarMouseClicked
         // TODO add your handling code here:
-        //mv.executarFuncoes(c, filaJMP); como passar parametros de Interface Inicial para interface?
+        mv.executarFuncoes(c, filaJMP); //como passar parametros de Interface Inicial para interface?
+       
+        
     }//GEN-LAST:event_botaoExecutarMouseClicked
 
-      public void preencherTabela(String linha, int numLinha) {
-        
+    public void preencherTabela(String linha, int numLinha) {
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        
+
         //System.out.println("Entrou preencher " + linha); //apenas para verificacao
         String instrucao = null, param1 = null, param2 = null, aux;
         DefaultTableModel model = (DefaultTableModel) tabelaExec.getModel();
-        
+
         String[] rowData = new String[tabelaExec.getColumnCount()];   //para adicionar na tabela
-        
+
         for (int i = 1; i < tabelaExec.getColumnCount(); i++) {//1 pois nao queremos centralizar o break point
-            tabelaExec.getColumnModel().getColumn(i).setCellRenderer( centerRenderer ); //centraliza o conteudo de cada coluna
+            tabelaExec.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); //centraliza o conteudo de cada coluna
         }
-        
+
         //coluna 0 contem o breakpoint.
         if (linha.contains(" ")) {
 
-            
-            
-                if (linha.contains(",")) {
-                    //2 parametros
+            if (linha.contains(",")) {
+                //2 parametros
 
-                    instrucao = linha.split(" ")[0];
-                    aux = linha.split(" ")[1];
-                    param1 = aux.split(",")[0];
-                    param2 = aux.split(",")[1];
-                    
-                } else {
-                    //1 parametro
-                    
-                    instrucao = linha.split(" ")[0];
-                    param1 = linha.split(" ")[1];
-                    param2 = null;
-                }
-                
-        }else {
+                instrucao = linha.split(" ")[0];
+                aux = linha.split(" ")[1];
+                param1 = aux.split(",")[0];
+                param2 = aux.split(",")[1];
+
+            } else {
+                //1 parametro
+
+                instrucao = linha.split(" ")[0];
+                param1 = linha.split(" ")[1];
+                param2 = null;
+            }
+
+        } else {
             //sem parametros
-                //instrucao = linha;
-            
-                    instrucao = linha;
-                    param1 = null;
-                    param2 = null;
-                    
+            //instrucao = linha;
+
+            instrucao = linha;
+            param1 = null;
+            param2 = null;
+
         }
         rowData[1] = valueOf(numLinha);
         rowData[2] = instrucao;
@@ -331,37 +344,58 @@ public class Interface extends javax.swing.JFrame {
         rowData[4] = param2;
         model.addRow(rowData);  //adiciona de fato a tabela 
     }
-    
-      public void preencherJumps(String instrucao, String label, int indice)
-      {
-       DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+
+    public void preencherJumps(String instrucao, String label, int indice) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        
+
         //System.out.println("Entrou preencher " + linha); //apenas para verificacao
-       // String instrucao = null, param1 = null, param2 = null, aux;
+        // String instrucao = null, param1 = null, param2 = null, aux;
         DefaultTableModel model = (DefaultTableModel) pilhaJump.getModel();
         String[] rowData = new String[pilhaJump.getColumnCount()];   //para adicionar na tabela
-        
+
         for (int i = 0; i < pilhaJump.getColumnCount(); i++) {
-            pilhaJump.getColumnModel().getColumn(i).setCellRenderer( centerRenderer ); //centraliza o conteudo de cada coluna
+            pilhaJump.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); //centraliza o conteudo de cada coluna
         }
-        
+
         indice = indice + 1;
         String aux = Integer.toString(indice);
-        
-        
+
         rowData[0] = instrucao;
         rowData[1] = label;
         rowData[2] = aux;
         model.addRow(rowData);
+
+    }
+
+    public void inicializaStatusComponentes() {
+        //botaoExecutar.setEnabled(false);
+    }
+    
+    public void preencherPilha(Pilha pilha){
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         
-      }
-      
-       public void inicializaStatusComponentes()
-       {
-       //botaoExecutar.setEnabled(false);
-       }
-      
+        DefaultTableModel model = (DefaultTableModel) pilhaDados.getModel();
+        String[] rowData = new String[pilhaDados.getColumnCount()];   //para adicionar na tabela
+        
+        for (int i = 0; i < pilhaDados.getColumnCount(); i++) {
+            pilhaDados.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); //centraliza o conteudo de cada coluna
+        }
+        
+        for (int j = 0; j < pilha.topo(); j++) {
+            
+            
+            
+            rowData[0] = Integer.toString(pilha.busca(j));
+            model.addRow(rowData);
+        }
+        
+        
+    }
+    
+    
+
     /**
      * @param args the command line arguments
      */
@@ -382,13 +416,11 @@ public class Interface extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
-        //</editor-fold>
 
-        
-        
-        
+        //</editor-fold>
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoContinuar;
