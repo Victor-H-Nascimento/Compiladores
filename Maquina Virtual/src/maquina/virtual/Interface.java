@@ -13,8 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-
-
 /**
  *
  * @author ettore
@@ -32,7 +30,8 @@ public class Interface extends javax.swing.JFrame {
     public ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
     public Funcoes c = new Funcoes();
     private Scanner scanner = new Scanner(System.in);
-    
+     Pilha pilha = new Pilha();
+
     public Interface(Funcoes c, MaquinaVirtual mv, ArrayList<ListaAuxiliar> filaJMP) {
         initComponents();
         inicializaStatusComponentes();
@@ -290,11 +289,13 @@ public class Interface extends javax.swing.JFrame {
 
     private void botaoExecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoExecutarMouseClicked
         // TODO add your handling code here:
-        mv.executarFuncoes(c, filaJMP); //como passar parametros de Interface Inicial para interface?
-       
-        
+         String comando;
+        do {
+            comando = mv.executarFuncoes2(c, filaJMP);
+            preencherPilha();
+        } while (!"HLT".equals(comando));
     }//GEN-LAST:event_botaoExecutarMouseClicked
-
+    
     public void preencherTabela(String linha, int numLinha) {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -371,30 +372,30 @@ public class Interface extends javax.swing.JFrame {
     public void inicializaStatusComponentes() {
         //botaoExecutar.setEnabled(false);
     }
+
     
-    public void preencherPilha(Pilha pilha){
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+    public void preencherPilha() {
+         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         
-        DefaultTableModel model = (DefaultTableModel) pilhaDados.getModel();
+         DefaultTableModel model = (DefaultTableModel) pilhaDados.getModel();
         String[] rowData = new String[pilhaDados.getColumnCount()];   //para adicionar na tabela
         
         for (int i = 0; i < pilhaDados.getColumnCount(); i++) {
             pilhaDados.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); //centraliza o conteudo de cada coluna
         }
         
-        for (int j = 0; j < pilha.topo(); j++) {
-            
-            
-            
+      
+       
+        pilha = c.pilhaInteira();
+        System.out.println("Tamanho da pilha = " + pilha.topo());
+        for (int j = 0; j <= pilha.topo(); j++) {
+            System.out.println("Colocar " + pilha.busca(j));
             rowData[0] = Integer.toString(pilha.busca(j));
             model.addRow(rowData);
         }
-        
-        
+        System.out.println("Linhas = "+model.getRowCount());
     }
-    
-    
 
     /**
      * @param args the command line arguments
@@ -419,8 +420,7 @@ public class Interface extends javax.swing.JFrame {
 
         //</editor-fold>
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoContinuar;

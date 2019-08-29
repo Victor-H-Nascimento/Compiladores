@@ -24,6 +24,11 @@ public class Pilha {
         this.pilha.add(objeto);
     }
     
+    public Pilha retornaPilha()
+    {
+        return this;
+    }
+    
     public void inserePosicaoEspecifica(Object objeto,int x) {
         this.pilha.add(x, objeto);
     }

@@ -180,7 +180,7 @@ public class InterfaceInicial extends javax.swing.JFrame {
            String path = arquivo.getAbsolutePath();
             mv.leArquivo(path, c, arq,filaJMP);
             
-            Interface tabelaPreenchida = new Interface(c);
+            Interface tabelaPreenchida = new Interface(c,mv,filaJMP);
             tabelaPreenchida.setResizable(false);
             tabelaPreenchida.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             tabelaPreenchida.setLocationRelativeTo(this);
