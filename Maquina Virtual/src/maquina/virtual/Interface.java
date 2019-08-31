@@ -65,6 +65,7 @@ public class Interface extends javax.swing.JFrame {
         textFieldSaida = new javax.swing.JTextArea();
         botaoExecutar = new javax.swing.JButton();
         botaoContinuar = new javax.swing.JButton();
+        passoApasso = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuFileAbrir = new javax.swing.JMenuItem();
@@ -186,6 +187,13 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        passoApasso.setText("jButton1");
+        passoApasso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                passoApassoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -203,15 +211,19 @@ public class Interface extends javax.swing.JFrame {
                             .addComponent(jScrollPane5)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE))
                 .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(botaoContinuar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(botaoContinuar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(passoApasso)
+                        .addGap(29, 29, 29))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,7 +237,8 @@ public class Interface extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textFIeldEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoExecutar))
+                    .addComponent(botaoExecutar)
+                    .addComponent(passoApasso))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
@@ -295,6 +308,12 @@ public class Interface extends javax.swing.JFrame {
             preencherPilha();
         } while (!"HLT".equals(comando));
     }//GEN-LAST:event_botaoExecutarMouseClicked
+
+    private void passoApassoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passoApassoMouseClicked
+        // TODO add your handling code here:
+        String comando = mv.executarFuncoes2(c, filaJMP);
+        preencherPilha();
+    }//GEN-LAST:event_passoApassoMouseClicked
     
     public void preencherTabela(String linha, int numLinha) {
 
@@ -375,7 +394,38 @@ public class Interface extends javax.swing.JFrame {
 
     
     public void preencherPilha() {
-         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+         
+         pilha = c.pilhaInteira();
+        int aux = pilha.topo();
+        
+        System.out.println("Tabela [" + (aux+1) + "] [1]");
+        Object [][] tabelaDados = new Object [aux + 1][1];
+        
+        for (int j = 0; j <= pilha.topo(); j++) {
+           int indice = pilha.topo() - j;
+            System.out.println("Ind "+ indice);
+            System.out.println("Colocar " + pilha.busca(j));
+            tabelaDados[indice][0] = pilha.busca(j);
+        }
+        
+        pilhaDados.setModel(new javax.swing.table.DefaultTableModel(
+           tabelaDados,
+            new String [] {
+                "Dados"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        
+        
+        /*DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         
          DefaultTableModel model = (DefaultTableModel) pilhaDados.getModel();
@@ -394,7 +444,7 @@ public class Interface extends javax.swing.JFrame {
             rowData[0] = Integer.toString(pilha.busca(j));
             model.addRow(rowData);
         }
-        System.out.println("Linhas = "+model.getRowCount());
+        System.out.println("Linhas = "+model.getRowCount());*/
     }
 
     /**
@@ -438,6 +488,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuFileAbrir;
     private javax.swing.JMenuItem menuFileExportar;
+    private javax.swing.JButton passoApasso;
     private javax.swing.JTable pilhaDados;
     private javax.swing.JTable pilhaJump;
     private javax.swing.JTable tabelaExec;

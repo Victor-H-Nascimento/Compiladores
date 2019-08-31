@@ -16,7 +16,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     private int s;//topo da plha
     private int i;//indice proxima instrucao
     private final int numeroNULL;
-    public Pilha pilha = new Pilha();
+    private Pilha pilha = new Pilha();
     private Fila fila = new Fila();
     private Scanner scanner = new Scanner(System.in);
 
