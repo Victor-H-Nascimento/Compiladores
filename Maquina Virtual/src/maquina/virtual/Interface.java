@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,7 +31,8 @@ public class Interface extends javax.swing.JFrame {
     public ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
     public Funcoes c = new Funcoes();
     private Scanner scanner = new Scanner(System.in);
-     Pilha pilha = new Pilha();
+    public int entrada;
+    Pilha pilha = new Pilha();
 
     public Interface(Funcoes c, MaquinaVirtual mv, ArrayList<ListaAuxiliar> filaJMP) {
         initComponents();
@@ -58,9 +60,7 @@ public class Interface extends javax.swing.JFrame {
         pilhaDados = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         pilhaJump = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        textFIeldEntrada = new javax.swing.JTextField();
         jScrollPane5 = new javax.swing.JScrollPane();
         textFieldSaida = new javax.swing.JTextArea();
         botaoExecutar = new javax.swing.JButton();
@@ -159,15 +159,7 @@ public class Interface extends javax.swing.JFrame {
             pilhaJump.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        jLabel1.setText("Entrada:");
-
         jLabel2.setText("Saida:");
-
-        textFIeldEntrada.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textFIeldEntradaActionPerformed(evt);
-            }
-        });
 
         textFieldSaida.setColumns(20);
         textFieldSaida.setRows(5);
@@ -202,13 +194,9 @@ public class Interface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(textFIeldEntrada)
-                            .addComponent(jScrollPane5)))
+                        .addComponent(jLabel2)
+                        .addGap(25, 25, 25)
+                        .addComponent(jScrollPane5))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -234,17 +222,16 @@ public class Interface extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(textFIeldEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoExecutar)
-                    .addComponent(passoApasso))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(botaoExecutar)
+                            .addComponent(passoApasso))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(botaoContinuar))
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoContinuar))
-                .addContainerGap())
+                    .addComponent(jLabel2))
+                .addGap(28, 28, 28))
         );
 
         menuFile.setText("File");
@@ -291,10 +278,6 @@ public class Interface extends javax.swing.JFrame {
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botaoContinuarActionPerformed
-
-    private void textFIeldEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFIeldEntradaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textFIeldEntradaActionPerformed
 
     private void menuFileAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileAbrirActionPerformed
 
@@ -446,6 +429,12 @@ public class Interface extends javax.swing.JFrame {
         }
         System.out.println("Linhas = "+model.getRowCount());*/
     }
+    
+    public static int entradaDados(){
+        String input = JOptionPane.showInputDialog("Digite um numero:");
+        int entrada = Integer.parseInt(input);
+        return entrada;
+    }
 
     /**
      * @param args the command line arguments
@@ -475,7 +464,6 @@ public class Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoContinuar;
     private javax.swing.JButton botaoExecutar;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -492,7 +480,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTable pilhaDados;
     private javax.swing.JTable pilhaJump;
     private javax.swing.JTable tabelaExec;
-    private javax.swing.JTextField textFIeldEntrada;
     private javax.swing.JTextArea textFieldSaida;
     // End of variables declaration//GEN-END:variables
 }
