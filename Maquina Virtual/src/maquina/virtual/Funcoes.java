@@ -19,7 +19,9 @@ public class Funcoes implements EncapsulamentoFuncoes {
     private Pilha pilha = new Pilha();
     private Fila fila = new Fila();
     private Scanner scanner = new Scanner(System.in);
-
+    
+    
+    
     //construtor
     public Funcoes() {
         this.i = 0;
@@ -357,9 +359,11 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public void RD() {
+        int indiceAtual = this.pilha.topo();
         this.s = this.pilha.topo() + 1; //atualiza s
         System.out.println("Entrada de dados: ");
-        this.pilha.insere(scanner.nextInt());// entrada de dados
+        //this.pilha.insere(scanner.nextInt());// entrada de dados
+        this.pilha.insere(Interface.entradaDados());
         //confirmar se precisa diferenciar bool e int
     }
 

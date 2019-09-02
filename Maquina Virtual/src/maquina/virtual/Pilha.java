@@ -66,5 +66,13 @@ public class Pilha {
     public int procuraM(int t) {
         return (int) this.pilha.elementAt(t);
     }
+    
+    public int verificaInsercao(Pilha pilha, int indice){
+        //recebe o indice inicial e verifica se o indice aumentou
+        if((this.pilha.size()-1) == indice){    //nada foi inserido
+            return 0;
+        }
+        return 1;   //algo ja foi inserido
+    }
 
 }

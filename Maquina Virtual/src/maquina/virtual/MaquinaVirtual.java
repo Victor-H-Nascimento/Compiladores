@@ -340,7 +340,7 @@ public class MaquinaVirtual {
                         c.PRN();
                         break;
                     case "RD":
-                        c.RD();
+                        c.RD() ;
                         break;
                     case "RETURN":
                         c.RETURN();
