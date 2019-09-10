@@ -76,7 +76,7 @@ public class Compilador {
          char[] auxCaracter = caracter.toCharArray();
          
         if (caracter.contains("0") || caracter.contains("1") || caracter.contains("2") || caracter.contains("3") || caracter.contains("4") || caracter.contains("5") || caracter.contains("6") || caracter.contains("7") || caracter.contains("8") || caracter.contains("9")) {//se digito
-            c.trataDigito(caracter);
+            c.trataDigito(caracter,c,arq);
         }
         else{
         
