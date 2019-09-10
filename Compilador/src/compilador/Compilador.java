@@ -69,12 +69,53 @@ public class Compilador {
 
         } while (true);//!eof
 
-        //pegaToken();
-        //colocarTokenLista();
     }
 
     public static void pegaToken() {
-
+        
+         char[] auxCaracter = caracter.toCharArray();
+         
+        if (caracter.contains("0") || caracter.contains("1") || caracter.contains("2") || caracter.contains("3") || caracter.contains("4") || caracter.contains("5") || caracter.contains("6") || caracter.contains("7") || caracter.contains("8") || caracter.contains("9")) {//se digito
+            c.trataDigito(caracter);
+        }
+        else{
+        
+            if ( (Character.getNumericValue(auxCaracter[0]) >= 65 && Character.getNumericValue(auxCaracter[0]) <= 90) || (Character.getNumericValue(auxCaracter[0]) >= 97 && Character.getNumericValue(auxCaracter[0]) <= 122)) {// se letra
+                c.trataIdentificador(caracter);
+            }
+            
+            else{
+                if (caracter.contains(":")) {// se :
+                    c.trataAtribuicao(caracter);
+                }
+                
+                else
+                {
+                    if (caracter.contains("+") || caracter.contains("-") || caracter.contains("*")) {//se +,-,*
+                        c.trataOperadorAritmetico(caracter);
+                    }
+                    
+                    else
+                    {
+                        if (caracter.contains(">") || caracter.contains("<") || caracter.contains("=") || caracter.contains("!")) {// se >,<,=,!
+                            c.trataOperadorRelacional(caracter);
+                        }
+                        
+                        else
+                        {
+                            if (caracter.contains(";") || caracter.contains(",") || caracter.contains("(") || caracter.contains(")") || caracter.contains(".")) {
+                                c.trataPontuacao(caracter);
+                            }
+                            
+                            else{
+                                System.out.println("Erro. Nenhum tratamento chamado");
+                                System.err.println("Erro Léxico 1");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static void colocaTokenLista() {

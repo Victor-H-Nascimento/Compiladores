@@ -13,12 +13,12 @@ public interface EncapsulamentoFuncoes {
     
     
     public abstract String leCaracter(Arquivo arq);
-    public abstract void trataDigito();
-    public abstract void trataIdentificador();
-    public abstract void trataPalavraReservada();
-    public abstract void trataAtribuicao();
-    public abstract void trataOperadorAritmetico();
-    public abstract void trataOperadorRelacional();
-    public abstract void trataPontuacao();
+    public abstract void trataDigito(String caracter);
+    public abstract void trataIdentificador(String caracter);
+    public abstract void trataPalavraReservada(String caracter);
+    public abstract void trataAtribuicao(String caracter);
+    public abstract void trataOperadorAritmetico(String caracter);
+    public abstract void trataOperadorRelacional(String caracter);
+    public abstract void trataPontuacao(String caracter);
     //fazer o tratamento de erro
 }

@@ -34,31 +34,31 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     @Override
-    public void trataDigito() {
+    public void trataDigito(String caracter) {
     }
 
     @Override
-    public void trataIdentificador() {
+    public void trataIdentificador(String caracter) {
     }
 
     @Override
-    public void trataPalavraReservada() {
+    public void trataPalavraReservada(String caracter) {
     }
 
     @Override
-    public void trataAtribuicao() {
+    public void trataAtribuicao(String caracter) {
     }
 
     @Override
-    public void trataOperadorAritmetico() {
+    public void trataOperadorAritmetico(String caracter) {
     }
 
     @Override
-    public void trataOperadorRelacional() {
+    public void trataOperadorRelacional(String caracter) {
     }
 
     @Override
-    public void trataPontuacao() {
+    public void trataPontuacao(String caracter) {
         
     }
     
