@@ -5,10 +5,9 @@
  */
 package compilador;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,6 +17,8 @@ public class Compilador {
 
     private static Arquivo arq = new Arquivo();
     private static Funcoes c = new Funcoes();
+    private static ArrayList<Token> listaToken = new ArrayList();
+    private static Token token;
     private static String caracter;
 
     public Compilador() {
@@ -29,7 +30,7 @@ public class Compilador {
         arq.Open("/home/victor/Área de Trabalho/lexico.txt", c);
 
         caracter = c.leCaracter(arq);
-
+        System.out.println("Caracter lido1 : " + caracter);
         do {
 
             while (caracter.contains("{") || caracter.contains(" ") || caracter.contains("\n") || caracter.contains("\t"))//!eof
@@ -40,6 +41,9 @@ public class Compilador {
                     while (!caracter.contains("}"))//!eof
                     {
                         caracter = c.leCaracter(arq);
+                        //int i = Integer.parseInt(caracter);
+                        //System.out.println("valor decimal" + i);
+                        System.out.println("comentario : " + caracter);
                     }
                     caracter = c.leCaracter(arq); //lendo logo apos }
                 }
@@ -60,9 +64,10 @@ public class Compilador {
                 {
                     caracter = c.leCaracter(arq);
                 }
-
+                System.out.println("Caracter lido2 : " + caracter);
             }
             if (caracter.contains("!eof")) {//possiveis erros do lexico ocorrerao aqui, precisamos validar quando simbolos como @ chegam no caracter
+                System.out.println("Pega token : " + caracter);
                 pegaToken();
                 colocaTokenLista();
             }
@@ -72,42 +77,28 @@ public class Compilador {
     }
 
     public static void pegaToken() {
-        
-         char[] auxCaracter = caracter.toCharArray();
-         
+
+        token = new Token();
+        char[] auxCaracter = caracter.toCharArray();
+
         if (caracter.contains("0") || caracter.contains("1") || caracter.contains("2") || caracter.contains("3") || caracter.contains("4") || caracter.contains("5") || caracter.contains("6") || caracter.contains("7") || caracter.contains("8") || caracter.contains("9")) {//se digito
-            c.trataDigito(caracter,c,arq);
-        }
-        else{
-        
-            if ( (Character.getNumericValue(auxCaracter[0]) >= 65 && Character.getNumericValue(auxCaracter[0]) <= 90) || (Character.getNumericValue(auxCaracter[0]) >= 97 && Character.getNumericValue(auxCaracter[0]) <= 122)) {// se letra
-                c.trataIdentificador(caracter,c,arq);
-            }
-            
-            else{
+            caracter = c.trataDigito(caracter, c, arq, token);
+        } else {
+            if ((Character.getNumericValue(auxCaracter[0]) >= 65 && Character.getNumericValue(auxCaracter[0]) <= 90) || (Character.getNumericValue(auxCaracter[0]) >= 97 && Character.getNumericValue(auxCaracter[0]) <= 122)) {// se letra
+                caracter = c.trataIdentificador(caracter, c, arq, token);
+            } else {
                 if (caracter.contains(":")) {// se :
-                    c.trataAtribuicao(caracter,c,arq);
-                }
-                
-                else
-                {
+                    caracter = c.trataAtribuicao(caracter, c, arq, token);
+                } else {
                     if (caracter.contains("+") || caracter.contains("-") || caracter.contains("*")) {//se +,-,*
-                        c.trataOperadorAritmetico(caracter,c,arq);
-                    }
-                    
-                    else
-                    {
+                        caracter = c.trataOperadorAritmetico(caracter, c, arq, token);
+                    } else {
                         if (caracter.contains(">") || caracter.contains("<") || caracter.contains("=") || caracter.contains("!")) {// se >,<,=,!
-                            c.trataOperadorRelacional(caracter,c,arq);
-                        }
-                        
-                        else
-                        {
+                            caracter = c.trataOperadorRelacional(caracter, c, arq, token);
+                        } else {
                             if (caracter.contains(";") || caracter.contains(",") || caracter.contains("(") || caracter.contains(")") || caracter.contains(".")) {
-                                c.trataPontuacao(caracter,c,arq);
-                            }
-                            
-                            else{
+                                caracter = c.trataPontuacao(caracter, c, arq, token);
+                            } else {
                                 System.out.println("Erro. Nenhum tratamento chamado");
                                 System.err.println("Erro Léxico 1");
                             }
@@ -119,6 +110,7 @@ public class Compilador {
     }
 
     public static void colocaTokenLista() {
-
+        listaToken.add(token);
+        
     }
 }

@@ -6,7 +6,6 @@
 package compilador;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,8 +16,8 @@ import java.util.logging.Logger;
 public class Funcoes implements EncapsulamentoFuncoes {
 
     //atributos
-    private ArrayList<Token> listaToken = new ArrayList();
-    Token token = new Token();
+    
+    SimbolosToken simbolos = new SimbolosToken();
     private int aux;
 
     @Override
@@ -34,7 +33,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     @Override
-    public String trataDigito(String caracter, Funcoes c, Arquivo arq) {
+    public String trataDigito(String caracter, Funcoes c, Arquivo arq, Token token) {
 
         String novoCaracter = c.leCaracter(arq);
 
@@ -42,14 +41,14 @@ public class Funcoes implements EncapsulamentoFuncoes {
             caracter = caracter.concat(novoCaracter);
             novoCaracter = c.leCaracter(arq);
         }
-        token.setSimbolo("sNumero");
+        token.setSimbolo(simbolos.getNumero());
         token.setLexema(caracter);
 
         return novoCaracter;
     }
 
     @Override
-    public String trataIdentificador(String caracter, Funcoes c, Arquivo arq) {
+    public String trataIdentificador(String caracter, Funcoes c, Arquivo arq, Token token) {
         String novoCaracter = c.leCaracter(arq);
         char[] auxCaracter = novoCaracter.toCharArray();
         String id = caracter;
@@ -66,91 +65,91 @@ public class Funcoes implements EncapsulamentoFuncoes {
         switch (id) {
 
             case "programa":
-                token.setSimbolo("sPrograma");
+                token.setSimbolo(simbolos.getPrograma());
                 break;
 
             case "se":
-                token.setSimbolo("sSe");
+                token.setSimbolo(simbolos.getSe());
                 break;
 
             case "entao":
-                token.setSimbolo("sEntao");
+                token.setSimbolo(simbolos.getEntao());
                 break;
 
             case "senao":
-                token.setSimbolo("sSenao");
+                token.setSimbolo(simbolos.getSenao());
                 break;
 
             case "enquanto":
-                token.setSimbolo("sEnquanto");
+                token.setSimbolo(simbolos.getEnquanto());
                 break;
 
             case "faca":
-                token.setSimbolo("sFaca");
+                token.setSimbolo(simbolos.getFaca());
                 break;
 
             case "inicio":
-                token.setSimbolo("sInicio");
+                token.setSimbolo(simbolos.getInicio());
                 break;
 
             case "fim":
-                token.setSimbolo("sFim");
+                token.setSimbolo(simbolos.getFim());
                 break;
 
             case "escreva":
-                token.setSimbolo("sEscreva");
+                token.setSimbolo(simbolos.getEscreva());
                 break;
 
             case "leia":
-                token.setSimbolo("sLeia");
+                token.setSimbolo(simbolos.getLeia());
                 break;
 
             case "var":
-                token.setSimbolo("sVar");
+                token.setSimbolo(simbolos.getVar());
                 break;
 
             case "inteiro":
-                token.setSimbolo("sInteiro");
+                token.setSimbolo(simbolos.getInteiro());
                 break;
 
             case "booleano":
-                token.setSimbolo("sBooleano");
+                token.setSimbolo(simbolos.getBooleano());
                 break;
 
             case "verdadeiro":
-                token.setSimbolo("sVerdadeiro");
+                token.setSimbolo(simbolos.getVerdadeiro());
                 break;
 
             case "falso":
-                token.setSimbolo("sFalso");
+                token.setSimbolo(simbolos.getFalso());
                 break;
 
             case "procedimento":
-                token.setSimbolo("sProcedimento");
+                token.setSimbolo(simbolos.getProcedimento());
                 break;
 
             case "funcao":
-                token.setSimbolo("sFuncao");
+                token.setSimbolo(simbolos.getFuncao());
                 break;
 
             case "div":
-                token.setSimbolo("sDiv");
+                token.setSimbolo(simbolos.getDivisao());
                 break;
 
             case "e":
-                token.setSimbolo("sE");
+                token.setSimbolo(simbolos.getE());
                 break;
 
             case "ou":
-                token.setSimbolo("sOu");
+                token.setSimbolo(simbolos.getOu());
                 break;
 
             case "nao":
-                token.setSimbolo("sNao");
+                token.setSimbolo(simbolos.getNao());
                 break;
 
             default:
-                token.setSimbolo("sIdentificador");
+                token.setSimbolo(simbolos.getIdentificador());
                 break;
 
         }
@@ -159,15 +158,15 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     @Override
-    public String trataAtribuicao(String caracter, Funcoes c, Arquivo arq) {
+    public String trataAtribuicao(String caracter, Funcoes c, Arquivo arq, Token token) {
 
         String novoCaracter = c.leCaracter(arq);
 
         if (novoCaracter.contains("=")) {
             caracter = caracter.concat(novoCaracter);
-            token.setSimbolo("sAtribuicao");
+            token.setSimbolo(simbolos.getAtribuicao());
         } else {
-            token.setSimbolo("sDoisPontos");
+            token.setSimbolo(simbolos.getDoisPontos());
         }
 
         token.setLexema(caracter);
@@ -176,23 +175,23 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     @Override
-    public String trataOperadorAritmetico(String caracter, Funcoes c, Arquivo arq) {
+    public String trataOperadorAritmetico(String caracter, Funcoes c, Arquivo arq, Token token) {
         String novoCaracter = c.leCaracter(arq);
 
         switch (caracter) {
 
             case "+":
-                token.setSimbolo("sMais");
+                token.setSimbolo(simbolos.getMais());
                 token.setLexema(caracter);
                 break;
 
             case "-":
-                token.setSimbolo("sMenos");
+                token.setSimbolo(simbolos.getMenos());
                 token.setLexema(caracter);
                 break;
 
             case "*":
-                token.setSimbolo("sMult");
+                token.setSimbolo(simbolos.getMultiplicacao());
                 token.setLexema(caracter);
                 break;
 
@@ -207,7 +206,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     @Override
-    public String trataOperadorRelacional(String caracter, Funcoes c, Arquivo arq) {
+    public String trataOperadorRelacional(String caracter, Funcoes c, Arquivo arq, Token token) {
         String novoCaracter = c.leCaracter(arq);
 
         if (novoCaracter.contains("=")) {
@@ -216,17 +215,17 @@ public class Funcoes implements EncapsulamentoFuncoes {
             switch (caracter) {
 
                 case ">":
-                    token.setSimbolo("sMaiorIgual");
+                    token.setSimbolo(simbolos.getMaiorIgual());
                     token.setLexema(relacional);
                     break;
 
                 case "<":
-                    token.setSimbolo("sMenorIgual");
+                    token.setSimbolo(simbolos.getMenorIgual());
                     token.setLexema(relacional);
                     break;
 
                 case "!":
-                    token.setSimbolo("sDif");
+                    token.setSimbolo(simbolos.getDiferente());
                     token.setLexema(relacional);
                     break;
 
@@ -242,17 +241,17 @@ public class Funcoes implements EncapsulamentoFuncoes {
             switch (caracter) {
 
                 case ">":
-                    token.setSimbolo("sMaior");
+                    token.setSimbolo(simbolos.getMaior());
                     token.setLexema(caracter);
                     break;
 
                 case "<":
-                    token.setSimbolo("sMenor");
+                    token.setSimbolo(simbolos.getMenor());
                     token.setLexema(caracter);
                     break;
 
                 case "=":
-                    token.setSimbolo("sIgual");
+                    token.setSimbolo(simbolos.getIgual());
                     token.setLexema(caracter);
                     break;
 
@@ -268,33 +267,33 @@ public class Funcoes implements EncapsulamentoFuncoes {
     }
 
     @Override
-    public String trataPontuacao(String caracter, Funcoes c, Arquivo arq) {
+    public String trataPontuacao(String caracter, Funcoes c, Arquivo arq, Token token) {
         String novoCaracter = c.leCaracter(arq);
 
         switch (caracter) {
 
             case ";":
-                token.setSimbolo("sPontoVirgula");
+                token.setSimbolo(simbolos.getPontoVirgula());
                 token.setLexema(caracter);
                 break;
 
             case ".":
-                token.setSimbolo("sPonto");
+                token.setSimbolo(simbolos.getPonto());
                 token.setLexema(caracter);
                 break;
 
             case ",":
-                token.setSimbolo("sVirgula");
+                token.setSimbolo(simbolos.getVirgula());
                 token.setLexema(caracter);
                 break;
 
             case "(":
-                token.setSimbolo("sAbreParenteses");
+                token.setSimbolo(simbolos.getAbreParenteses());
                 token.setLexema(caracter);
                 break;
 
             case ")":
-                token.setSimbolo("sFechaParenteses");
+                token.setSimbolo(simbolos.getFechaParenteses());
                 token.setLexema(caracter);
                 break;
 
