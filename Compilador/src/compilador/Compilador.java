@@ -42,20 +42,29 @@ public class Compilador {
                         caracter = c.leCaracter(arq);
                     }
                     caracter = c.leCaracter(arq); //lendo logo apos }
-                    
-                    //retirando espacoes
-                    while(caracter.contains(" "))//!eof
-                    {
-                        caracter = c.leCaracter(arq);
-                    }
-                 
                 }
-                
-                if (caracter.contains("!eof")) {
-                    pegaToken();
-                    colocaTokenLista();
+                //retirando espacoes
+                while (caracter.contains(" "))//!eof
+                {
+                    caracter = c.leCaracter(arq);
                 }
 
+                //retirando quebra de linha
+                while (caracter.contains("\n"))//!eof
+                {
+                    caracter = c.leCaracter(arq);
+                }
+
+                //retirando tabulações
+                while (caracter.contains("\t"))//!eof
+                {
+                    caracter = c.leCaracter(arq);
+                }
+
+            }
+            if (caracter.contains("!eof")) {//possiveis erros do lexico ocorrerao aqui, precisamos validar quando simbolos como @ chegam no caracter
+                pegaToken();
+                colocaTokenLista();
             }
 
         } while (true);//!eof
