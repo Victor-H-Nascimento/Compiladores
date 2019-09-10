@@ -81,30 +81,30 @@ public class Compilador {
         else{
         
             if ( (Character.getNumericValue(auxCaracter[0]) >= 65 && Character.getNumericValue(auxCaracter[0]) <= 90) || (Character.getNumericValue(auxCaracter[0]) >= 97 && Character.getNumericValue(auxCaracter[0]) <= 122)) {// se letra
-                c.trataIdentificador(caracter);
+                c.trataIdentificador(caracter,c,arq);
             }
             
             else{
                 if (caracter.contains(":")) {// se :
-                    c.trataAtribuicao(caracter);
+                    c.trataAtribuicao(caracter,c,arq);
                 }
                 
                 else
                 {
                     if (caracter.contains("+") || caracter.contains("-") || caracter.contains("*")) {//se +,-,*
-                        c.trataOperadorAritmetico(caracter);
+                        c.trataOperadorAritmetico(caracter,c,arq);
                     }
                     
                     else
                     {
                         if (caracter.contains(">") || caracter.contains("<") || caracter.contains("=") || caracter.contains("!")) {// se >,<,=,!
-                            c.trataOperadorRelacional(caracter);
+                            c.trataOperadorRelacional(caracter,c,arq);
                         }
                         
                         else
                         {
                             if (caracter.contains(";") || caracter.contains(",") || caracter.contains("(") || caracter.contains(")") || caracter.contains(".")) {
-                                c.trataPontuacao(caracter);
+                                c.trataPontuacao(caracter,c,arq);
                             }
                             
                             else{

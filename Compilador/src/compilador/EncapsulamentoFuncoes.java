@@ -15,7 +15,6 @@ public interface EncapsulamentoFuncoes {
     public abstract String leCaracter(Arquivo arq);
     public abstract String trataDigito(String caracter, Funcoes c, Arquivo arq);
     public abstract String trataIdentificador(String caracter, Funcoes c, Arquivo arq);
-    public abstract String trataPalavraReservada(String caracter, Funcoes c, Arquivo arq);
     public abstract String trataAtribuicao(String caracter, Funcoes c, Arquivo arq);
     public abstract String trataOperadorAritmetico(String caracter, Funcoes c, Arquivo arq);
     public abstract String trataOperadorRelacional(String caracter, Funcoes c, Arquivo arq);
