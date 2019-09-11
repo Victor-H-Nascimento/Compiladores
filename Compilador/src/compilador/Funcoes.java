@@ -174,6 +174,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
         if (novoCaracter.contains("=")) {
             caracter = caracter.concat(novoCaracter);
             token.setSimbolo(simbolos.getAtribuicao());
+            novoCaracter = c.leCaracter();
         } else {
             token.setSimbolo(simbolos.getDoisPontos());
         }
