@@ -16,7 +16,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
     //atributos
     SimbolosToken simbolos = new SimbolosToken();
     private final ArrayList<String> listaArquivo = new ArrayList();
-    private int aux;
 
     //funcoes Lista de Arquivo
     public void leArquivo(String caracterArquivo) {
@@ -28,7 +27,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             return true;
         }
         return false;
-        
     }
 
     @Override
@@ -59,7 +57,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public String trataIdentificador(String caracter, Funcoes c, Arquivo arq, Token token) {
         String novoCaracter = c.leCaracter();
         char[] auxCaracter = novoCaracter.toCharArray();
-        int valorASCII = (int)auxCaracter[0];
         String id = caracter;
         
         while (((int)auxCaracter[0] >= 65 && (int)auxCaracter[0] <= 90) || ((int)auxCaracter[0] >= 97 && (int)auxCaracter[0] <= 122) || ((int)auxCaracter[0] >= 48 && (int)auxCaracter[0] <= 57) ||novoCaracter.contains("_")) {

@@ -18,29 +18,12 @@ public class Arquivo {
 
     }
 
-    public void Open(String caminho, Funcoes c) {
-
-        try {
-            this.arq = new FileReader(caminho);
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("Erro: Arquivo não encontrado!");
-        }
-    }
-
-    public int Read() throws IOException {
-        lerArq = new BufferedReader(arq);
-        return this.lerArq.read();
-    }
-    
-    
      public void Ler(String Caminho, Funcoes c) {
 
         try {
             FileReader arq = new FileReader(Caminho);
             BufferedReader lerArq = new BufferedReader(arq);
             int linha;
-            String linhaInserir = "";
             try {
 
                 do {
@@ -59,5 +42,6 @@ public class Arquivo {
             System.out.println("Erro: Arquivo não encontrado!");
         }
     }
+     
 
 }

@@ -27,60 +27,58 @@ public class Compilador {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
 
-        // arq.Open("/home/victor/Área de Trabalho/lexico.txt", c);
         arq.Ler("/home/victor/Área de Trabalho/lexico.txt", c);
 
         caracter = c.leCaracter();
         do {
 
-            while (caracter.contains("{") || caracter.contains(" ") || caracter.contains("\n") || caracter.contains("\t"))//!eof
+            while ((caracter.contains("{") || caracter.contains(" ") || caracter.contains("\n") || caracter.contains("\t")) && !c.estaVazia())//!eof
             {
 
                 if (caracter.contains("{")) {
                     //retirando comentarios
-                    while (!caracter.contains("}"))//!eof
+                    while (!caracter.contains("}") && !c.estaVazia())//!eof
                     {
                         caracter = c.leCaracter();
                     }
-                    caracter = c.leCaracter(); //lendo logo apos }
+
+                    if (!c.estaVazia()) {
+                        caracter = c.leCaracter(); //lendo logo apos }
+                    }
                 }
-                //retirando espacoes
-                while (caracter.contains(" "))//!eof
+                //retirando espacos
+                while (caracter.contains(" ") && !c.estaVazia())//!eof
                 {
                     caracter = c.leCaracter();
                 }
 
                 //retirando quebra de linha
-                while (caracter.contains("\n"))//!eof
+                while (caracter.contains("\n") && !c.estaVazia())//!eof
                 {
                     caracter = c.leCaracter();
                 }
 
                 //retirando tabulações
-                while (caracter.contains("\t"))//!eof
+                while (caracter.contains("\t") && !c.estaVazia())//!eof
                 {
                     caracter = c.leCaracter();
                 }
             }
-            if (!c.estaVazia()) {//possiveis erros do lexico ocorrerao aqui, precisamos validar quando simbolos como @ chegam no caracter
-                System.out.println("Pega token " + caracter);
+            if (!c.estaVazia()) {
                 pegaToken();
                 colocaTokenLista();
-                
+
             }
 
         } while (!c.estaVazia());//!eof
-        
-        System.out.println("**********************************");
-                mostraTokens();
-                System.out.println("**********************************");
+
+        mostraTokens();
     }
 
     public static void pegaToken() {
 
         token = new Token();
         char[] auxCaracter = caracter.toCharArray();
-        int valorASCII = (int) auxCaracter[0];
 
         if (caracter.contains("0") || caracter.contains("1") || caracter.contains("2") || caracter.contains("3") || caracter.contains("4") || caracter.contains("5") || caracter.contains("6") || caracter.contains("7") || caracter.contains("8") || caracter.contains("9")) {//se digito
             caracter = c.trataDigito(caracter, c, arq, token);
@@ -101,7 +99,7 @@ public class Compilador {
                                 caracter = c.trataPontuacao(caracter, c, arq, token);
                             } else {
                                 System.out.println("Erro. Nenhum tratamento chamado");
-                                //  System.err.println("Erro Léxico 1");
+                                System.err.println("Erro Léxico 1");
                             }
                         }
                     }
@@ -115,10 +113,13 @@ public class Compilador {
     }
 
     public static void mostraTokens() {
+         System.out.println("**********************************");
         for (Token item : listaToken) {
             System.out.println("Lexema: " + item.getLexema());
             System.out.println("Simbolo: " + item.getSimbolo());
+            System.out.println("");
         }
+         System.out.println("**********************************");
     }
 
 }
