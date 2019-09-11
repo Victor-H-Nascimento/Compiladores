@@ -5,9 +5,7 @@
  */
 package compilador;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,30 +14,40 @@ import java.util.logging.Logger;
 public class Funcoes implements EncapsulamentoFuncoes {
 
     //atributos
-    
     SimbolosToken simbolos = new SimbolosToken();
+    private final ArrayList<String> listaArquivo = new ArrayList();
     private int aux;
 
-    @Override
-    public String leCaracter(Arquivo arq) {
-        String retorno = "";
-        try {
-            aux = arq.Read();
-            retorno = Character.toString((char) aux);
-        } catch (IOException ex) {
-            Logger.getLogger(Funcoes.class.getName()).log(Level.SEVERE, null, ex);
+    //funcoes Lista de Arquivo
+    public void leArquivo(String caracterArquivo) {
+        listaArquivo.add(caracterArquivo);
+    }
+    
+    public boolean estaVazia() {
+        if (listaArquivo.isEmpty()) {
+            return true;
         }
+        return false;
+        
+    }
+
+    @Override
+    public String leCaracter() {
+        
+        String retorno = listaArquivo.get(0);
+        listaArquivo.remove(0);;
+
         return retorno;
     }
 
     @Override
     public String trataDigito(String caracter, Funcoes c, Arquivo arq, Token token) {
 
-        String novoCaracter = c.leCaracter(arq);
+        String novoCaracter = c.leCaracter();
 
         while (novoCaracter.contains("0") || novoCaracter.contains("1") || novoCaracter.contains("2") || novoCaracter.contains("3") || novoCaracter.contains("4") || novoCaracter.contains("5") || novoCaracter.contains("6") || novoCaracter.contains("7") || novoCaracter.contains("8") || novoCaracter.contains("9")) {
             caracter = caracter.concat(novoCaracter);
-            novoCaracter = c.leCaracter(arq);
+            novoCaracter = c.leCaracter();
         }
         token.setSimbolo(simbolos.getNumero());
         token.setLexema(caracter);
@@ -49,18 +57,19 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public String trataIdentificador(String caracter, Funcoes c, Arquivo arq, Token token) {
-        String novoCaracter = c.leCaracter(arq);
+        String novoCaracter = c.leCaracter();
         char[] auxCaracter = novoCaracter.toCharArray();
+        int valorASCII = (int)auxCaracter[0];
         String id = caracter;
-
-        while ((Character.getNumericValue(auxCaracter[0]) >= 65 && Character.getNumericValue(auxCaracter[0]) <= 90) || (Character.getNumericValue(auxCaracter[0]) >= 97 && Character.getNumericValue(auxCaracter[0]) <= 122) || (Character.getNumericValue(auxCaracter[0]) >= 48 && Character.getNumericValue(auxCaracter[0]) <= 57) || novoCaracter.contains("_")) {
+        
+        while (((int)auxCaracter[0] >= 65 && (int)auxCaracter[0] <= 90) || ((int)auxCaracter[0] >= 97 && (int)auxCaracter[0] <= 122) || ((int)auxCaracter[0] >= 48 && (int)auxCaracter[0] <= 57) ||novoCaracter.contains("_")) {
             id = id.concat(novoCaracter);
-            novoCaracter = c.leCaracter(arq);
+            novoCaracter = c.leCaracter();
             auxCaracter = novoCaracter.toCharArray();
 
         }
-
         token.setLexema(id);
+        
 
         switch (id) {
 
@@ -160,7 +169,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     @Override
     public String trataAtribuicao(String caracter, Funcoes c, Arquivo arq, Token token) {
 
-        String novoCaracter = c.leCaracter(arq);
+        String novoCaracter = c.leCaracter();
 
         if (novoCaracter.contains("=")) {
             caracter = caracter.concat(novoCaracter);
@@ -176,7 +185,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public String trataOperadorAritmetico(String caracter, Funcoes c, Arquivo arq, Token token) {
-        String novoCaracter = c.leCaracter(arq);
+        String novoCaracter = c.leCaracter();
 
         switch (caracter) {
 
@@ -207,7 +216,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public String trataOperadorRelacional(String caracter, Funcoes c, Arquivo arq, Token token) {
-        String novoCaracter = c.leCaracter(arq);
+        String novoCaracter = c.leCaracter();
 
         if (novoCaracter.contains("=")) {
             String relacional = caracter.concat(novoCaracter);
@@ -236,7 +245,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
             }
 
-            novoCaracter = c.leCaracter(arq);// le mais um caracter caso o o igual ter sido processado pelo switch acima
+            novoCaracter = c.leCaracter();// le mais um caracter caso o o igual ter sido processado pelo switch acima
         } else {
             switch (caracter) {
 
@@ -268,7 +277,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public String trataPontuacao(String caracter, Funcoes c, Arquivo arq, Token token) {
-        String novoCaracter = c.leCaracter(arq);
+        String novoCaracter = c.leCaracter();
 
         switch (caracter) {
 

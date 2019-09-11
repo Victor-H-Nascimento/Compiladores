@@ -32,5 +32,32 @@ public class Arquivo {
         lerArq = new BufferedReader(arq);
         return this.lerArq.read();
     }
+    
+    
+     public void Ler(String Caminho, Funcoes c) {
+
+        try {
+            FileReader arq = new FileReader(Caminho);
+            BufferedReader lerArq = new BufferedReader(arq);
+            int linha;
+            String linhaInserir = "";
+            try {
+
+                do {
+                    
+                    linha = lerArq.read();
+                    c.leArquivo(Character.toString((char) linha));
+                    
+                } while (linha != -1);
+
+                arq.close();
+
+            } catch (IOException ex) {
+                System.out.println("Erro: Não foi possível ler o arquivo!");
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Erro: Arquivo não encontrado!");
+        }
+    }
 
 }

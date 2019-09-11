@@ -12,7 +12,7 @@ package compilador;
 public interface EncapsulamentoFuncoes {
     
     
-    public abstract String leCaracter(Arquivo arq);
+    public abstract String leCaracter();
     public abstract String trataDigito(String caracter, Funcoes c, Arquivo arq,Token token);
     public abstract String trataIdentificador(String caracter, Funcoes c, Arquivo arq,Token token);
     public abstract String trataAtribuicao(String caracter, Funcoes c, Arquivo arq,Token token);
