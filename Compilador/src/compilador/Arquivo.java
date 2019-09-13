@@ -23,15 +23,27 @@ public class Arquivo {
         try {
             FileReader arq = new FileReader(Caminho);
             BufferedReader lerArq = new BufferedReader(arq);
-            int linha;
+            int linha = 0;
+            boolean continua = true;
+            
             try {
 
                 do {
                     
-                    linha = lerArq.read();
-                    c.leArquivo(Character.toString((char) linha));
+                    //linha = lerArq.read();
+                    //c.leArquivo(Character.toString((char) linha));
+                    String aux = lerArq.readLine();
                     
-                } while (linha != -1);
+                    if (aux != null) {
+                         c.leArquivo(aux);
+                    }
+                    
+                    else{
+                        continua = false;
+                    }
+                    
+                    //System.out.println("Oq estou lendo?" + lerArq.readLine());
+                } while (continua);
 
                 arq.close();
 

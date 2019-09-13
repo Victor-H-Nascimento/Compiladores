@@ -117,6 +117,7 @@ public class Compilador {
         for (Token item : listaToken) {
             System.out.println("Lexema: " + item.getLexema());
             System.out.println("Simbolo: " + item.getSimbolo());
+            System.out.println("Linha: " + item.getLinhaCodigo());
             System.out.println("");
         }
          System.out.println("**********************************");

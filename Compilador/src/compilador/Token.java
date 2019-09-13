@@ -12,6 +12,7 @@ package compilador;
 public class Token {
     private String simbolo;
     private String lexema;
+    private int linhaCodigo;
 
     public Token() {
     }
@@ -30,6 +31,14 @@ public class Token {
 
     public void setLexema(String lexema) {
         this.lexema = lexema;
+    }
+
+    public int getLinhaCodigo() {
+        return linhaCodigo;
+    }
+
+    public void setLinhaCodigo(int linhaCodigo) {
+        this.linhaCodigo = linhaCodigo;
     }
     
     

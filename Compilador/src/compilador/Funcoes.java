@@ -16,26 +16,50 @@ public class Funcoes implements EncapsulamentoFuncoes {
     //atributos
     SimbolosToken simbolos = new SimbolosToken();
     private final ArrayList<String> listaArquivo = new ArrayList();
+    private char[] listaCaracteres = null;
+    private int caracteresEmUmaLinha = 0;
+    private int posicaoListaCaracteres = 0;
+    private int linhaDeCodigo = 0;
+    private int qtdLinhasArquivo = 0;
 
     //funcoes Lista de Arquivo
-    public void leArquivo(String caracterArquivo) {
-        listaArquivo.add(caracterArquivo);
+    public void leArquivo(String linhaArquivo) {
+        listaArquivo.add(linhaArquivo);
+       qtdLinhasArquivo = listaArquivo.size();
     }
-    
+
     public boolean estaVazia() {
-        if (listaArquivo.isEmpty()) {
-            return true;
-        }
-        return false;
+        return listaArquivo.isEmpty();
     }
 
     @Override
     public String leCaracter() {
-        
-        String retorno = listaArquivo.get(0);
-        listaArquivo.remove(0);;
 
-        return retorno;
+        String aux = "ERRO";
+        
+        if (posicaoListaCaracteres == caracteresEmUmaLinha) {
+           
+            System.out.println("Linha a ler: " + listaArquivo.get(0));
+            listaCaracteres = listaArquivo.get(0).toCharArray();
+            listaArquivo.remove(0);
+            caracteresEmUmaLinha = listaCaracteres.length;
+            posicaoListaCaracteres = 0;
+            linhaDeCodigo++;
+            
+        }
+
+        if (caracteresEmUmaLinha != 0) {
+            aux = Character.toString((char) listaCaracteres[posicaoListaCaracteres]);
+            posicaoListaCaracteres++;
+            
+        }
+
+        return aux;
+
+        /* String retorno = listaArquivo.get(0);
+        listaArquivo.remove(0);
+
+        return retorno;*/
     }
 
     @Override
@@ -49,17 +73,18 @@ public class Funcoes implements EncapsulamentoFuncoes {
         }
         token.setSimbolo(simbolos.getNumero());
         token.setLexema(caracter);
-
+        token.setLinhaCodigo(linhaDeCodigo);
         return novoCaracter;
     }
 
     @Override
     public String trataIdentificador(String caracter, Funcoes c, Arquivo arq, Token token) {
+        token.setLinhaCodigo(linhaDeCodigo);
         String novoCaracter = c.leCaracter();
         char[] auxCaracter = novoCaracter.toCharArray();
         String id = caracter;
-        
-        while (((int)auxCaracter[0] >= 65 && (int)auxCaracter[0] <= 90) || ((int)auxCaracter[0] >= 97 && (int)auxCaracter[0] <= 122) || ((int)auxCaracter[0] >= 48 && (int)auxCaracter[0] <= 57) ||novoCaracter.contains("_")) {
+
+        while (((int) auxCaracter[0] >= 65 && (int) auxCaracter[0] <= 90) || ((int) auxCaracter[0] >= 97 && (int) auxCaracter[0] <= 122) || ((int) auxCaracter[0] >= 48 && (int) auxCaracter[0] <= 57) || novoCaracter.contains("_")) {
             id = id.concat(novoCaracter);
             novoCaracter = c.leCaracter();
             auxCaracter = novoCaracter.toCharArray();
@@ -177,29 +202,30 @@ public class Funcoes implements EncapsulamentoFuncoes {
         }
 
         token.setLexema(caracter);
+        token.setLinhaCodigo(linhaDeCodigo);
 
         return novoCaracter;
     }
 
     @Override
     public String trataOperadorAritmetico(String caracter, Funcoes c, Arquivo arq, Token token) {
+
+        token.setLexema(caracter);
+        token.setLinhaCodigo(linhaDeCodigo);
         String novoCaracter = c.leCaracter();
 
         switch (caracter) {
 
             case "+":
                 token.setSimbolo(simbolos.getMais());
-                token.setLexema(caracter);
                 break;
 
             case "-":
                 token.setSimbolo(simbolos.getMenos());
-                token.setLexema(caracter);
                 break;
 
             case "*":
                 token.setSimbolo(simbolos.getMultiplicacao());
-                token.setLexema(caracter);
                 break;
 
             default:
@@ -214,6 +240,8 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public String trataOperadorRelacional(String caracter, Funcoes c, Arquivo arq, Token token) {
+        
+        token.setLinhaCodigo(linhaDeCodigo);
         String novoCaracter = c.leCaracter();
 
         if (novoCaracter.contains("=")) {
@@ -275,33 +303,31 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public String trataPontuacao(String caracter, Funcoes c, Arquivo arq, Token token) {
+        token.setLexema(caracter);
+        token.setLinhaCodigo(linhaDeCodigo);
+
         String novoCaracter = c.leCaracter();
 
         switch (caracter) {
 
             case ";":
                 token.setSimbolo(simbolos.getPontoVirgula());
-                token.setLexema(caracter);
                 break;
 
             case ".":
                 token.setSimbolo(simbolos.getPonto());
-                token.setLexema(caracter);
                 break;
 
             case ",":
                 token.setSimbolo(simbolos.getVirgula());
-                token.setLexema(caracter);
                 break;
 
             case "(":
                 token.setSimbolo(simbolos.getAbreParenteses());
-                token.setLexema(caracter);
                 break;
 
             case ")":
                 token.setSimbolo(simbolos.getFechaParenteses());
-                token.setLexema(caracter);
                 break;
 
             default:
