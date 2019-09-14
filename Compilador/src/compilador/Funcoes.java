@@ -20,38 +20,50 @@ public class Funcoes implements EncapsulamentoFuncoes {
     private int caracteresEmUmaLinha = 0;
     private int posicaoListaCaracteres = 0;
     private int linhaDeCodigo = 0;
-    private int qtdLinhasArquivo = 0;
 
     //funcoes Lista de Arquivo
     public void leArquivo(String linhaArquivo) {
         listaArquivo.add(linhaArquivo);
-       qtdLinhasArquivo = listaArquivo.size();
     }
 
     public boolean estaVazia() {
-        return listaArquivo.isEmpty();
+        //return listaArquivo.isEmpty();
+
+        //return false;
+        return listaArquivo.isEmpty() && (listaCaracteres.length + 1) == posicaoListaCaracteres;
     }
 
     @Override
     public String leCaracter() {
 
-        String aux = "ERRO";
-        
+        String aux;
+
         if (posicaoListaCaracteres == caracteresEmUmaLinha) {
-           
-            System.out.println("Linha a ler: " + listaArquivo.get(0));
-            listaCaracteres = listaArquivo.get(0).toCharArray();
-            listaArquivo.remove(0);
-            caracteresEmUmaLinha = listaCaracteres.length;
-            posicaoListaCaracteres = 0;
-            linhaDeCodigo++;
             
+            if (!listaArquivo.isEmpty()) {// entra aqui toda vez q uma linha acabaa, lendo uma nova linha e removendo da listaArquivo
+                
+                listaCaracteres = listaArquivo.get(0).toCharArray();
+                listaArquivo.remove(0);
+                caracteresEmUmaLinha = listaCaracteres.length;
+                posicaoListaCaracteres = 0;
+                linhaDeCodigo++;
+                
+            } 
+            
+            else {// so entrara aqui quando tiver processado o ultimo caracter
+                posicaoListaCaracteres++;
+                return "EOF";
+            }
         }
 
         if (caracteresEmUmaLinha != 0) {
             aux = Character.toString((char) listaCaracteres[posicaoListaCaracteres]);
             posicaoListaCaracteres++;
-            
+
+        }
+        
+        else{
+            return "\n";// caso seja uma linha com enter, devemos retornar \n e isso nao gerara token, por isso havera um numero de linha "faltando"
         }
 
         return aux;
@@ -91,7 +103,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
         }
         token.setLexema(id);
-        
 
         switch (id) {
 
@@ -240,7 +251,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     @Override
     public String trataOperadorRelacional(String caracter, Funcoes c, Arquivo arq, Token token) {
-        
+
         token.setLinhaCodigo(linhaDeCodigo);
         String novoCaracter = c.leCaracter();
 
