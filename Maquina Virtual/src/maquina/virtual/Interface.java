@@ -5,12 +5,16 @@
  */
 package maquina.virtual;
 
+import java.awt.Color;
+import java.awt.Component;
 import static java.lang.String.valueOf;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
+import static javax.management.Query.value;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,6 +34,7 @@ public class Interface extends javax.swing.JFrame {
     public MaquinaVirtual mv = new MaquinaVirtual();
     public ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
     public Funcoes c = new Funcoes();
+    public int indiceLinha = 0;
     private Scanner scanner = new Scanner(System.in);
     public int entrada;
     Pilha pilha = new Pilha();
@@ -179,7 +184,7 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        passoApasso.setText("jButton1");
+        passoApasso.setText("Passo a passo");
         passoApasso.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 passoApassoMouseClicked(evt);
@@ -285,18 +290,42 @@ public class Interface extends javax.swing.JFrame {
 
     private void botaoExecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoExecutarMouseClicked
         // TODO add your handling code here:
-         String comando;
-        do {
-            comando = mv.executarFuncoes2(c, filaJMP);
+        boolean breakPoint = false;
+        breakPoint = (boolean) tabelaExec.getModel().getValueAt(indiceLinha, 0); 
+        String comando;
+        //do {
+            comando = mv.executarFuncoes(c, filaJMP, breakPoint);
             preencherPilha();
-        } while (!"HLT".equals(comando));
+        // while (!"HLT".equals(comando));
     }//GEN-LAST:event_botaoExecutarMouseClicked
 
+    
+    
     private void passoApassoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passoApassoMouseClicked
         // TODO add your handling code here:
+        //descobrir em qual linha esta
+        
+        tabelaExec.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(Color.RED);
+                return c;
+                //row == indiceLinha? Color.green : Color.white
+            }
+            
+        });
+        
+        //tabelaExec.setBackground(Color.red);
         String comando = mv.executarFuncoes2(c, filaJMP);
+        System.out.println("indice: "+indiceLinha);
         preencherPilha();
+        indiceLinha++;
+        
+        
     }//GEN-LAST:event_passoApassoMouseClicked
+        
+    
     
     public void preencherTabela(String linha, int numLinha) {
 
@@ -312,6 +341,8 @@ public class Interface extends javax.swing.JFrame {
         for (int i = 1; i < tabelaExec.getColumnCount(); i++) {//1 pois nao queremos centralizar o break point
             tabelaExec.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); //centraliza o conteudo de cada coluna
         }
+        
+        
 
         //coluna 0 contem o breakpoint.
         if (linha.contains(" ")) {

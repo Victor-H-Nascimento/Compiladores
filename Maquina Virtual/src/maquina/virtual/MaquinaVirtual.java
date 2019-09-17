@@ -28,7 +28,7 @@ public class MaquinaVirtual {
         arq.EnderecaJMP(c, filaJMP);
     }
 
-    public void executarFuncoes(Funcoes c, ArrayList<ListaAuxiliar> filaJMP) {
+    public String executarFuncoes(Funcoes c, ArrayList<ListaAuxiliar> filaJMP, boolean breakPoint) {
         String nomeFuncao;
         String primeiroParametro, segundoParametro;
         String aux;
@@ -118,7 +118,7 @@ public class MaquinaVirtual {
                 //sem parametros
                 //chamar a funcao
                 System.out.println(linha);
-
+                nomeFuncao = linha;
                 switch (linha) {
                     case "ADD":
                         c.ADD();
@@ -193,7 +193,8 @@ public class MaquinaVirtual {
             c.setI();
             c.PRINTAPILHA();
             System.out.println("" + "******************************************************************************************" + "");
-        } while (!linha.contains("HLT"));
+            return nomeFuncao;
+        } while (!linha.contains("HLT") || !breakPoint);
         //sempre que executar uma linha, atualizar o i com a funcao setI 
     }
     
@@ -359,7 +360,7 @@ public class MaquinaVirtual {
                         System.err.println("Erro: Nenhuma funcao sem parametros foi chamada");
                 }
             }
-
+            
             c.insereNaFila(linha);
             c.setI();
             c.PRINTAPILHA();
