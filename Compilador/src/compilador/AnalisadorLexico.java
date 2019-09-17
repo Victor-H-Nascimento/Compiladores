@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author victor
  */
-public class Compilador {
+public class AnalisadorLexico {
 
     private static Arquivo arq = new Arquivo();
     private static Funcoes c = new Funcoes();
@@ -21,7 +21,7 @@ public class Compilador {
     private static Token token;
     private static String caracter;
 
-    public Compilador() {
+    public AnalisadorLexico() {
 
     }
 
