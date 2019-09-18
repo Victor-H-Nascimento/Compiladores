@@ -25,6 +25,10 @@ public class Funcoes implements EncapsulamentoFuncoes {
     public void leArquivo(String linhaArquivo) {
         listaArquivo.add(linhaArquivo);
     }
+    
+    public int getLinhaCodigo() {
+        return linhaDeCodigo;
+    }
 
     public boolean estaVazia() {
         //return listaArquivo.isEmpty();

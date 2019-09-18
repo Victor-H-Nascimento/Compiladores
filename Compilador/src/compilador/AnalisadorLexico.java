@@ -20,6 +20,7 @@ public class AnalisadorLexico {
     private static ArrayList<Token> listaToken = new ArrayList();
     private static Token token;
     private static String caracter;
+    private static boolean errosLexicos = false;
 
     public AnalisadorLexico() {
 
@@ -65,17 +66,19 @@ public class AnalisadorLexico {
                 }
             }
             if (!c.estaVazia()) {
-                pegaToken();
-                colocaTokenLista();
+                errosLexicos = pegaToken();
+                if (!errosLexicos) {
+                    colocaTokenLista();
+                }
 
             }
 
-        } while (!c.estaVazia());//!eof
+        } while (!c.estaVazia() && !errosLexicos);//!eof
 
         mostraTokens();
     }
 
-    public static void pegaToken() {
+    public static boolean pegaToken() {
 
         token = new Token();
         char[] auxCaracter = caracter.toCharArray();
@@ -98,14 +101,15 @@ public class AnalisadorLexico {
                             if (caracter.contains(";") || caracter.contains(",") || caracter.contains("(") || caracter.contains(")") || caracter.contains(".")) {
                                 caracter = c.trataPontuacao(caracter, c, arq, token);
                             } else {
-                                System.out.println("Erro. Nenhum tratamento chamado");
-                                System.err.println("Erro Léxico 1");
+                                System.err.println("Linha " + c.getLinhaCodigo()  +" - Erro Léxico: Caracter " + caracter + " não tem função definida");
+                                return true;
                             }
                         }
                     }
                 }
             }
         }
+        return false;
     }
 
     public static void colocaTokenLista() {
@@ -113,14 +117,14 @@ public class AnalisadorLexico {
     }
 
     public static void mostraTokens() {
-         System.out.println("**********************************");
+        System.out.println("**********************************");
         for (Token item : listaToken) {
             System.out.println("Lexema: " + item.getLexema());
             System.out.println("Simbolo: " + item.getSimbolo());
             System.out.println("Linha: " + item.getLinhaCodigo());
             System.out.println("");
         }
-         System.out.println("**********************************");
+        System.out.println("**********************************");
     }
 
 }
