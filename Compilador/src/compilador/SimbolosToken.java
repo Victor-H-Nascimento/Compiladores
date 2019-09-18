@@ -50,7 +50,6 @@ public class SimbolosToken {
     private final String doisPontos = "sDoisPontos";
     private final String verdadeiro = "sVerdadeiro";
     private final String falso = "sFalso";
-    private final String branch = "sBranch";
     
     
     public String getPrograma() {
