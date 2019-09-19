@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -127,18 +128,27 @@ public class InterfaceEditor extends javax.swing.JFrame {
         
         File arquivo = abrirArquivo.getSelectedFile();
         String path1 = arquivo.getAbsolutePath();
-        String conteudo;
+        
         try {
             System.out.println(Files.readAllLines(Paths.get(path1)));
         } catch (IOException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //Files.readAllLines(path);
+        List<String> lista = null;
+        try {
+            //Files.readAllLines(path);
+            lista = Files.readAllLines(Paths.get(path1));
+            
+            //System.out.println(conteudo);
+            /*path = abrirArquivo.getSelectedFile().getAbsolutePath();
+            System.out.println(path);*/
+        } catch (IOException ex) {
+            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        jTextAreaDeCodigo.setText(Files.readAllLines(Paths.get(path1)));
-        //System.out.println(conteudo);
-        /*path = abrirArquivo.getSelectedFile().getAbsolutePath();
-        System.out.println(path);*/
+        String comando = lista.toString();
+        jTextAreaDeCodigo.setText(comando);
+        //aqui, o comando 'e uma string gigante de uma linha so, vou ver algum jeito de pegarmos linha por linha e colocar um /n antes de inserir na string comando
         
 
     }//GEN-LAST:event_jMenuItemAbrirActionPerformed
