@@ -1,8 +1,11 @@
 package compilador;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -121,10 +124,22 @@ public class InterfaceEditor extends javax.swing.JFrame {
         abrirArquivo.setFileFilter(filter);
         abrirArquivo.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
         int retornoOpenDialog = abrirArquivo.showOpenDialog(null);
-        //jTextAreaDeCodigo.setText();
-
+        
+        File arquivo = abrirArquivo.getSelectedFile();
+        String path1 = arquivo.getAbsolutePath();
+        String conteudo;
+        try {
+            System.out.println(Files.readAllLines(Paths.get(path1)));
+        } catch (IOException ex) {
+            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Files.readAllLines(path);
+        
+        jTextAreaDeCodigo.setText(Files.readAllLines(Paths.get(path1)));
+        //System.out.println(conteudo);
         /*path = abrirArquivo.getSelectedFile().getAbsolutePath();
         System.out.println(path);*/
+        
 
     }//GEN-LAST:event_jMenuItemAbrirActionPerformed
 
