@@ -1,6 +1,8 @@
 package compilador;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -17,10 +19,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class InterfaceEditor extends javax.swing.JFrame {
 
+    String path;
     /**
      * Creates new form InterfaceEditor
      */
-    public InterfaceEditor() {
+    FileWriter arq;
+
+    public InterfaceEditor() throws IOException {
+        this.path = "EditorTexto.txt";
+        this.arq = new FileWriter(path);
         initComponents();
     }
 
@@ -115,15 +122,26 @@ public class InterfaceEditor extends javax.swing.JFrame {
         abrirArquivo.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
         int retornoOpenDialog = abrirArquivo.showOpenDialog(null);
         //jTextAreaDeCodigo.setText();
+
+        /*path = abrirArquivo.getSelectedFile().getAbsolutePath();
+        System.out.println(path);*/
+
     }//GEN-LAST:event_jMenuItemAbrirActionPerformed
 
     private void jMenuItemCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCompilarActionPerformed
         // TODO add your handling code here:
-        String codigo = jTextAreaDeCodigo.getText();
-        System.out.println(codigo);
+
+        PrintWriter gravarArq = new PrintWriter(arq);
+        gravarArq.println(jTextAreaDeCodigo.getText());
+        
+        try {
+            arq.close();
+        } catch (IOException ex) {
+            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         try {
-            AnalisadorLexico analisadorLexico = new AnalisadorLexico();
+            AnalisadorLexico analisadorLexico = new AnalisadorLexico(path);
         } catch (IOException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }

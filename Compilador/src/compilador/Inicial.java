@@ -5,6 +5,7 @@
  */
 package compilador;
 
+import java.io.IOException;
 import javax.swing.JFrame;
 
 /**
@@ -13,7 +14,7 @@ import javax.swing.JFrame;
  */
 public class Inicial {
     
-     public static void main(String[] args) {
+     public static void main(String[] args) throws IOException {
         InterfaceEditor primeiraInterface = new InterfaceEditor();
         primeiraInterface.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         primeiraInterface.setLocationRelativeTo(null);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author victor
  */
-public class AnalisadorLexico {
+public final class AnalisadorLexico {
 
     private  Arquivo arq = new Arquivo();
     private  Funcoes c = new Funcoes();
@@ -22,8 +22,10 @@ public class AnalisadorLexico {
     private  String caracter;
     private  boolean errosLexicos = false;
 
-    public AnalisadorLexico() throws IOException {
-        lexico();
+    public AnalisadorLexico(String codigoFonte) throws IOException {
+        
+        lexico(codigoFonte);
+        
     }
 
     /**
@@ -31,9 +33,9 @@ public class AnalisadorLexico {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void lexico() throws FileNotFoundException, IOException {
+    public void lexico(String codigoFonte) throws FileNotFoundException, IOException {
 
-        arq.Ler("/home/victor/Área de Trabalho/lexico.txt", c);
+        arq.Ler(codigoFonte, c);
 
         caracter = c.leCaracter();
         do {
