@@ -1,26 +1,28 @@
+package compilador;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package compilador;
-
-import java.awt.Window;
-
 /**
  *
- * @author ettore
+ * @author victor
  */
-public class InterfaceEditor extends javax.swing.JPanel {
+public class InterfaceEditor extends javax.swing.JFrame {
 
     /**
-     * Creates new form interfaceEditor
+     * Creates new form InterfaceEditor
      */
     public InterfaceEditor() {
-        
-        
+        initComponents();
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,65 +33,111 @@ public class InterfaceEditor extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        codigoTextField = new javax.swing.JTextField();
-        botaoExecutar = new javax.swing.JButton();
-        botaoGerarTxt = new javax.swing.JButton();
+        jScrollPaneEditorTexto = new javax.swing.JScrollPane();
+        jTextAreaDeCodigo = new javax.swing.JTextArea();
+        textArea1 = new java.awt.TextArea();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuArquivo = new javax.swing.JMenu();
+        jMenuItemAbrir = new javax.swing.JMenuItem();
+        jMenuExecução = new javax.swing.JMenu();
+        jMenuItemCompilar = new javax.swing.JMenuItem();
 
-        setMaximumSize(new java.awt.Dimension(1920, 1080));
-        setMinimumSize(new java.awt.Dimension(1920, 1080));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(1920, 1080));
+        jTextAreaDeCodigo.setColumns(20);
+        jTextAreaDeCodigo.setRows(5);
+        jTextAreaDeCodigo.setToolTipText("");
+        jScrollPaneEditorTexto.setViewportView(jTextAreaDeCodigo);
 
-        codigoTextField.addActionListener(new java.awt.event.ActionListener() {
+        textArea1.setBackground(new java.awt.Color(238, 238, 238));
+        textArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.E_RESIZE_CURSOR));
+        textArea1.setEditable(false);
+        textArea1.setEnabled(false);
+        textArea1.setForeground(new java.awt.Color(255, 0, 0));
+
+        jMenuArquivo.setText("Arquivo");
+
+        jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAbrir.setText("Abrir");
+        jMenuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                codigoTextFieldActionPerformed(evt);
+                jMenuItemAbrirActionPerformed(evt);
             }
         });
+        jMenuArquivo.add(jMenuItemAbrir);
 
-        botaoExecutar.setText("Executar");
+        jMenuBar1.add(jMenuArquivo);
 
-        botaoGerarTxt.setText("Gerar txt");
+        jMenuExecução.setText("Execução");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        jMenuItemCompilar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
+        jMenuItemCompilar.setText("Compilar");
+        jMenuItemCompilar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCompilarActionPerformed(evt);
+            }
+        });
+        jMenuExecução.add(jMenuItemCompilar);
+
+        jMenuBar1.add(jMenuExecução);
+
+        setJMenuBar(jMenuBar1);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(codigoTextField))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(botaoExecutar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(botaoGerarTxt)
-                .addGap(0, 245, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPaneEditorTexto, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
+                    .addComponent(textArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botaoExecutar)
-                    .addComponent(botaoGerarTxt))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(codigoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPaneEditorTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textArea1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 300));
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void codigoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codigoTextFieldActionPerformed
+    private void jMenuItemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAbrirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_codigoTextFieldActionPerformed
+        JFileChooser abrirArquivo = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Entrada de dados", "txt");
+        abrirArquivo.setFileFilter(filter);
+        abrirArquivo.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
+        int retornoOpenDialog = abrirArquivo.showOpenDialog(null);
+        //jTextAreaDeCodigo.setText();
+    }//GEN-LAST:event_jMenuItemAbrirActionPerformed
 
-    public void telaCheia(){
-        
-    }
+    private void jMenuItemCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCompilarActionPerformed
+        // TODO add your handling code here:
+        String codigo = jTextAreaDeCodigo.getText();
+        System.out.println(codigo);
+
+        try {
+            AnalisadorLexico analisadorLexico = new AnalisadorLexico();
+        } catch (IOException ex) {
+            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemCompilarActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botaoExecutar;
-    private javax.swing.JButton botaoGerarTxt;
-    private javax.swing.JTextField codigoTextField;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenu jMenuArquivo;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuExecução;
+    private javax.swing.JMenuItem jMenuItemAbrir;
+    private javax.swing.JMenuItem jMenuItemCompilar;
+    private javax.swing.JScrollPane jScrollPaneEditorTexto;
+    private javax.swing.JTextArea jTextAreaDeCodigo;
+    private java.awt.TextArea textArea1;
     // End of variables declaration//GEN-END:variables
 }

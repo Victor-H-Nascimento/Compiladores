@@ -15,18 +15,23 @@ import java.util.ArrayList;
  */
 public class AnalisadorLexico {
 
-    private static Arquivo arq = new Arquivo();
-    private static Funcoes c = new Funcoes();
-    private static ArrayList<Token> listaToken = new ArrayList();
-    private static Token token;
-    private static String caracter;
-    private static boolean errosLexicos = false;
+    private  Arquivo arq = new Arquivo();
+    private  Funcoes c = new Funcoes();
+    private  ArrayList<Token> listaToken = new ArrayList();
+    private  Token token;
+    private  String caracter;
+    private  boolean errosLexicos = false;
 
-    public AnalisadorLexico() {
-
+    public AnalisadorLexico() throws IOException {
+        lexico();
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    /**
+     *
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public void lexico() throws FileNotFoundException, IOException {
 
         arq.Ler("/home/victor/Área de Trabalho/lexico.txt", c);
 
@@ -78,7 +83,7 @@ public class AnalisadorLexico {
         mostraTokens();
     }
 
-    public static boolean pegaToken() {
+    public boolean pegaToken() {
 
         token = new Token();
         char[] auxCaracter = caracter.toCharArray();
@@ -112,11 +117,11 @@ public class AnalisadorLexico {
         return false;
     }
 
-    public static void colocaTokenLista() {
+    public void colocaTokenLista() {
         listaToken.add(token);
     }
 
-    public static void mostraTokens() {
+    public void mostraTokens() {
         System.out.println("**********************************");
         for (Token item : listaToken) {
             System.out.println("Lexema: " + item.getLexema());
