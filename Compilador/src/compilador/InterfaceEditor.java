@@ -61,14 +61,14 @@ public class InterfaceEditor extends javax.swing.JFrame {
         jScrollPaneEditorTexto.setViewportView(jTextAreaDeCodigo);
 
         textArea1.setBackground(new java.awt.Color(238, 238, 238));
-        textArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.E_RESIZE_CURSOR));
+        textArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         textArea1.setEditable(false);
         textArea1.setEnabled(false);
         textArea1.setForeground(new java.awt.Color(255, 0, 0));
 
         jMenuArquivo.setText("Arquivo");
 
-        jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         jMenuItemAbrir.setText("Abrir");
         jMenuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,11 +124,10 @@ public class InterfaceEditor extends javax.swing.JFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Entrada de dados", "txt");
         abrirArquivo.setFileFilter(filter);
         abrirArquivo.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
-        int retornoOpenDialog = abrirArquivo.showOpenDialog(null);
-        
-        File arquivo = abrirArquivo.getSelectedFile();
-        String path1 = arquivo.getAbsolutePath();
-        
+        abrirArquivo.showOpenDialog(null);
+
+        String path1 = abrirArquivo.getSelectedFile().getAbsolutePath();
+
         try {
             System.out.println(Files.readAllLines(Paths.get(path1)));
         } catch (IOException ex) {
@@ -136,29 +135,18 @@ public class InterfaceEditor extends javax.swing.JFrame {
         }
         List<String> lista = null;
         try {
-            //Files.readAllLines(path);
             lista = Files.readAllLines(Paths.get(path1));
+            String comando = "";
+
+            for (String linha : lista) {
+           comando = comando.concat(linha).concat("\n");
+        }
             
-            //System.out.println(conteudo);
-            /*path = abrirArquivo.getSelectedFile().getAbsolutePath();
-            System.out.println(path);*/
+            jTextAreaDeCodigo.setText(comando);//aqui, o comando 'e uma string gigante de uma linha so, vou ver algum jeito de pegarmos linha por linha e colocar um /n antes de inserir na string comando
+
         } catch (IOException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        int i = 0;
-        String comando = "";
-        do {
-            comando = comando + lista.get(i) + "\n";
-            i++;
-        } while (!"fim.".equals(lista.get(i)));
-        comando = comando + lista.get(i) + "\n"; //para pegar o "fim."
-        
-        
-        //String comando = lista.toString();
-        jTextAreaDeCodigo.setText(comando);
-        //aqui, o comando 'e uma string gigante de uma linha so, vou ver algum jeito de pegarmos linha por linha e colocar um /n antes de inserir na string comando
-        
-
     }//GEN-LAST:event_jMenuItemAbrirActionPerformed
 
     private void jMenuItemCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCompilarActionPerformed
@@ -166,7 +154,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
 
         PrintWriter gravarArq = new PrintWriter(arq);
         gravarArq.println(jTextAreaDeCodigo.getText());
-        
+
         try {
             arq.close();
         } catch (IOException ex) {
