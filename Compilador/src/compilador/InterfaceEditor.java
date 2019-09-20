@@ -145,8 +145,16 @@ public class InterfaceEditor extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        int i = 0;
+        String comando = "";
+        do {
+            comando = comando + lista.get(i) + "\n";
+            i++;
+        } while (!"fim.".equals(lista.get(i)));
+        comando = comando + lista.get(i) + "\n"; //para pegar o "fim."
         
-        String comando = lista.toString();
+        
+        //String comando = lista.toString();
         jTextAreaDeCodigo.setText(comando);
         //aqui, o comando 'e uma string gigante de uma linha so, vou ver algum jeito de pegarmos linha por linha e colocar um /n antes de inserir na string comando
         
