@@ -30,6 +30,7 @@ public final class AnalisadorLexico {
 
     /**
      *
+     * @param codigoFonte
      * @throws FileNotFoundException
      * @throws IOException
      */
