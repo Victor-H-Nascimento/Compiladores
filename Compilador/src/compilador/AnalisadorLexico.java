@@ -103,6 +103,11 @@ public final class AnalisadorLexico {
                     } else {
                         if (caracter.contains(">") || caracter.contains("<") || caracter.contains("=") || caracter.contains("!")) {// se >,<,=,!
                             caracter = c.trataOperadorRelacional(caracter, c, arq, token);
+                             errosLexicos = c.getErroExclamacao();//verificacoes necessarias para quando existe um ! nao seguido de um =
+                             if (errosLexicos) {
+                                 caracter = "!";
+                                return true;
+                            }
                         } else {
                             if (caracter.contains(";") || caracter.contains(",") || caracter.contains("(") || caracter.contains(")") || caracter.contains(".")) {
                                 caracter = c.trataPontuacao(caracter, c, arq, token);

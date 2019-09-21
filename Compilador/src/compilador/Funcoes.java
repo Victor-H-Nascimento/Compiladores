@@ -20,6 +20,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
     private final ArrayList<String> listaCaracter = new ArrayList();
     private int linhaDeCodigo = 0;
     private boolean ultimoCaracterLido = false;
+    private  boolean erroExclamacao = false;
 
     //funcoes Lista de Arquivo
     public void leArquivo(String linhaArquivo) {
@@ -32,6 +33,10 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     public boolean estaVazia() {
         return listaArquivo.isEmpty() && listaCaracter.isEmpty() && ultimoCaracterLido;
+    }
+    
+    public boolean getErroExclamacao() {
+        return erroExclamacao;
     }
 
     @Override
@@ -242,12 +247,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             case "*":
                 token.setSimbolo(simbolos.getMultiplicacao());
                 break;
-
-            default:
-                System.out.println("Erro no Trata Operador Aritmetico");
-                System.err.println("Erro Lexico 2");
-                break;
-
         }
 
         return novoCaracter;
@@ -278,12 +277,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
                     token.setSimbolo(simbolos.getDiferente());
                     token.setLexema(relacional);
                     break;
-
-                default:
-                    System.out.println("Erro no Trata Operador Relacional com 2 caracteres");
-                    System.err.println("Erro Lexico 3");
-                    break;
-
             }
 
             novoCaracter = c.leCaracter();// le mais um caracter caso o o igual ter sido processado pelo switch acima
@@ -308,6 +301,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
                 default:
                     System.out.println("Erro no Trata Operador Relacional com 1 caracter");
                     System.err.println("Erro Lexico 4");
+                    erroExclamacao = true;
                     break;
 
             }
@@ -344,12 +338,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             case ")":
                 token.setSimbolo(simbolos.getFechaParenteses());
                 break;
-
-            default:
-                System.out.println("Erro no Trata Pontuacao");
-                System.err.println("Erro Lexico 5");
-                break;
-
         }
 
         return novoCaracter;
