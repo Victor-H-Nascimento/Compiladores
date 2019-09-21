@@ -135,4 +135,17 @@ public final class AnalisadorLexico {
         System.out.println("**********************************");
     }
 
+    
+    public String erroLexico() {
+        
+        String retorno = "Sem erros";
+        
+        if (errosLexicos) {
+            retorno = Integer.toString(c.getLinhaCodigo());
+            retorno = retorno.concat(" ").concat(caracter);
+        }
+        
+        return  retorno;
+    }
+    
 }

@@ -70,7 +70,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPaneEditorTexto" alignment="0" pref="1024" max="32767" attributes="0"/>
-                  <Component id="textArea1" max="32767" attributes="0"/>
+                  <Component id="jTextAreaDeErros" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -82,7 +82,7 @@
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Component id="jScrollPaneEditorTexto" min="-2" pref="469" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="textArea1" pref="144" max="32767" attributes="0"/>
+              <Component id="jTextAreaDeErros" pref="144" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -105,7 +105,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="java.awt.TextArea" name="textArea1">
+    <Component class="java.awt.TextArea" name="jTextAreaDeErros">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ee" green="ee" red="ee" type="rgb"/>

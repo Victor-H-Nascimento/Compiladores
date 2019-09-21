@@ -32,9 +32,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
     public boolean estaVazia() {
         return listaArquivo.isEmpty() && listaCaracter.isEmpty() && ultimoCaracterLido;
-
-        //return false;
-        //return listaArquivo.isEmpty() && (listaAuxiliar.length + 1) == posicaoListaCaracteres;
     }
 
     @Override
@@ -77,29 +74,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             ultimoCaracterLido = true;
             return "%";
         }
-
-       /* if (!listaArquivo.isEmpty()) {// entra aqui toda vez q uma linha acaba, lendo uma nova linha e removendo da listaArquivo
-
-            listaAuxiliar = listaArquivo.get(0).toCharArray();
-            listaArquivo.remove(0);
-
-            for (char item : listaAuxiliar) {
-                listaCaracter.add(Character.toString(item));
-            }
-
-            linhaDeCodigo++;
-
-        } else {// so entrara aqui quando tiver processado o ultimo caracter
-            return "EOF";
-        }
-
-        if (!listaCaracter.isEmpty()) {
-            aux = listaCaracter.get(0);
-            listaCaracter.remove(0);
-
-        } else {
-            return "\n";// caso seja uma linha com enter, devemos retornar \n e isso nao gerara token, por isso havera um numero de linha "faltando"
-        }*/
 
         return aux;
     }

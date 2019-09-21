@@ -1,5 +1,6 @@
 package compilador;
 
+import java.awt.Color;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,7 +46,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
 
         jScrollPaneEditorTexto = new javax.swing.JScrollPane();
         jTextAreaDeCodigo = new javax.swing.JTextArea();
-        textArea1 = new java.awt.TextArea();
+        jTextAreaDeErros = new java.awt.TextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemAbrir = new javax.swing.JMenuItem();
@@ -59,11 +60,11 @@ public class InterfaceEditor extends javax.swing.JFrame {
         jTextAreaDeCodigo.setToolTipText("");
         jScrollPaneEditorTexto.setViewportView(jTextAreaDeCodigo);
 
-        textArea1.setBackground(new java.awt.Color(238, 238, 238));
-        textArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        textArea1.setEditable(false);
-        textArea1.setEnabled(false);
-        textArea1.setForeground(new java.awt.Color(255, 0, 0));
+        jTextAreaDeErros.setBackground(new java.awt.Color(238, 238, 238));
+        jTextAreaDeErros.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTextAreaDeErros.setEditable(false);
+        jTextAreaDeErros.setEnabled(false);
+        jTextAreaDeErros.setForeground(new java.awt.Color(255, 0, 0));
 
         jMenuArquivo.setText("Arquivo");
 
@@ -101,7 +102,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPaneEditorTexto, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
-                    .addComponent(textArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextAreaDeErros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -110,7 +111,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPaneEditorTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textArea1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addComponent(jTextAreaDeErros, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -138,9 +139,9 @@ public class InterfaceEditor extends javax.swing.JFrame {
             String comando = "";
 
             for (String linha : lista) {
-           comando = comando.concat(linha).concat("\n");
-        }
-            
+                comando = comando.concat(linha).concat("\n");
+            }
+
             jTextAreaDeCodigo.setText(comando);//aqui, o comando 'e uma string gigante de uma linha so, vou ver algum jeito de pegarmos linha por linha e colocar um /n antes de inserir na string comando
 
         } catch (IOException ex) {
@@ -162,6 +163,17 @@ public class InterfaceEditor extends javax.swing.JFrame {
 
         try {
             AnalisadorLexico analisadorLexico = new AnalisadorLexico(path);
+            String linhaEcaracter = analisadorLexico.erroLexico();
+
+            if (linhaEcaracter.contains("Sem erros")) {
+                jTextAreaDeErros.setForeground(Color.BLUE);
+                jTextAreaDeErros.setText("Construido com sucesso!");
+            } else {
+                String numeroLinha = linhaEcaracter.split(" ")[0];
+                String caracterComErro = linhaEcaracter.split(" ")[1];
+                jTextAreaDeErros.setText("Linha " + numeroLinha + " - Erro Léxico: Caracter " + caracterComErro + " não tem função definida.");
+            }
+
         } catch (IOException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -176,6 +188,6 @@ public class InterfaceEditor extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemCompilar;
     private javax.swing.JScrollPane jScrollPaneEditorTexto;
     private javax.swing.JTextArea jTextAreaDeCodigo;
-    private java.awt.TextArea textArea1;
+    private java.awt.TextArea jTextAreaDeErros;
     // End of variables declaration//GEN-END:variables
 }
