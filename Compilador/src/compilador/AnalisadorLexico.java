@@ -13,22 +13,28 @@ import java.util.ArrayList;
  *
  * @author victor
  */
-public class AnalisadorLexico {
+public final class AnalisadorLexico {
 
-    private static Arquivo arq = new Arquivo();
-    private static Funcoes c = new Funcoes();
-    private static ArrayList<Token> listaToken = new ArrayList();
-    private static Token token;
-    private static String caracter;
-    private static boolean errosLexicos = false;
+    private  Arquivo arq = new Arquivo();
+    private  Funcoes c = new Funcoes();
+    private  ArrayList<Token> listaToken = new ArrayList();
+    private  Token token;
+    private  String caracter;
+    private  boolean errosLexicos = false;
 
-    public AnalisadorLexico() {
-
+    public AnalisadorLexico(String codigoFonte) throws IOException {
+        lexico(codigoFonte);
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    /**
+     *
+     * @param codigoFonte
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public void lexico(String codigoFonte) throws FileNotFoundException, IOException {
 
-        arq.Ler("/home/victor/Área de Trabalho/lexico.txt", c);
+        arq.Ler(codigoFonte, c);
 
         caracter = c.leCaracter();
         do {
@@ -78,7 +84,7 @@ public class AnalisadorLexico {
         mostraTokens();
     }
 
-    public static boolean pegaToken() {
+    public boolean pegaToken() {
 
         token = new Token();
         char[] auxCaracter = caracter.toCharArray();
@@ -97,11 +103,15 @@ public class AnalisadorLexico {
                     } else {
                         if (caracter.contains(">") || caracter.contains("<") || caracter.contains("=") || caracter.contains("!")) {// se >,<,=,!
                             caracter = c.trataOperadorRelacional(caracter, c, arq, token);
+                             errosLexicos = c.getErroExclamacao();//verificacoes necessarias para quando existe um ! nao seguido de um =
+                             if (errosLexicos) {
+                                 caracter = "!";
+                                return true;
+                            }
                         } else {
                             if (caracter.contains(";") || caracter.contains(",") || caracter.contains("(") || caracter.contains(")") || caracter.contains(".")) {
                                 caracter = c.trataPontuacao(caracter, c, arq, token);
                             } else {
-                                System.err.println("Linha " + c.getLinhaCodigo()  +" - Erro Léxico: Caracter " + caracter + " não tem função definida");
                                 return true;
                             }
                         }
@@ -112,11 +122,11 @@ public class AnalisadorLexico {
         return false;
     }
 
-    public static void colocaTokenLista() {
+    public void colocaTokenLista() {
         listaToken.add(token);
     }
 
-    public static void mostraTokens() {
+    public void mostraTokens() {
         System.out.println("**********************************");
         for (Token item : listaToken) {
             System.out.println("Lexema: " + item.getLexema());
@@ -127,4 +137,17 @@ public class AnalisadorLexico {
         System.out.println("**********************************");
     }
 
+    
+    public String erroLexico() {
+        
+        String retorno = "Sem erros";
+        
+        if (errosLexicos) {
+            retorno = Integer.toString(c.getLinhaCodigo());
+            retorno = retorno.concat(" ").concat(caracter);
+        }
+        
+        return  retorno;
+    }
+    
 }

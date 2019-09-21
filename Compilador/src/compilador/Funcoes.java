@@ -16,66 +16,71 @@ public class Funcoes implements EncapsulamentoFuncoes {
     //atributos
     SimbolosToken simbolos = new SimbolosToken();
     private final ArrayList<String> listaArquivo = new ArrayList();
-    private char[] listaCaracteres = null;
-    private int caracteresEmUmaLinha = 0;
-    private int posicaoListaCaracteres = 0;
+    private char[] listaAuxiliar = null;
+    private final ArrayList<String> listaCaracter = new ArrayList();
     private int linhaDeCodigo = 0;
+    private boolean ultimoCaracterLido = false;
+    private  boolean erroExclamacao = false;
 
     //funcoes Lista de Arquivo
     public void leArquivo(String linhaArquivo) {
         listaArquivo.add(linhaArquivo);
     }
-    
+
     public int getLinhaCodigo() {
         return linhaDeCodigo;
     }
 
     public boolean estaVazia() {
-        //return listaArquivo.isEmpty();
-
-        //return false;
-        return listaArquivo.isEmpty() && (listaCaracteres.length + 1) == posicaoListaCaracteres;
+        return listaArquivo.isEmpty() && listaCaracter.isEmpty() && ultimoCaracterLido;
+    }
+    
+    public boolean getErroExclamacao() {
+        return erroExclamacao;
     }
 
     @Override
     public String leCaracter() {
 
-        String aux;
+        String aux = null;
 
-        if (posicaoListaCaracteres == caracteresEmUmaLinha) {
-            
-            if (!listaArquivo.isEmpty()) {// entra aqui toda vez q uma linha acabaa, lendo uma nova linha e removendo da listaArquivo
-                
-                listaCaracteres = listaArquivo.get(0).toCharArray();
-                listaArquivo.remove(0);
-                caracteresEmUmaLinha = listaCaracteres.length;
-                posicaoListaCaracteres = 0;
-                linhaDeCodigo++;
-                
-            } 
-            
-            else {// so entrara aqui quando tiver processado o ultimo caracter
-                posicaoListaCaracteres++;
-                return "EOF";
+        if (!listaArquivo.isEmpty() && listaCaracter.isEmpty()) {
+          
+            listaAuxiliar = listaArquivo.get(0).toCharArray();
+            listaArquivo.remove(0);
+
+            for (char item : listaAuxiliar) {
+                listaCaracter.add(Character.toString(item));
             }
-        }
 
-        if (caracteresEmUmaLinha != 0) {
-            aux = Character.toString((char) listaCaracteres[posicaoListaCaracteres]);
-            posicaoListaCaracteres++;
+            linhaDeCodigo++;
+            
+            if (!listaCaracter.isEmpty()) {
+                aux = listaCaracter.get(0);
+            listaCaracter.remove(0);
 
-        }
-        
-        else{
-            return "\n";// caso seja uma linha com enter, devemos retornar \n e isso nao gerara token, por isso havera um numero de linha "faltando"
+            }
+            
+            else{
+            aux = "\n";
+            }
+                        
+            
+        } else if (!listaArquivo.isEmpty() && !listaCaracter.isEmpty()) {
+            aux = listaCaracter.get(0);
+            listaCaracter.remove(0);
+
+        } else if (listaArquivo.isEmpty() && !listaCaracter.isEmpty()) {
+            aux = listaCaracter.get(0);
+            listaCaracter.remove(0);
+
+
+        } else if (listaArquivo.isEmpty() && listaCaracter.isEmpty()) {
+            ultimoCaracterLido = true;
+            return "%";
         }
 
         return aux;
-
-        /* String retorno = listaArquivo.get(0);
-        listaArquivo.remove(0);
-
-        return retorno;*/
     }
 
     @Override
@@ -242,12 +247,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             case "*":
                 token.setSimbolo(simbolos.getMultiplicacao());
                 break;
-
-            default:
-                System.out.println("Erro no Trata Operador Aritmetico");
-                System.err.println("Erro Lexico 2");
-                break;
-
         }
 
         return novoCaracter;
@@ -278,12 +277,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
                     token.setSimbolo(simbolos.getDiferente());
                     token.setLexema(relacional);
                     break;
-
-                default:
-                    System.out.println("Erro no Trata Operador Relacional com 2 caracteres");
-                    System.err.println("Erro Lexico 3");
-                    break;
-
             }
 
             novoCaracter = c.leCaracter();// le mais um caracter caso o o igual ter sido processado pelo switch acima
@@ -308,6 +301,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
                 default:
                     System.out.println("Erro no Trata Operador Relacional com 1 caracter");
                     System.err.println("Erro Lexico 4");
+                    erroExclamacao = true;
                     break;
 
             }
@@ -344,12 +338,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             case ")":
                 token.setSimbolo(simbolos.getFechaParenteses());
                 break;
-
-            default:
-                System.out.println("Erro no Trata Pontuacao");
-                System.err.println("Erro Lexico 5");
-                break;
-
         }
 
         return novoCaracter;

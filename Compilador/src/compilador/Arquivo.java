@@ -23,7 +23,6 @@ public class Arquivo {
         try {
             FileReader arq = new FileReader(Caminho);
             BufferedReader lerArq = new BufferedReader(arq);
-            int linha = 0;
             boolean continua = true;
             
             try {
