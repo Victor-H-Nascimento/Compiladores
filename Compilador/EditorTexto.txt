@@ -1,4 +1,4 @@
-   programa teste1;
+     programa teste1;
                                            var x, y: integer;
 
                                             procedimento p;
@@ -12,7 +12,9 @@
                                                 fim ;
                                     inicio
                                          leia(x);
-                                         p;  
+                                         p;  /
                                          escreva (y);
                                          escreva (x)
-                                    fim.  !=
+                                    fim.  
+
+
