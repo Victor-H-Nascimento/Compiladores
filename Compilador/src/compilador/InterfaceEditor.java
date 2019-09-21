@@ -31,7 +31,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
 
     public InterfaceEditor() throws IOException {
         this.path = "EditorTexto.txt";
-        this.arq = new FileWriter(path);
+      //  this.arq = new FileWriter(path);
         initComponents();
     }
 
@@ -108,10 +108,10 @@ public class InterfaceEditor extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPaneEditorTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addComponent(jScrollPaneEditorTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 513, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextAreaDeErros, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addComponent(jTextAreaDeErros, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -126,16 +126,11 @@ public class InterfaceEditor extends javax.swing.JFrame {
         abrirArquivo.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
         abrirArquivo.showOpenDialog(null);
 
-        String path1 = abrirArquivo.getSelectedFile().getAbsolutePath();
+        String caminho = abrirArquivo.getSelectedFile().getAbsolutePath();
 
-        try {
-            System.out.println(Files.readAllLines(Paths.get(path1)));
-        } catch (IOException ex) {
-            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
         List<String> lista = null;
         try {
-            lista = Files.readAllLines(Paths.get(path1));
+            lista = Files.readAllLines(Paths.get(caminho));
             String comando = "";
 
             for (String linha : lista) {
@@ -150,8 +145,12 @@ public class InterfaceEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemAbrirActionPerformed
 
     private void jMenuItemCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCompilarActionPerformed
-        // TODO add your handling code here:
-
+        try {
+            // TODO add your handling code here:
+            this.arq = new FileWriter(path);
+        } catch (IOException ex) {
+            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         PrintWriter gravarArq = new PrintWriter(arq);
         gravarArq.println(jTextAreaDeCodigo.getText());
 
@@ -171,6 +170,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
             } else {
                 String numeroLinha = linhaEcaracter.split(" ")[0];
                 String caracterComErro = linhaEcaracter.split(" ")[1];
+                jTextAreaDeErros.setForeground(Color.RED);
                 jTextAreaDeErros.setText("Linha " + numeroLinha + " - Erro Léxico: Caracter " + caracterComErro + " não tem função definida.");
             }
 

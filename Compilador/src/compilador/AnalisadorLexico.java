@@ -23,9 +23,7 @@ public final class AnalisadorLexico {
     private  boolean errosLexicos = false;
 
     public AnalisadorLexico(String codigoFonte) throws IOException {
-        
         lexico(codigoFonte);
-        
     }
 
     /**
@@ -109,7 +107,6 @@ public final class AnalisadorLexico {
                             if (caracter.contains(";") || caracter.contains(",") || caracter.contains("(") || caracter.contains(")") || caracter.contains(".")) {
                                 caracter = c.trataPontuacao(caracter, c, arq, token);
                             } else {
-                                System.err.println("Linha " + c.getLinhaCodigo()  +" - Erro Léxico: Caracter " + caracter + " não tem função definida");
                                 return true;
                             }
                         }
