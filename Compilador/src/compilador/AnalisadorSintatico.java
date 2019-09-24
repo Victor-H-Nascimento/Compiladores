@@ -144,11 +144,68 @@ public class AnalisadorSintatico {
         }
     }
 
+    private void analisaComandoSimples() throws IOException {
+        if (token.getSimbolo().equalsIgnoreCase("sIdentificador")){
+            analisaAtributosChamadaProcedimento();
+        }
+        else if(token.getSimbolo().equalsIgnoreCase("sSe")){
+            analisaSe();
+        }
+        else if(token.getSimbolo().equalsIgnoreCase("sEnquanto")){
+            analisaEnquanto();
+        }
+        else if(token.getSimbolo().equalsIgnoreCase("sLeia")){
+            analisaLeia();
+        }
+        else if(token.getSimbolo().equalsIgnoreCase("sEscreva")){
+            analisaEscreva();
+        }
+        else{
+            analisaComandos();
+        }
+    }
+    
+    
+    private void analisaAtributosChamadaProcedimento() throws IOException {
+        token = analisadorLexico.lexico();
+        if (token.getSimbolo().equalsIgnoreCase("sAtribuicao")) {
+            analisaAtribuicao();
+        }
+        else{
+            chamadaProcedimento();  //temos que implementar, nao tem no livro
+        }
+    }
+    
+    private void analisaLeia() {
+        
+    }
+    
     private void analisaSubRotinas() {
     }
 
-    private void analisaComandoSimples() {
+
+    private void analisaSe() {
+        
+    }
+
+    private void analisaEnquanto() {
+        
+    }
+
+    
+
+    private void analisaEscreva() {
+        
+    }
+
+    private void analisaAtribuicao() {
+        
+    }
+
+    private void chamadaProcedimento() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 
 }
