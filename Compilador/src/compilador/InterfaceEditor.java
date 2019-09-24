@@ -28,6 +28,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
      * Creates new form InterfaceEditor
      */
     FileWriter arq;
+    
 
     public InterfaceEditor() throws IOException {
         this.path = "EditorTexto.txt";
@@ -162,7 +163,9 @@ public class InterfaceEditor extends javax.swing.JFrame {
 
         try {
             AnalisadorLexico analisadorLexico = new AnalisadorLexico(path);
+            AnalisadorSintatico sintatico = new AnalisadorSintatico(analisadorLexico);
             String linhaEcaracter = analisadorLexico.erroLexico();
+            
 
             if (linhaEcaracter.contains("Sem erros")) {
                 jTextAreaDeErros.setForeground(Color.BLUE);

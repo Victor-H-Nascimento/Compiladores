@@ -23,19 +23,23 @@ public final class AnalisadorLexico {
     private  boolean errosLexicos = false;
 
     public AnalisadorLexico(String codigoFonte) throws IOException {
-        lexico(codigoFonte);
+        leArquivo(codigoFonte);
     }
 
+    
+    private void leArquivo(String codigoFonte) throws IOException{
+        arq.Ler(codigoFonte, c);
+    }
+    
+    
     /**
      *
-     * @param codigoFonte
+     * @return 
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void lexico(String codigoFonte) throws FileNotFoundException, IOException {
-
-        arq.Ler(codigoFonte, c);
-
+    public Token lexico() throws FileNotFoundException, IOException {
+        
         caracter = c.leCaracter();
         do {
 
@@ -74,17 +78,19 @@ public final class AnalisadorLexico {
             if (!c.estaVazia()) {
                 errosLexicos = pegaToken();
                 if (!errosLexicos) {
-                    colocaTokenLista();
+                    //colocaTokenLista();
+                    return token;
                 }
 
             }
 
         } while (!c.estaVazia() && !errosLexicos);//!eof
 
-        mostraTokens();
+        //mostraTokens();
+        return token;
     }
 
-    public boolean pegaToken() {
+    private boolean pegaToken() {
 
         token = new Token();
         char[] auxCaracter = caracter.toCharArray();
@@ -126,7 +132,7 @@ public final class AnalisadorLexico {
         listaToken.add(token);
     }
 
-    public void mostraTokens() {
+    private void mostraTokens() {
         System.out.println("**********************************");
         for (Token item : listaToken) {
             System.out.println("Lexema: " + item.getLexema());
