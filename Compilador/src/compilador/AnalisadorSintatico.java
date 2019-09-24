@@ -176,33 +176,134 @@ public class AnalisadorSintatico {
         }
     }
     
-    private void analisaLeia() {
-        
+    private void analisaLeia() throws IOException {
+        token = analisadorLexico.lexico();
+        if (token.getSimbolo().equalsIgnoreCase("sAbreParentesis")) {
+            token = analisadorLexico.lexico();
+            if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+                //semantico
+                token = analisadorLexico.lexico();
+                if(token.getSimbolo().equalsIgnoreCase("sFechaParentesis")){
+                    token = analisadorLexico.lexico();
+                }
+                else{
+                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ')' esperado");
+                }
+            }
+            else{
+                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+            }
+        }
+        else{
+            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: '(' esperado");
+        }
     }
     
-    private void analisaSubRotinas() {
+    
+    private void analisaEscreva() throws IOException {
+        token = analisadorLexico.lexico();
+        if (token.getSimbolo().equalsIgnoreCase("sAbreParentesis")) {
+            token = analisadorLexico.lexico();
+            if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+                //lexico
+                token = analisadorLexico.lexico();
+                if (token.getSimbolo().equalsIgnoreCase("sFechaParentesis")) {
+                    token = analisadorLexico.lexico();
+                }
+                else{
+                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ')' esperado");
+                }
+            }
+            else{
+                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+            }
+        }
+        else{
+            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: '(' esperado");
+        }
+    }
+    
+    
+    private void analisaEnquanto() throws IOException {
+        //semantico
+        token = analisadorLexico.lexico();
+        analisaExpressao();
+        if (token.getSimbolo().equalsIgnoreCase("sFaca")) {
+            //semantico
+            token = analisadorLexico.lexico();
+            analisaComandoSimples();
+            //semantico
+        }
+        else{
+            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: 'faca' esperado");
+        }
+    }
+    
+    private void analisaSe() throws IOException {
+        token = analisadorLexico.lexico();
+        analisaExpressao();
+        if (token.getSimbolo().equalsIgnoreCase("sEntao")) {
+            token = analisadorLexico.lexico();
+            analisaComandoSimples();
+            if (token.getSimbolo().equalsIgnoreCase("sSenao")) {
+                token = analisadorLexico.lexico();
+                analisaComandoSimples();
+            }
+        }
+        else{
+            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: 'entao' esperado");
+        }
+    }
+    
+    private void analisaSubRotinas() throws IOException {
+        //semantico
+        int flag = 0;
+        if (token.getSimbolo().equalsIgnoreCase("sProcedimento") || token.getSimbolo().equalsIgnoreCase("sFuncao")) {
+            //semantico
+        }
+        while(token.getSimbolo().equalsIgnoreCase("sProcedimento") || token.getSimbolo().equalsIgnoreCase("sFuncao")){
+            if (token.getSimbolo().equalsIgnoreCase("sProcedimento")) {
+                analisaDeclaracaoProcedimento();                
+            }
+            else{
+                analisaDeclaracaoFuncao();
+            }
+            if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
+                token = analisadorLexico.lexico();
+            }
+            else{
+                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ';' esperado");
+            }
+        }
+        if (flag == 1) {
+            //semantico
+        }
     }
 
 
-    private void analisaSe() {
+    private void analisaDeclaracaoProcedimento() {
         
     }
 
-    private void analisaEnquanto() {
-        
-    }
 
     
 
-    private void analisaEscreva() {
-        
-    }
 
     private void analisaAtribuicao() {
         
     }
 
     private void chamadaProcedimento() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void analisaExpressao() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+
+    private void analisaDeclaracaoFuncao() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
