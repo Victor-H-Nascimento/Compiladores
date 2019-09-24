@@ -65,7 +65,7 @@ public class AnalisadorSintatico {
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
                 while (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
 
-                    analisaVariaveis();
+                    analisaDeclaracaoVariaveis();
 
                     if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
                         token = analisadorLexico.lexico();
@@ -79,7 +79,7 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void analisaVariaveis() throws IOException {
+    private void analisaDeclaracaoVariaveis() throws IOException {
 
         do {
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
@@ -165,7 +165,7 @@ public class AnalisadorSintatico {
         if (token.getSimbolo().equalsIgnoreCase("sAtribuicao")) {
             analisaAtribuicao();
         } else {
-            chamadaProcedimento();  //temos que implementar, nao tem no livro
+            analisaChamadaProcedimento();  //temos que implementar, nao tem no livro
         }
     }
 
@@ -332,7 +332,7 @@ public class AnalisadorSintatico {
     }
 
     private void analisaFator() throws IOException {
-        if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+        if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {// se variavel ou funcao
             //semantico
             if (true) {//lexema
                 if (true) {
@@ -349,6 +349,7 @@ public class AnalisadorSintatico {
         } else {
             if (token.getSimbolo().equalsIgnoreCase("sNumero")) {
                 token = analisadorLexico.lexico();
+                
             }
             else if(token.getSimbolo().equalsIgnoreCase("sNao")){
                 token = analisadorLexico.lexico();
@@ -374,16 +375,17 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void analisaAtribuicao() {
-
+    private void analisaAtribuicao() throws IOException {
+        token = analisadorLexico.lexico();
+        analisaExpressao();
     }
 
-    private void chamadaProcedimento() {
-        
+    private void analisaChamadaProcedimento() {
+        //nada acontece no sintatico, apenas no semantico
     }
 
-    private void analisaChamadaFuncao() {
-            
+    private void analisaChamadaFuncao() throws IOException {
+            token = analisadorLexico.lexico();
     }
 
 }
