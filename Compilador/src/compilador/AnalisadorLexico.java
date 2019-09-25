@@ -29,6 +29,7 @@ public final class AnalisadorLexico {
     
     private void leArquivo(String codigoFonte) throws IOException{
         arq.Ler(codigoFonte, c);
+        caracter = c.leCaracter();
     }
     
     
@@ -40,7 +41,7 @@ public final class AnalisadorLexico {
      */
     public Token lexico() throws FileNotFoundException, IOException {
         
-        caracter = c.leCaracter();
+        
         do {
 
             while ((caracter.contains("{") || caracter.contains(" ") || caracter.contains("\n") || caracter.contains("\t")) && !c.estaVazia())//!eof

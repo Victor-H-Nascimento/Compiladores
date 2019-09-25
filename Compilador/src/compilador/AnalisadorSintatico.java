@@ -104,7 +104,7 @@ public class AnalisadorSintatico {
             } else {
                 System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
             }
-        } while (token.getSimbolo().equalsIgnoreCase("sDoisPontos"));
+        } while (!token.getSimbolo().equalsIgnoreCase("sDoisPontos"));
 
         token = analisadorLexico.lexico();
         analisaTipo();
@@ -116,8 +116,9 @@ public class AnalisadorSintatico {
             System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: tipo 'inteiro' ou 'booleano' esperado");
         } else {
             // senão coloca_tipo_tabela(token.lexema) semantico
-            token = analisadorLexico.lexico();
         }
+        
+        token = analisadorLexico.lexico();
 
     }
 
@@ -146,7 +147,7 @@ public class AnalisadorSintatico {
 
     private void analisaComandoSimples() throws IOException {
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
-            analisaAtributosChamadaProcedimento();
+            analisaAtribuicaoOuChamadaProcedimento();
         } else if (token.getSimbolo().equalsIgnoreCase("sSe")) {
             analisaSe();
         } else if (token.getSimbolo().equalsIgnoreCase("sEnquanto")) {
@@ -160,7 +161,7 @@ public class AnalisadorSintatico {
         }
     }
 
-    private void analisaAtributosChamadaProcedimento() throws IOException {
+    private void analisaAtribuicaoOuChamadaProcedimento() throws IOException {
         token = analisadorLexico.lexico();
         if (token.getSimbolo().equalsIgnoreCase("sAtribuicao")) {
             analisaAtribuicao();
@@ -171,12 +172,12 @@ public class AnalisadorSintatico {
 
     private void analisaLeia() throws IOException {
         token = analisadorLexico.lexico();
-        if (token.getSimbolo().equalsIgnoreCase("sAbreParentesis")) {
+        if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses")) {
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
                 //semantico
                 token = analisadorLexico.lexico();
-                if (token.getSimbolo().equalsIgnoreCase("sFechaParentesis")) {
+                if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses")) {
                     token = analisadorLexico.lexico();
                 } else {
                     System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ')' esperado");
@@ -191,12 +192,12 @@ public class AnalisadorSintatico {
 
     private void analisaEscreva() throws IOException {
         token = analisadorLexico.lexico();
-        if (token.getSimbolo().equalsIgnoreCase("sAbreParentesis")) {
+        if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses")) {
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
                 //lexico
                 token = analisadorLexico.lexico();
-                if (token.getSimbolo().equalsIgnoreCase("sFechaParentesis")) {
+                if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses")) {
                     token = analisadorLexico.lexico();
                 } else {
                     System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ')' esperado");
@@ -315,12 +316,16 @@ public class AnalisadorSintatico {
     private void analisaExpressaoSimples() throws IOException {
         if (token.getSimbolo().equalsIgnoreCase("sMais") || token.getSimbolo().equalsIgnoreCase("sMenos")) {
             token = analisadorLexico.lexico();
-            analisaTermo();
-            while (token.getSimbolo().equalsIgnoreCase("sMais") || token.getSimbolo().equalsIgnoreCase("sMenos") || token.getSimbolo().equalsIgnoreCase("sOu")) {
+           
+        }
+        
+         analisaTermo();
+        
+         while (token.getSimbolo().equalsIgnoreCase("sMais") || token.getSimbolo().equalsIgnoreCase("sMenos") || token.getSimbolo().equalsIgnoreCase("sOu")) {
                 token = analisadorLexico.lexico();
                 analisaTermo();
             }
-        }
+        
     }
 
     private void analisaTermo() throws IOException {
