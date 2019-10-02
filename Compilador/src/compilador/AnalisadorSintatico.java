@@ -6,6 +6,7 @@
 package compilador;
 
 import java.io.IOException;
+import java.util.Stack;
 
 /**
  *
@@ -15,7 +16,13 @@ public class AnalisadorSintatico {
 
     private final AnalisadorLexico analisadorLexico;
     private Token token;
-
+    private Stack <TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();  
+    
+    
+    
+  
+    
+    
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
         analisaPrograma();
