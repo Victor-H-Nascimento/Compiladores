@@ -12,9 +12,26 @@ package compilador;
 public class TabelaDeSimbolosFuncoes extends TabelaDeSimbolos {
     String tipo;
 
-    public TabelaDeSimbolosFuncoes(String lexema, boolean escopo, String tipo) {
-        super(lexema, escopo);
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    
+    public TabelaDeSimbolosFuncoes(String lexema, String tipo) {//  vai usar esse construtor?
+        this.setLexema(lexema);
+        this.setEscopo(true);
+        this.tipo = tipo;
+    }
+
+    public TabelaDeSimbolosFuncoes(String lexema) {
+        this.setLexema(lexema);
+        this.setEscopo(true);
+    }
+    
+    
     
 }

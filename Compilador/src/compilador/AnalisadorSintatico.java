@@ -19,10 +19,6 @@ public class AnalisadorSintatico {
     private Stack <TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();  
     
     
-    
-  
-    
-    
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
         analisaPrograma();
@@ -31,6 +27,8 @@ public class AnalisadorSintatico {
     private void analisaPrograma() throws IOException {
         token = analisadorLexico.lexico();
         if (token.getSimbolo().equalsIgnoreCase("sPrograma")) {
+            TabelaDeSimbolosProgramaProcedimentos programaTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
+            pilhaTabelaDeSimbolos.add(programaTabelaSimbolos);
             token = analisadorLexico.lexico();
 
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
@@ -90,7 +88,8 @@ public class AnalisadorSintatico {
 
         do {
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
-                //codigo semantico aqui
+                TabelaDeSimbolosVariaveis variaveisTabelaSimbolos = new TabelaDeSimbolosVariaveis(token.getLexema());
+                pilhaTabelaDeSimbolos.add(variaveisTabelaSimbolos);
 
                 token = analisadorLexico.lexico();
                 if (token.getSimbolo().equalsIgnoreCase("sVirgula") || token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
@@ -274,6 +273,10 @@ public class AnalisadorSintatico {
         //semantico
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
             //semantico
+            
+            TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
+            pilhaTabelaDeSimbolos.add(procedimentoTabelaSimbolos);
+            
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
                 analisaBloco();
@@ -291,6 +294,10 @@ public class AnalisadorSintatico {
         //semantico
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
             //semantico
+            
+            TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema());
+            pilhaTabelaDeSimbolos.add(funcaoTabelaSimbolos);
+            
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
                 token = analisadorLexico.lexico();

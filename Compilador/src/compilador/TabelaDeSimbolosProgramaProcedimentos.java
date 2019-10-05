@@ -11,8 +11,9 @@ package compilador;
  */
 public class TabelaDeSimbolosProgramaProcedimentos extends TabelaDeSimbolos {
     
-    public TabelaDeSimbolosProgramaProcedimentos(String lexema, boolean escopo) {
-        super(lexema, escopo);
+    public TabelaDeSimbolosProgramaProcedimentos(String lexema) {
+        this.setLexema(lexema);
+        this.setEscopo(true);
     }
     
 }

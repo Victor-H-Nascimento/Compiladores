@@ -9,17 +9,27 @@ package compilador;
  *
  * @author 16000465
  */
-public class TabelaDeSimbolos {
+public abstract class TabelaDeSimbolos {
     
-    String lexema;
-    boolean escopo;
-    
-    public TabelaDeSimbolos(String lexema, boolean escopo) {
-        this.lexema = lexema;
-        this.escopo = escopo;
-        
+   private String lexema;
+   boolean escopo;
+
+    public String getLexema() {
+        return lexema;
     }
 
-    
+    public void setLexema(String lexema) {
+        this.lexema = lexema;
+    }
+
+    public boolean isEscopo() {
+        return escopo;
+    }
+
+    public void setEscopo(boolean escopo) {
+        this.escopo = escopo;
+    }
+   
+   
     
 }
