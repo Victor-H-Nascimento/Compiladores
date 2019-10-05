@@ -164,9 +164,14 @@ public class InterfaceEditor extends javax.swing.JFrame {
         try {
             AnalisadorLexico analisadorLexico = new AnalisadorLexico(path);
             AnalisadorSintatico sintatico = new AnalisadorSintatico(analisadorLexico);
-            String linhaEcaracter = analisadorLexico.erroLexico();
             
-
+            jTextAreaDeErros.setForeground(Color.RED);
+            jTextAreaDeErros.setText(sintatico.getFraseContendoErro());
+            
+            
+            
+            /*String linhaEcaracter = analisadorLexico.erroLexicoNaLinha();
+            
             if (linhaEcaracter.contains("Sem erros")) {
                 jTextAreaDeErros.setForeground(Color.BLUE);
                 jTextAreaDeErros.setText("Construido com sucesso!");
@@ -175,7 +180,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
                 String caracterComErro = linhaEcaracter.split(" ")[1];
                 jTextAreaDeErros.setForeground(Color.RED);
                 jTextAreaDeErros.setText("Linha " + numeroLinha + " - Erro Léxico: Caracter " + caracterComErro + " não tem função definida.");
-            }
+            }*/
 
         } catch (IOException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
