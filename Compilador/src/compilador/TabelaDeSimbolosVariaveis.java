@@ -42,6 +42,7 @@ public class TabelaDeSimbolosVariaveis extends TabelaDeSimbolos {
     public TabelaDeSimbolosVariaveis(String lexema) {
         this.setLexema(lexema);
         this.setEscopo(false);
+        this.setTipo("");
     }
     
     

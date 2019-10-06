@@ -143,6 +143,18 @@ public class AnalisadorSintatico {
             mostraErros("inteiro ou booleano");
         } else {
             // senão coloca_tipo_tabela(token.lexema) semantico
+            
+                for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
+                    
+                    if (item instanceof TabelaDeSimbolosVariaveis) {
+                        if (((TabelaDeSimbolosVariaveis) item).getTipo().contentEquals("")) {
+                            ((TabelaDeSimbolosVariaveis) item).setTipo(token.getLexema());
+                        }
+                    }
+                    
+            }
+            
+            
         }
 
         token = analisadorLexico.lexico();
