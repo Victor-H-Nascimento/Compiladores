@@ -28,7 +28,8 @@ public class AnalisadorSintatico {
         token = analisadorLexico.lexico();
         if (token.getSimbolo().equalsIgnoreCase("sPrograma")) {
             TabelaDeSimbolosProgramaProcedimentos programaTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
-            pilhaTabelaDeSimbolos.add(programaTabelaSimbolos);
+            pilhaTabelaDeSimbolos.push(programaTabelaSimbolos);
+            exibePilha();
             token = analisadorLexico.lexico();
 
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
@@ -89,7 +90,7 @@ public class AnalisadorSintatico {
         do {
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
                 TabelaDeSimbolosVariaveis variaveisTabelaSimbolos = new TabelaDeSimbolosVariaveis(token.getLexema());
-                pilhaTabelaDeSimbolos.add(variaveisTabelaSimbolos);
+                pilhaTabelaDeSimbolos.push(variaveisTabelaSimbolos);
 
                 token = analisadorLexico.lexico();
                 if (token.getSimbolo().equalsIgnoreCase("sVirgula") || token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
@@ -275,7 +276,7 @@ public class AnalisadorSintatico {
             //semantico
             
             TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
-            pilhaTabelaDeSimbolos.add(procedimentoTabelaSimbolos);
+            pilhaTabelaDeSimbolos.push(procedimentoTabelaSimbolos);
             
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
@@ -296,7 +297,7 @@ public class AnalisadorSintatico {
             //semantico
             
             TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema());
-            pilhaTabelaDeSimbolos.add(funcaoTabelaSimbolos);
+            pilhaTabelaDeSimbolos.push(funcaoTabelaSimbolos);
             
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
@@ -405,6 +406,14 @@ public class AnalisadorSintatico {
 
     private void analisaChamadaFuncao() throws IOException {
             token = analisadorLexico.lexico();
+    }
+
+    private void exibePilha() {
+        System.out.println("*********************************************");
+         for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
+             System.out.println(item.getLexema());
+        }
+        System.out.println("*********************************************");
     }
 
 }
