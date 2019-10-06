@@ -6,6 +6,7 @@
 package compilador;
 
 import java.io.IOException;
+import java.util.Stack;
 
 /**
  *
@@ -15,6 +16,11 @@ public class AnalisadorSintatico {
 
     private final AnalisadorLexico analisadorLexico;
     private Token token;
+
+    private Stack <TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();  
+    
+    
+
     private String fraseContendoErro = "";
     private  boolean errosSintaticos = false;
 
@@ -31,7 +37,10 @@ public class AnalisadorSintatico {
 
         token = analisadorLexico.lexico();
 
-        if (token.getSimbolo().equalsIgnoreCase("sPrograma") && !analisadorLexico.contemErrosLexicos() && !errosSintaticos) {
+        if (token.getSimbolo().equalsIgnoreCase("sPrograma")) {
+            TabelaDeSimbolosProgramaProcedimentos programaTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
+            pilhaTabelaDeSimbolos.push(programaTabelaSimbolos);
+            exibePilha();
 
             token = analisadorLexico.lexico();
 
@@ -100,7 +109,8 @@ public class AnalisadorSintatico {
 
         do {
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
-                //codigo semantico aqui
+                TabelaDeSimbolosVariaveis variaveisTabelaSimbolos = new TabelaDeSimbolosVariaveis(token.getLexema());
+                pilhaTabelaDeSimbolos.push(variaveisTabelaSimbolos);
 
                 token = analisadorLexico.lexico();
                 if (token.getSimbolo().equalsIgnoreCase("sVirgula") || token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
@@ -284,6 +294,10 @@ public class AnalisadorSintatico {
         //semantico
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
             //semantico
+            
+            TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
+            pilhaTabelaDeSimbolos.push(procedimentoTabelaSimbolos);
+            
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !errosSintaticos) {
                 analisaBloco();
@@ -301,6 +315,10 @@ public class AnalisadorSintatico {
         //semantico
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
             //semantico
+            
+            TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema());
+            pilhaTabelaDeSimbolos.push(funcaoTabelaSimbolos);
+            
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sDoisPontos") && !errosSintaticos) {
                 token = analisadorLexico.lexico();
@@ -413,6 +431,14 @@ public class AnalisadorSintatico {
             fraseContendoErro = ("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: " + erroEncontrado + " esperado");
         }
          errosSintaticos = true;
+    }
+
+    private void exibePilha() {
+        System.out.println("*********************************************");
+         for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
+             System.out.println(item.getLexema());
+        }
+        System.out.println("*********************************************");
     }
 
 }
