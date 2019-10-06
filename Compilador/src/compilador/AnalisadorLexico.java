@@ -21,18 +21,16 @@ public final class AnalisadorLexico {
     private  Token token;
     private  String caracter;
     private  boolean errosLexicos = false;
-
+    
     public AnalisadorLexico(String codigoFonte) throws IOException {
-        leArquivo(codigoFonte);
+       arq.Ler(codigoFonte, c);
+       caracter = c.leCaracter();
     }
 
-    
-    private void leArquivo(String codigoFonte) throws IOException{
-        arq.Ler(codigoFonte, c);
-        caracter = c.leCaracter();
+    public boolean contemErrosLexicos() {
+        return errosLexicos;
     }
-    
-    
+
     /**
      *
      * @return 
@@ -40,8 +38,7 @@ public final class AnalisadorLexico {
      * @throws IOException
      */
     public Token lexico() throws FileNotFoundException, IOException {
-        
-        
+            
         do {
 
             while ((caracter.contains("{") || caracter.contains(" ") || caracter.contains("\n") || caracter.contains("\t")) && !c.estaVazia())//!eof
@@ -77,17 +74,22 @@ public final class AnalisadorLexico {
                 }
             }
             if (!c.estaVazia()) {
+                
                 errosLexicos = pegaToken();
                 if (!errosLexicos) {
-                    //colocaTokenLista();
                     return token;
                 }
-
+                
+                else{
+                    token.setLexema(caracter);
+                    token.setSimbolo("Erro Lexico");
+                    token.setLinhaCodigo(c.getLinhaCodigo());
+                    return token;
+                }
             }
 
-        } while (!c.estaVazia() && !errosLexicos);//!eof
+        } while (!c.estaVazia());//!eof
 
-        //mostraTokens();
         return token;
     }
 
@@ -128,24 +130,8 @@ public final class AnalisadorLexico {
         }
         return false;
     }
-
-    public void colocaTokenLista() {
-        listaToken.add(token);
-    }
-
-    private void mostraTokens() {
-        System.out.println("**********************************");
-        for (Token item : listaToken) {
-            System.out.println("Lexema: " + item.getLexema());
-            System.out.println("Simbolo: " + item.getSimbolo());
-            System.out.println("Linha: " + item.getLinhaCodigo());
-            System.out.println("");
-        }
-        System.out.println("**********************************");
-    }
-
     
-    public String erroLexico() {
+    public String erroLexicoNaLinha() {
         
         String retorno = "Sem erros";
         

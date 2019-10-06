@@ -16,43 +16,57 @@ public class AnalisadorSintatico {
 
     private final AnalisadorLexico analisadorLexico;
     private Token token;
+
     private Stack <TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();  
     
     
+
+    private String fraseContendoErro = "";
+    private  boolean errosSintaticos = false;
+
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
         analisaPrograma();
     }
 
+    public String getFraseContendoErro() {
+        return fraseContendoErro;
+    }
+
     private void analisaPrograma() throws IOException {
+
         token = analisadorLexico.lexico();
+
         if (token.getSimbolo().equalsIgnoreCase("sPrograma")) {
             TabelaDeSimbolosProgramaProcedimentos programaTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
             pilhaTabelaDeSimbolos.push(programaTabelaSimbolos);
             exibePilha();
+
             token = analisadorLexico.lexico();
 
-            if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+            if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !analisadorLexico.contemErrosLexicos()  && !errosSintaticos) {
                 token = analisadorLexico.lexico();
                 //  insere_tabela(token.lexema,”nomedeprograma”,””,””) semantico
 
-                if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
+                if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !analisadorLexico.contemErrosLexicos()  && !errosSintaticos) {
                     analisaBloco();
                     if (token.getSimbolo().equalsIgnoreCase("sPonto")) {
                         //se acabou arquivo ou é comentário   então sucesso
                         //senao ERRO
                     } else {
-                        System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ´.´ esperado");
+                        mostraErros(".");
+
                     }
                 } else {
-                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ´;´ esperado");
+
+                    mostraErros(";");
                 }
 
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+                mostraErros("identificador");
             }
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: palavra-chave 'programa' esperada");
+            mostraErros("programa");
         }
 
     }
@@ -66,21 +80,27 @@ public class AnalisadorSintatico {
 
     private void analisaEtapaVariaveis() throws IOException {
 
-        if (token.getSimbolo().equalsIgnoreCase("sVar")) {
-            token = analisadorLexico.lexico();
+        if (token.getSimbolo().equalsIgnoreCase("sVar") && !errosSintaticos) {
+
+            
+                token = analisadorLexico.lexico();
+          
+
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
                 while (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
 
                     analisaDeclaracaoVariaveis();
 
-                    if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
+                    if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !analisadorLexico.contemErrosLexicos()  && !errosSintaticos) {
                         token = analisadorLexico.lexico();
                     } else {
-                        System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ´;´ esperado");
+
+                        mostraErros(";");
+
                     }
                 }
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+                mostraErros("identificador");
             }
         }
     }
@@ -99,19 +119,19 @@ public class AnalisadorSintatico {
                         token = analisadorLexico.lexico();
 
                         if (token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
-                            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+                            mostraErros("identificador");
                         }
 
                     }
 
                 } else {
-                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ´,´ ou ´:´ esperado");
+                    mostraErros(", ou :");
                 }
 
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+                mostraErros("identificador");
             }
-        } while (!token.getSimbolo().equalsIgnoreCase("sDoisPontos"));
+        } while (!token.getSimbolo().equalsIgnoreCase("sDoisPontos")  && !errosSintaticos);
 
         token = analisadorLexico.lexico();
         analisaTipo();
@@ -119,22 +139,22 @@ public class AnalisadorSintatico {
     }
 
     private void analisaTipo() throws IOException {
-        if (!token.getSimbolo().equalsIgnoreCase("sInteiro") && !token.getSimbolo().equalsIgnoreCase("sBooleano")) {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: tipo 'inteiro' ou 'booleano' esperado");
+        if (!token.getSimbolo().equalsIgnoreCase("sInteiro") && !token.getSimbolo().equalsIgnoreCase("sBooleano")  && !errosSintaticos) {
+            mostraErros("inteiro ou booleano");
         } else {
             // senão coloca_tipo_tabela(token.lexema) semantico
         }
-        
+
         token = analisadorLexico.lexico();
 
     }
 
     private void analisaComandos() throws IOException {
-        if (token.getSimbolo().equalsIgnoreCase("sInicio")) {
+        if (token.getSimbolo().equalsIgnoreCase("sInicio")  && !errosSintaticos) {
             token = analisadorLexico.lexico();
             analisaComandoSimples();
 
-            while (!token.getSimbolo().equalsIgnoreCase("sFim")) {
+            while (!token.getSimbolo().equalsIgnoreCase("sFim")  && !errosSintaticos) {
                 if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
                     token = analisadorLexico.lexico();
 
@@ -143,12 +163,12 @@ public class AnalisadorSintatico {
                     }
 
                 } else {
-                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ';' esperado");
+                    mostraErros(";");
                 }
             }
             token = analisadorLexico.lexico();
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: palavra-chave 'inicio' esperada");
+            mostraErros("inicio");
         }
     }
 
@@ -179,41 +199,41 @@ public class AnalisadorSintatico {
 
     private void analisaLeia() throws IOException {
         token = analisadorLexico.lexico();
-        if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses")) {
+        if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses") && !errosSintaticos) {
             token = analisadorLexico.lexico();
-            if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+            if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
                 //semantico
                 token = analisadorLexico.lexico();
-                if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses")) {
+                if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses") && !errosSintaticos) {
                     token = analisadorLexico.lexico();
                 } else {
-                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ')' esperado");
+                    mostraErros(")");
                 }
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+                mostraErros("identificador");
             }
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: '(' esperado");
+            mostraErros("(");
         }
     }
 
     private void analisaEscreva() throws IOException {
         token = analisadorLexico.lexico();
-        if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses")) {
+        if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses") && !errosSintaticos) {
             token = analisadorLexico.lexico();
-            if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+            if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
                 //lexico
                 token = analisadorLexico.lexico();
-                if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses")) {
+                if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses") && !errosSintaticos) {
                     token = analisadorLexico.lexico();
                 } else {
-                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ')' esperado");
+                    mostraErros(")");
                 }
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+                mostraErros("identificador");
             }
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: '(' esperado");
+            mostraErros("(");
         }
     }
 
@@ -221,20 +241,20 @@ public class AnalisadorSintatico {
         //semantico
         token = analisadorLexico.lexico();
         analisaExpressao();
-        if (token.getSimbolo().equalsIgnoreCase("sFaca")) {
+        if (token.getSimbolo().equalsIgnoreCase("sFaca") && !errosSintaticos) {
             //semantico
             token = analisadorLexico.lexico();
             analisaComandoSimples();
             //semantico
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: 'faca' esperado");
+            mostraErros("faca");
         }
     }
 
     private void analisaSe() throws IOException {
         token = analisadorLexico.lexico();
         analisaExpressao();
-        if (token.getSimbolo().equalsIgnoreCase("sEntao")) {
+        if (token.getSimbolo().equalsIgnoreCase("sEntao") && !errosSintaticos) {
             token = analisadorLexico.lexico();
             analisaComandoSimples();
             if (token.getSimbolo().equalsIgnoreCase("sSenao")) {
@@ -242,7 +262,7 @@ public class AnalisadorSintatico {
                 analisaComandoSimples();
             }
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: 'entao' esperado");
+            mostraErros("entao");
         }
     }
 
@@ -258,10 +278,10 @@ public class AnalisadorSintatico {
             } else {
                 analisaDeclaracaoFuncao();
             }
-            if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
+            if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !errosSintaticos) {
                 token = analisadorLexico.lexico();
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ';' esperado");
+                mostraErros(";");
             }
         }
         if (flag == 1) {
@@ -272,20 +292,20 @@ public class AnalisadorSintatico {
     private void analisaDeclaracaoProcedimento() throws IOException {
         token = analisadorLexico.lexico();
         //semantico
-        if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+        if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
             //semantico
             
             TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
             pilhaTabelaDeSimbolos.push(procedimentoTabelaSimbolos);
             
             token = analisadorLexico.lexico();
-            if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
+            if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !errosSintaticos) {
                 analisaBloco();
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ';' esperado");
+                mostraErros(";");
             }
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+            mostraErros("identificador");
         }
         //semantico
     }
@@ -293,29 +313,29 @@ public class AnalisadorSintatico {
     private void analisaDeclaracaoFuncao() throws IOException {
         token = analisadorLexico.lexico();
         //semantico
-        if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
+        if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
             //semantico
             
             TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema());
             pilhaTabelaDeSimbolos.push(funcaoTabelaSimbolos);
             
             token = analisadorLexico.lexico();
-            if (token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
+            if (token.getSimbolo().equalsIgnoreCase("sDoisPontos") && !errosSintaticos) {
                 token = analisadorLexico.lexico();
-                if (token.getSimbolo().equalsIgnoreCase("sInteiro") || token.getSimbolo().equalsIgnoreCase("sBooleano")) {
+                if (token.getSimbolo().equalsIgnoreCase("sInteiro") || token.getSimbolo().equalsIgnoreCase("sBooleano") && !errosSintaticos) {
                     //semantico
                     token = analisadorLexico.lexico();
                     if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
                         analisaBloco();
                     }
                 } else {
-                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: 'inteiro' ou 'booleano' esperado");
+                    mostraErros("inteiro ou booleano");
                 }
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ':' esperado");
+                mostraErros(":");
             }
         } else {
-            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: identificador esperado");
+            mostraErros("identificador");
         }
         //semantico
     }
@@ -331,16 +351,16 @@ public class AnalisadorSintatico {
     private void analisaExpressaoSimples() throws IOException {
         if (token.getSimbolo().equalsIgnoreCase("sMais") || token.getSimbolo().equalsIgnoreCase("sMenos")) {
             token = analisadorLexico.lexico();
-           
+
         }
-        
-         analisaTermo();
-        
-         while (token.getSimbolo().equalsIgnoreCase("sMais") || token.getSimbolo().equalsIgnoreCase("sMenos") || token.getSimbolo().equalsIgnoreCase("sOu")) {
-                token = analisadorLexico.lexico();
-                analisaTermo();
-            }
-        
+
+        analisaTermo();
+
+        while (token.getSimbolo().equalsIgnoreCase("sMais") || token.getSimbolo().equalsIgnoreCase("sMenos") || token.getSimbolo().equalsIgnoreCase("sOu")) {
+            token = analisadorLexico.lexico();
+            analisaTermo();
+        }
+
     }
 
     private void analisaTermo() throws IOException {
@@ -357,40 +377,33 @@ public class AnalisadorSintatico {
             if (true) {//lexema
                 if (true) {
                     analisaChamadaFuncao();
-                }
-                else{
+                } else {
                     token = analisadorLexico.lexico();
                 }
-            }
-            else{
+            } else {
                 System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Semantico: n sei qual");
             }
-            
+
         } else {
             if (token.getSimbolo().equalsIgnoreCase("sNumero")) {
                 token = analisadorLexico.lexico();
-                
-            }
-            else if(token.getSimbolo().equalsIgnoreCase("sNao")){
+
+            } else if (token.getSimbolo().equalsIgnoreCase("sNao")) {
                 token = analisadorLexico.lexico();
                 analisaFator();
-            }
-            else if(token.getSimbolo().equalsIgnoreCase("sAbreParentesis")){
+            } else if (token.getSimbolo().equalsIgnoreCase("sAbreParentesis")) {
                 token = analisadorLexico.lexico();
                 analisaExpressao();
-                if (token.getSimbolo().equalsIgnoreCase("sFechaParentesis")) {
+                if (token.getSimbolo().equalsIgnoreCase("sFechaParentesis") && !errosSintaticos) {
                     token = analisadorLexico.lexico();
+                } else {
+                    mostraErros(")");
                 }
-                else{
-                    System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: ')' esperado");
-                }
-                
-            }
-            else if(token.getLexema().equalsIgnoreCase("verdadeiro") || token.getLexema().equalsIgnoreCase("falso")){
+
+            } else if ((token.getLexema().equalsIgnoreCase("verdadeiro") || token.getLexema().equalsIgnoreCase("falso")) && !errosSintaticos) {
                 token = analisadorLexico.lexico();
-            }
-            else{
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: 'verdadeiro' ou 'falso' esperados");
+            } else {
+                mostraErros("verdadeiro ou falso");
             }
         }
     }
@@ -405,7 +418,19 @@ public class AnalisadorSintatico {
     }
 
     private void analisaChamadaFuncao() throws IOException {
-            token = analisadorLexico.lexico();
+        token = analisadorLexico.lexico();
+    }
+
+    private void mostraErros(String erroEncontrado) {
+        
+        if (analisadorLexico.contemErrosLexicos() &&  !errosSintaticos) {
+            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Léxico: Caracter " + token.getLexema() + " não tem função definida.");
+            fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Léxico: " + token.getLexema() + " não tem função definida.");
+        } else if(!analisadorLexico.contemErrosLexicos() &&  !errosSintaticos) {
+            System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: " + erroEncontrado + " esperado");
+            fraseContendoErro = ("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: " + erroEncontrado + " esperado");
+        }
+         errosSintaticos = true;
     }
 
     private void exibePilha() {
