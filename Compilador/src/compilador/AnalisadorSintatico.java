@@ -178,6 +178,22 @@ public class AnalisadorSintatico {
                     mostraErros(";");
                 }
             }
+            
+            //remover da pilha
+            
+            
+            while(!pilhaTabelaDeSimbolos.lastElement().isEscopo())
+            {
+                pilhaTabelaDeSimbolos.pop();
+            }
+            
+            
+            if ((pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes ||pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) && pilhaTabelaDeSimbolos.lastElement().isEscopo()) {
+                pilhaTabelaDeSimbolos.lastElement().setEscopo(false);
+            }
+            
+            
+            
             token = analisadorLexico.lexico();
         } else {
             mostraErros("inicio");
