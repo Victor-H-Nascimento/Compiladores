@@ -7,7 +7,6 @@ package compilador;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,7 +16,6 @@ public final class AnalisadorLexico {
 
     private  Arquivo arq = new Arquivo();
     private  Funcoes c = new Funcoes();
-    private  ArrayList<Token> listaToken = new ArrayList();
     private  Token token;
     private  String caracter;
     private  boolean errosLexicos = false;

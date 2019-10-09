@@ -52,6 +52,8 @@ public class Funcoes implements EncapsulamentoFuncoes {
             for (char item : listaAuxiliar) {
                 listaCaracter.add(Character.toString(item));
             }
+            
+            listaCaracter.add("\n");
 
             linhaDeCodigo++;
             
@@ -61,9 +63,7 @@ public class Funcoes implements EncapsulamentoFuncoes {
 
             }
             
-            else{
-            aux = "\n";
-            }
+          
                         
             
         } else if (!listaArquivo.isEmpty() && !listaCaracter.isEmpty()) {
