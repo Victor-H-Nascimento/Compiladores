@@ -7,7 +7,6 @@ package compilador;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,26 +16,27 @@ public final class AnalisadorLexico {
 
     private  Arquivo arq = new Arquivo();
     private  Funcoes c = new Funcoes();
-    private  ArrayList<Token> listaToken = new ArrayList();
     private  Token token;
     private  String caracter;
     private  boolean errosLexicos = false;
-
+    
     public AnalisadorLexico(String codigoFonte) throws IOException {
-        lexico(codigoFonte);
+       arq.Ler(codigoFonte, c);
+       caracter = c.leCaracter();
+    }
+
+    public boolean contemErrosLexicos() {
+        return errosLexicos;
     }
 
     /**
      *
-     * @param codigoFonte
+     * @return 
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void lexico(String codigoFonte) throws FileNotFoundException, IOException {
-
-        arq.Ler(codigoFonte, c);
-
-        caracter = c.leCaracter();
+    public Token lexico() throws FileNotFoundException, IOException {
+            
         do {
 
             while ((caracter.contains("{") || caracter.contains(" ") || caracter.contains("\n") || caracter.contains("\t")) && !c.estaVazia())//!eof
@@ -72,19 +72,26 @@ public final class AnalisadorLexico {
                 }
             }
             if (!c.estaVazia()) {
+                
                 errosLexicos = pegaToken();
                 if (!errosLexicos) {
-                    colocaTokenLista();
+                    return token;
                 }
-
+                
+                else{
+                    token.setLexema(caracter);
+                    token.setSimbolo("Erro Lexico");
+                    token.setLinhaCodigo(c.getLinhaCodigo());
+                    return token;
+                }
             }
 
-        } while (!c.estaVazia() && !errosLexicos);//!eof
+        } while (!c.estaVazia());//!eof
 
-        mostraTokens();
+        return token;
     }
 
-    public boolean pegaToken() {
+    private boolean pegaToken() {
 
         token = new Token();
         char[] auxCaracter = caracter.toCharArray();
@@ -121,24 +128,8 @@ public final class AnalisadorLexico {
         }
         return false;
     }
-
-    public void colocaTokenLista() {
-        listaToken.add(token);
-    }
-
-    public void mostraTokens() {
-        System.out.println("**********************************");
-        for (Token item : listaToken) {
-            System.out.println("Lexema: " + item.getLexema());
-            System.out.println("Simbolo: " + item.getSimbolo());
-            System.out.println("Linha: " + item.getLinhaCodigo());
-            System.out.println("");
-        }
-        System.out.println("**********************************");
-    }
-
     
-    public String erroLexico() {
+    public String erroLexicoNaLinha() {
         
         String retorno = "Sem erros";
         

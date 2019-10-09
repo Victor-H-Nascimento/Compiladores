@@ -51,6 +51,8 @@ public class Funcoes {
             for (char item : listaAuxiliar) {
                 listaCaracter.add(Character.toString(item));
             }
+            
+            listaCaracter.add("\n");
 
             listaCaracter.add("\n");
             
