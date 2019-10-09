@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author victor
  */
-public class Funcoes implements EncapsulamentoFuncoes {
+public class Funcoes {
 
     //atributos
     SimbolosToken simbolos = new SimbolosToken();
@@ -39,7 +39,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         return erroExclamacao;
     }
 
-    @Override
     public String leCaracter() {
 
         String aux = null;
@@ -53,6 +52,8 @@ public class Funcoes implements EncapsulamentoFuncoes {
                 listaCaracter.add(Character.toString(item));
             }
 
+            listaCaracter.add("\n");
+            
             linhaDeCodigo++;
             
             if (!listaCaracter.isEmpty()) {
@@ -60,11 +61,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
             listaCaracter.remove(0);
 
             }
-            
-            else{
-            aux = "\n";
-            }
-                        
             
         } else if (!listaArquivo.isEmpty() && !listaCaracter.isEmpty()) {
             aux = listaCaracter.get(0);
@@ -83,7 +79,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         return aux;
     }
 
-    @Override
     public String trataDigito(String caracter, Funcoes c, Arquivo arq, Token token) {
 
         String novoCaracter = c.leCaracter();
@@ -98,7 +93,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         return novoCaracter;
     }
 
-    @Override
     public String trataIdentificador(String caracter, Funcoes c, Arquivo arq, Token token) {
         token.setLinhaCodigo(linhaDeCodigo);
         String novoCaracter = c.leCaracter();
@@ -208,7 +202,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         return novoCaracter;
     }
 
-    @Override
     public String trataAtribuicao(String caracter, Funcoes c, Arquivo arq, Token token) {
 
         String novoCaracter = c.leCaracter();
@@ -227,7 +220,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         return novoCaracter;
     }
 
-    @Override
     public String trataOperadorAritmetico(String caracter, Funcoes c, Arquivo arq, Token token) {
 
         token.setLexema(caracter);
@@ -252,7 +244,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         return novoCaracter;
     }
 
-    @Override
     public String trataOperadorRelacional(String caracter, Funcoes c, Arquivo arq, Token token) {
 
         token.setLinhaCodigo(linhaDeCodigo);
@@ -310,7 +301,6 @@ public class Funcoes implements EncapsulamentoFuncoes {
         return novoCaracter;
     }
 
-    @Override
     public String trataPontuacao(String caracter, Funcoes c, Arquivo arq, Token token) {
         token.setLexema(caracter);
         token.setLinhaCodigo(linhaDeCodigo);
