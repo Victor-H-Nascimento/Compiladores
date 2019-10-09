@@ -16,11 +16,7 @@ public class AnalisadorSintatico {
 
     private final AnalisadorLexico analisadorLexico;
     private Token token;
-
     private Stack <TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();  
-    
-    
-
     private String fraseContendoErro = "";
     private  boolean errosSintaticos = false;
 
@@ -40,7 +36,6 @@ public class AnalisadorSintatico {
         if (token.getSimbolo().equalsIgnoreCase("sPrograma")) {
             TabelaDeSimbolosProgramaProcedimentos programaTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
             pilhaTabelaDeSimbolos.push(programaTabelaSimbolos);
-            exibePilha();
 
             token = analisadorLexico.lexico();
 
@@ -55,10 +50,8 @@ public class AnalisadorSintatico {
                         //senao ERRO
                     } else {
                         mostraErros(".");
-
                     }
                 } else {
-
                     mostraErros(";");
                 }
 
@@ -94,9 +87,7 @@ public class AnalisadorSintatico {
                     if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !analisadorLexico.contemErrosLexicos()  && !errosSintaticos) {
                         token = analisadorLexico.lexico();
                     } else {
-
                         mostraErros(";");
-
                     }
                 }
             } else {
@@ -153,7 +144,6 @@ public class AnalisadorSintatico {
                     }
                     
             }
-            
             
         }
 
@@ -461,12 +451,6 @@ public class AnalisadorSintatico {
          errosSintaticos = true;
     }
 
-    private void exibePilha() {
-        System.out.println("*********************************************");
-         for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
-             System.out.println(item.getLexema());
-        }
-        System.out.println("*********************************************");
-    }
+    
 
 }

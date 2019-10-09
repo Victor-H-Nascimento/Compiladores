@@ -53,8 +53,6 @@ public class Funcoes {
             }
             
             listaCaracter.add("\n");
-
-            listaCaracter.add("\n");
             
             linhaDeCodigo++;
             

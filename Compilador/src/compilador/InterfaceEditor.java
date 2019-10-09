@@ -11,8 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultEditorKit;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,11 +28,10 @@ public class InterfaceEditor extends javax.swing.JFrame {
      * Creates new form InterfaceEditor
      */
     FileWriter arq;
-    
 
     public InterfaceEditor() throws IOException {
         this.path = "EditorTexto.txt";
-      //  this.arq = new FileWriter(path);
+        //  this.arq = new FileWriter(path);
         initComponents();
     }
 
@@ -155,15 +152,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
         PrintWriter gravarArq = new PrintWriter(arq);
-        
-        
-        //System.out.println(jTextAreaDeCodigo.getText());
-        
-        jTextAreaDeCodigo.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty,"\n");
-        
-        System.out.println(jTextAreaDeCodigo.getText().split("\n")[2]);
-        
-        String s = jTextAreaDeCodigo.getText();
+
         gravarArq.println(jTextAreaDeCodigo.getText());
 
         try {
@@ -175,23 +164,14 @@ public class InterfaceEditor extends javax.swing.JFrame {
         try {
             AnalisadorLexico analisadorLexico = new AnalisadorLexico(path);
             AnalisadorSintatico sintatico = new AnalisadorSintatico(analisadorLexico);
-            
-            jTextAreaDeErros.setForeground(Color.RED);
-            jTextAreaDeErros.setText(sintatico.getFraseContendoErro());
-            
-            
-            
-            /*String linhaEcaracter = analisadorLexico.erroLexicoNaLinha();
-            
-            if (linhaEcaracter.contains("Sem erros")) {
+
+            if (sintatico.getFraseContendoErro().contentEquals("")) {
                 jTextAreaDeErros.setForeground(Color.BLUE);
                 jTextAreaDeErros.setText("Construido com sucesso!");
             } else {
-                String numeroLinha = linhaEcaracter.split(" ")[0];
-                String caracterComErro = linhaEcaracter.split(" ")[1];
                 jTextAreaDeErros.setForeground(Color.RED);
-                jTextAreaDeErros.setText("Linha " + numeroLinha + " - Erro Léxico: Caracter " + caracterComErro + " não tem função definida.");
-            }*/
+                jTextAreaDeErros.setText(sintatico.getFraseContendoErro());
+            }
 
         } catch (IOException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
