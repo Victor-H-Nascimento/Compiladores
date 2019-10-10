@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -58,6 +60,11 @@ public class InterfaceEditor extends javax.swing.JFrame {
         jTextAreaDeCodigo.setColumns(20);
         jTextAreaDeCodigo.setRows(5);
         jTextAreaDeCodigo.setToolTipText("");
+        jTextAreaDeCodigo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextAreaDeCodigoMouseClicked(evt);
+            }
+        });
         jScrollPaneEditorTexto.setViewportView(jTextAreaDeCodigo);
 
         jTextAreaDeErros.setBackground(new java.awt.Color(238, 238, 238));
@@ -136,7 +143,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
             for (String linha : lista) {
                 comando = comando.concat(linha).concat("\n");
             }
-
+           
             jTextAreaDeCodigo.setText(comando);//aqui, o comando 'e uma string gigante de uma linha so, vou ver algum jeito de pegarmos linha por linha e colocar um /n antes de inserir na string comando
 
         } catch (IOException ex) {
@@ -154,7 +161,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
         PrintWriter gravarArq = new PrintWriter(arq);
 
         gravarArq.println(jTextAreaDeCodigo.getText());
-
+        
         try {
             arq.close();
         } catch (IOException ex) {
@@ -177,6 +184,41 @@ public class InterfaceEditor extends javax.swing.JFrame {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemCompilarActionPerformed
+
+    private void jTextAreaDeCodigoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextAreaDeCodigoMouseClicked
+        // TODO add your handling code here:
+        Color corLinha = new Color(232, 238, 250); // Color white
+        String d = "";
+        char[] arrayCodigo = jTextAreaDeCodigo.getText().toCharArray();
+        int posicaoCursor = jTextAreaDeCodigo.getCaretPosition();
+        
+        int inicioLinha = posicaoCursor;
+        int fimLinha = posicaoCursor;
+
+        while(arrayCodigo[inicioLinha] != '\n' && inicioLinha > 0)//procura o /n inicial
+        {
+            inicioLinha--;
+        }
+        
+        while(arrayCodigo[fimLinha] != '\n')//procura o /n final
+        {
+            fimLinha++;
+        }
+        
+        for (int i = inicioLinha; i < fimLinha; i++) {// concatena linha
+            d = d + arrayCodigo[i];
+        }
+    
+   
+   try {//coloca a cor entre o intervalo
+       jTextAreaDeCodigo.getHighlighter().removeAllHighlights();
+            jTextAreaDeCodigo.getHighlighter().addHighlight(inicioLinha,fimLinha,new DefaultHighlighter.DefaultHighlightPainter(corLinha));
+        } catch (BadLocationException ex) {
+            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   jTextAreaDeCodigo.requestFocus();//atualiza a tele(?)
+   
+    }//GEN-LAST:event_jTextAreaDeCodigoMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
