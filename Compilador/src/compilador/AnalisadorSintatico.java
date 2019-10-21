@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -108,7 +108,7 @@ public class AnalisadorSintatico {
                         token = analisadorLexico.lexico();
 
                         if (token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
-                            mostraErros("identificador");
+                            mostraErros("encontrado ':' quando um identificador era");
                         }
 
                     }
@@ -118,7 +118,7 @@ public class AnalisadorSintatico {
                 }
 
             } else {
-                mostraErros("identificador");
+                mostraErros("apos a ',' um identificador e");
             }
         } while (!token.getSimbolo().equalsIgnoreCase("sDoisPontos") && !errosSintaticos);
 
