@@ -143,7 +143,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
             for (String linha : lista) {
                 comando = comando.concat(linha).concat("\n");
             }
-           
+
             jTextAreaDeCodigo.setText(comando);//aqui, o comando 'e uma string gigante de uma linha so, vou ver algum jeito de pegarmos linha por linha e colocar um /n antes de inserir na string comando
 
         } catch (IOException ex) {
@@ -161,7 +161,7 @@ public class InterfaceEditor extends javax.swing.JFrame {
         PrintWriter gravarArq = new PrintWriter(arq);
 
         gravarArq.println(jTextAreaDeCodigo.getText());
-        
+
         try {
             arq.close();
         } catch (IOException ex) {
@@ -178,6 +178,34 @@ public class InterfaceEditor extends javax.swing.JFrame {
             } else {
                 jTextAreaDeErros.setForeground(Color.RED);
                 jTextAreaDeErros.setText(sintatico.getFraseContendoErro());
+
+               /* Color corLinhaErro = new Color(255, 0, 0); // Color white
+                // int pos2 = textArea.getText().indexOf(turnToString2);
+
+                try {
+
+                    if (sintatico.getToken().getLinhaCodigo() > 0) {
+                        String str[] = jTextAreaDeCodigo.getText().split("\n");
+
+                        String linhaDoErro = str[sintatico.getToken().getLinhaCodigo() - 1];
+                        String[] conteudoErro = linhaDoErro.split(sintatico.getToken().getLexema());
+                        int inicioToken = jTextAreaDeCodigo.getText().indexOf(str[sintatico.getToken().getLinhaCodigo() - 1]) + conteudoErro[0].length()-1;
+                        int finalToken = inicioToken + sintatico.getToken().getLexema().length();
+                        System.out.println("I " + inicioToken + "F " + finalToken);
+                        try {//coloca a cor entre o intervalo
+                            jTextAreaDeCodigo.getHighlighter().removeAllHighlights();
+                            jTextAreaDeCodigo.getHighlighter().addHighlight(inicioToken, finalToken, new DefaultHighlighter.DefaultHighlightPainter(corLinhaErro));
+                        } catch (BadLocationException ex) {
+                            Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        jTextAreaDeCodigo.requestFocus();//atualiza a tele(?)
+
+                    }
+
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Invalid option");
+                }*/
+
             }
 
         } catch (IOException ex) {
@@ -187,37 +215,36 @@ public class InterfaceEditor extends javax.swing.JFrame {
 
     private void jTextAreaDeCodigoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextAreaDeCodigoMouseClicked
         // TODO add your handling code here:
-        Color corLinha = new Color(232, 238, 250); // Color white
+        Color corLinhaClique = new Color(232, 238, 250); // Color white
         String d = "";
         char[] arrayCodigo = jTextAreaDeCodigo.getText().toCharArray();
         int posicaoCursor = jTextAreaDeCodigo.getCaretPosition();
-        
+
         int inicioLinha = posicaoCursor;
         int fimLinha = posicaoCursor;
 
-        while(arrayCodigo[inicioLinha] != '\n' && inicioLinha > 0)//procura o /n inicial
+        while (arrayCodigo[inicioLinha] != '\n' && inicioLinha > 0)//procura o /n inicial
         {
             inicioLinha--;
         }
-        
-        while(arrayCodigo[fimLinha] != '\n')//procura o /n final
+
+        while (arrayCodigo[fimLinha] != '\n')//procura o /n final
         {
             fimLinha++;
         }
-        
+
         for (int i = inicioLinha; i < fimLinha; i++) {// concatena linha
             d = d + arrayCodigo[i];
         }
-    
-   
-   try {//coloca a cor entre o intervalo
-       jTextAreaDeCodigo.getHighlighter().removeAllHighlights();
-            jTextAreaDeCodigo.getHighlighter().addHighlight(inicioLinha,fimLinha,new DefaultHighlighter.DefaultHighlightPainter(corLinha));
+
+        try {//coloca a cor entre o intervalo
+            jTextAreaDeCodigo.getHighlighter().removeAllHighlights();
+            jTextAreaDeCodigo.getHighlighter().addHighlight(inicioLinha, fimLinha, new DefaultHighlighter.DefaultHighlightPainter(corLinhaClique));
         } catch (BadLocationException ex) {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-   jTextAreaDeCodigo.requestFocus();//atualiza a tele(?)
-   
+        jTextAreaDeCodigo.requestFocus();//atualiza a tele(?)
+
     }//GEN-LAST:event_jTextAreaDeCodigoMouseClicked
 
 
