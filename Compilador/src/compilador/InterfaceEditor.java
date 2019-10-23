@@ -219,10 +219,13 @@ public class InterfaceEditor extends javax.swing.JFrame {
         String d = "";
         char[] arrayCodigo = jTextAreaDeCodigo.getText().toCharArray();
         int posicaoCursor = jTextAreaDeCodigo.getCaretPosition();
+        int inicioLinha = 0;
+        int fimLinha = 0;
 
-        int inicioLinha = posicaoCursor;
-        int fimLinha = posicaoCursor;
-
+        if (!jTextAreaDeCodigo.getText().isEmpty()) {
+        inicioLinha = posicaoCursor;
+        fimLinha = posicaoCursor;
+        
         while (arrayCodigo[inicioLinha] != '\n' && inicioLinha > 0)//procura o /n inicial
         {
             inicioLinha--;
@@ -244,6 +247,10 @@ public class InterfaceEditor extends javax.swing.JFrame {
             Logger.getLogger(InterfaceEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
         jTextAreaDeCodigo.requestFocus();//atualiza a tele(?)
+        }
+        
+
+        
 
     }//GEN-LAST:event_jTextAreaDeCodigoMouseClicked
 
