@@ -15,14 +15,19 @@ import java.util.Stack;
 public class AnalisadorSintatico {
 
     private final AnalisadorLexico analisadorLexico;
-    private Token token;
-    private Stack<TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();
+    private Token token = null;
+    private Stack <TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();  
+
     private String fraseContendoErro = "";
     private boolean errosSintaticos = false;
 
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
         analisaPrograma();
+    }
+
+    public Token getToken() {
+        return token;
     }
 
     public String getFraseContendoErro() {
