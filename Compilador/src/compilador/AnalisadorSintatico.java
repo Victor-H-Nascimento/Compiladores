@@ -1,4 +1,4 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -16,10 +16,11 @@ public class AnalisadorSintatico {
 
     private final AnalisadorLexico analisadorLexico;
     private Token token = null;
-    private Stack <TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();  
-
+    private Stack<TabelaDeSimbolos> pilhaTabelaDeSimbolos = new Stack<TabelaDeSimbolos>();
+    private Token tokenAuxiliar = null;
     private String fraseContendoErro = "";
     private boolean errosSintaticos = false;
+    private boolean erroNaAtribuicao = true;
 
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
@@ -103,28 +104,33 @@ public class AnalisadorSintatico {
 
         do {
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
-                TabelaDeSimbolosVariaveis variaveisTabelaSimbolos = new TabelaDeSimbolosVariaveis(token.getLexema());
-                pilhaTabelaDeSimbolos.push(variaveisTabelaSimbolos);
 
-                token = analisadorLexico.lexico();
-                if (token.getSimbolo().equalsIgnoreCase("sVirgula") || token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
+                if (pesquisaVariavelDuplicada(token.getLexema())) {
+                    TabelaDeSimbolosVariaveis variaveisTabelaSimbolos = new TabelaDeSimbolosVariaveis(token.getLexema());
+                    pilhaTabelaDeSimbolos.push(variaveisTabelaSimbolos);
+                    token = analisadorLexico.lexico();
+                    if (token.getSimbolo().equalsIgnoreCase("sVirgula") || token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
 
-                    if (token.getSimbolo().equalsIgnoreCase("sVirgula")) {
-                        token = analisadorLexico.lexico();
+                        if (token.getSimbolo().equalsIgnoreCase("sVirgula")) {
+                            token = analisadorLexico.lexico();
 
-                        if (token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
-                            mostraErros("encontrado ':' quando um identificador era");
+                            if (token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
+                                mostraErros("encontrado ':' quando um identificador era");
+                            }
+
                         }
 
+                    } else {
+                        mostraErros(", ou :");
                     }
 
                 } else {
-                    mostraErros(", ou :");
+                    erroSemanticoVariavelDuplicada();
                 }
-
             } else {
                 mostraErros("apos a ',' um identificador e");
             }
+
         } while (!token.getSimbolo().equalsIgnoreCase("sDoisPontos") && !errosSintaticos);
 
         token = analisadorLexico.lexico();
@@ -173,7 +179,7 @@ public class AnalisadorSintatico {
             }
 
             //remover da pilha
-            while (!pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.isEmpty()) {
+            while (!pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.isEmpty()) {//fazer logica para que se funcao nao tiver variaveis, nao dar pop nas variaveis de outras funcoes.
                 pilhaTabelaDeSimbolos.pop();
             }
 
@@ -204,6 +210,7 @@ public class AnalisadorSintatico {
     }
 
     private void analisaAtribuicaoOuChamadaProcedimento() throws IOException {
+        tokenAuxiliar = token;
         token = analisadorLexico.lexico();
         if (token.getSimbolo().equalsIgnoreCase("sAtribuicao")) {
             analisaAtribuicao();
@@ -275,7 +282,7 @@ public class AnalisadorSintatico {
             if (token.getSimbolo().equalsIgnoreCase("sSenao")) {
                 token = analisadorLexico.lexico();
                 analisaComandoSimples();
-            } 
+            }
         } else {
             mostraErros("entao");
         }
@@ -424,8 +431,23 @@ public class AnalisadorSintatico {
     }
 
     private void analisaAtribuicao() throws IOException {
-        token = analisadorLexico.lexico();
-        analisaExpressao();
+
+        //verificar se tokenAuxiliar é uma variavel e se já está na tabela de simbolos
+        for (int i = pilhaTabelaDeSimbolos.size(); i > 0; i--) {
+            if (pilhaTabelaDeSimbolos.elementAt(i-1).getLexema().contentEquals(tokenAuxiliar.getLexema()) && pilhaTabelaDeSimbolos.elementAt(i-1) instanceof TabelaDeSimbolosVariaveis) {
+                erroNaAtribuicao = false;
+                break;
+            } 
+        }
+
+        if (!erroNaAtribuicao) {
+            token = analisadorLexico.lexico();
+            analisaExpressao();
+            erroNaAtribuicao = true;
+        } else {
+            erroSemanticoLadoEsquerdoAtribuicao();
+        }
+
     }
 
     private void analisaChamadaProcedimento() {
@@ -445,6 +467,34 @@ public class AnalisadorSintatico {
             System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: " + erroEncontrado + " esperado");
             fraseContendoErro = ("Linha " + token.getLinhaCodigo() + " - Erro Sintatico: " + erroEncontrado + " esperado");
         }
+        errosSintaticos = true;
+    }
+
+    private boolean pesquisaVariavelDuplicada(String lexema) {
+
+        int tamanhoPilha = pilhaTabelaDeSimbolos.size();
+
+        while (pilhaTabelaDeSimbolos.elementAt(tamanhoPilha - 1) instanceof TabelaDeSimbolosVariaveis && !pilhaTabelaDeSimbolos.isEmpty() && tamanhoPilha > 1) {
+
+            TabelaDeSimbolosVariaveis item = (TabelaDeSimbolosVariaveis) pilhaTabelaDeSimbolos.elementAt(tamanhoPilha - 1);
+
+            if (item.getLexema().contentEquals(lexema)) {
+                return false;
+            }
+
+            tamanhoPilha--;
+        }
+
+        return true;
+    }
+
+    private void erroSemanticoVariavelDuplicada() {
+        fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Variavel duplicada '" + token.getLexema() + "'");
+        errosSintaticos = true;
+    }
+
+    private void erroSemanticoLadoEsquerdoAtribuicao() {
+        fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Tipo incompátivel no lado esquerdo da atribuição");
         errosSintaticos = true;
     }
 
