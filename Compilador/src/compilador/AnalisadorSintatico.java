@@ -21,6 +21,7 @@ public class AnalisadorSintatico {
     private String fraseContendoErro = "";
     private boolean errosSintaticos = false;
     private boolean erroNaAtribuicao = true;
+    private Stack<Boolean> isProcOrFunc = new Stack();
 
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
@@ -42,7 +43,7 @@ public class AnalisadorSintatico {
         if (token.getSimbolo().equalsIgnoreCase("sPrograma")) {
             TabelaDeSimbolosProgramaProcedimentos programaTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
             pilhaTabelaDeSimbolos.push(programaTabelaSimbolos);
-
+            isProcOrFunc.add(true);
             token = analisadorLexico.lexico();
 
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !analisadorLexico.contemErrosLexicos() && !errosSintaticos) {
@@ -180,19 +181,26 @@ public class AnalisadorSintatico {
 
             //remover da pilha
             //fazer condicao para executar este while, somente se for um fim de um procedimento/funcao.
-            while (!pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.isEmpty()) {//fazer logica para que se funcao nao tiver variaveis, nao dar pop nas variaveis de outras funcoes.
+            if (isProcOrFunc.lastElement() && !isProcOrFunc.isEmpty()) {
+                while (!pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.isEmpty()) {//fazer logica para que se funcao nao tiver variaveis, nao dar pop nas variaveis de outras funcoes.
 
-                if (pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) {
-                    pilhaTabelaDeSimbolos.pop();
-                    break;
-                } else {
-                    pilhaTabelaDeSimbolos.pop();
+                    if (pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) {
+                        pilhaTabelaDeSimbolos.pop();
+                        break;
+                    } else {
+                        pilhaTabelaDeSimbolos.pop();
+                    }
+
+                }
+
+                if ((pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) && pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.lastElement().getLexema().equalsIgnoreCase("programa")) {
+                    pilhaTabelaDeSimbolos.lastElement().setEscopo(false);
                 }
 
             }
 
-            if ((pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) && pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.lastElement().getLexema().equalsIgnoreCase("programa")) {
-                pilhaTabelaDeSimbolos.lastElement().setEscopo(false);
+            if (!isProcOrFunc.isEmpty()) {
+                isProcOrFunc.pop();// tira true ou false da pilha
             }
 
             token = analisadorLexico.lexico();
@@ -267,7 +275,7 @@ public class AnalisadorSintatico {
                         mostraErros(")");
                     }
                 } else {
-                    erroSemanticoVariavelFuncaoincompativel(token.getLexema());
+                    erroSemanticoVariavelFuncaoIncompativel(token.getLexema());
                 }
 
             } else {
@@ -281,9 +289,10 @@ public class AnalisadorSintatico {
     private void analisaEnquanto() throws IOException {
         //semantico
         token = analisadorLexico.lexico();
-       boolean retorno = analisaExpressao(); // ver condicao de retorno
+        boolean retorno = analisaExpressao(); // ver condicao de retorno
         if (token.getSimbolo().equalsIgnoreCase("sFaca") && !errosSintaticos) {
             //semantico
+            isProcOrFunc.add(false);
             token = analisadorLexico.lexico();
             analisaComandoSimples();
             //semantico
@@ -312,6 +321,7 @@ public class AnalisadorSintatico {
         int flag = 0;
         if (token.getSimbolo().equalsIgnoreCase("sProcedimento") || token.getSimbolo().equalsIgnoreCase("sFuncao")) {
             //semantico
+
         }
         while (token.getSimbolo().equalsIgnoreCase("sProcedimento") || token.getSimbolo().equalsIgnoreCase("sFuncao")) {
             if (token.getSimbolo().equalsIgnoreCase("sProcedimento")) {
@@ -332,19 +342,25 @@ public class AnalisadorSintatico {
 
     private void analisaDeclaracaoProcedimento() throws IOException {
         token = analisadorLexico.lexico();
+        isProcOrFunc.add(true);//adiciona true na pilha de proc/func
         //semantico
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
             //semantico
 
-            TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
-            pilhaTabelaDeSimbolos.push(procedimentoTabelaSimbolos);
+            if (pesquisaDeclaracaoProcedimento(token.getLexema())) {
+                TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
+                pilhaTabelaDeSimbolos.push(procedimentoTabelaSimbolos);
 
-            token = analisadorLexico.lexico();
-            if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !errosSintaticos) {
-                analisaBloco();
+                token = analisadorLexico.lexico();
+                if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !errosSintaticos) {
+                    analisaBloco();
+                } else {
+                    mostraErros(";");
+                }
             } else {
-                mostraErros(";");
+                erroSemanticoProcedimentoIncompativel(token.getLexema());
             }
+
         } else {
             mostraErros("identificador");
         }
@@ -353,27 +369,35 @@ public class AnalisadorSintatico {
 
     private void analisaDeclaracaoFuncao() throws IOException {
         token = analisadorLexico.lexico();
+        isProcOrFunc.add(true);//adiciona true na pilha de proc/func
         //semantico
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
             //semantico
 
-            TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema());
-            pilhaTabelaDeSimbolos.push(funcaoTabelaSimbolos);
+            if (pesquisaDeclaracaoFuncao(token.getLexema())) {
+                TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema());
+                pilhaTabelaDeSimbolos.push(funcaoTabelaSimbolos);
 
-            token = analisadorLexico.lexico();
-            if (token.getSimbolo().equalsIgnoreCase("sDoisPontos") && !errosSintaticos) {
                 token = analisadorLexico.lexico();
-                if (token.getSimbolo().equalsIgnoreCase("sInteiro") || token.getSimbolo().equalsIgnoreCase("sBooleano") && !errosSintaticos) {
-                    //semantico
+                if (token.getSimbolo().equalsIgnoreCase("sDoisPontos") && !errosSintaticos) {
                     token = analisadorLexico.lexico();
-                    if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
-                        analisaBloco();
+                    if (token.getSimbolo().equalsIgnoreCase("sInteiro") || token.getSimbolo().equalsIgnoreCase("sBooleano") && !errosSintaticos) {
+                        //semantico
+
+                        preencheTipoFuncaoProcedimento(token);
+
+                        token = analisadorLexico.lexico();
+                        if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
+                            analisaBloco();
+                        }
+                    } else {
+                        mostraErros("inteiro ou booleano");
                     }
                 } else {
-                    mostraErros("inteiro ou booleano");
+                    mostraErros(":");
                 }
             } else {
-                mostraErros(":");
+                erroSemanticoFuncaoIncompativel(token.getLexema());
             }
         } else {
             mostraErros("identificador");
@@ -387,7 +411,7 @@ public class AnalisadorSintatico {
             token = analisadorLexico.lexico();
             analisaExpressaoSimples();
         }
-        
+
         return true;
     }
 
@@ -417,14 +441,14 @@ public class AnalisadorSintatico {
     private void analisaFator() throws IOException {
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {// se variavel ou funcao
             //semantico
-            if (true) {//lexema
-                if (true) {
+            if (pesquisaDeclaracaoFuncaoVariavel(token.getLexema())) {//lexema
+                if (pesquisaTipoFuncao(token)) {
                     analisaChamadaFuncao();
                 } else {
                     token = analisadorLexico.lexico();
                 }
             } else {
-                System.out.println("Linha " + token.getLinhaCodigo() + " - Erro Semantico: n sei qual");
+                erroSemanticoVariavelFuncaoIncompativel(token.getLexema());
             }
 
         } else {
@@ -463,7 +487,7 @@ public class AnalisadorSintatico {
 
         if (!erroNaAtribuicao) {
             token = analisadorLexico.lexico();
-           boolean retorno = analisaExpressao(); // ver condicao de retorno
+            boolean retorno = analisaExpressao(); // ver condicao de retorno
             erroNaAtribuicao = true;
         } else {
             erroSemanticoLadoEsquerdoAtribuicao();
@@ -549,6 +573,68 @@ public class AnalisadorSintatico {
         return false;
     }
 
+    private boolean pesquisaDeclaracaoProcedimento(String lexema) {
+        for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
+
+            if (item instanceof TabelaDeSimbolosProgramaProcedimentos) {
+                if (item.getLexema().contentEquals(lexema)) {
+                    return false;
+                }
+            }
+
+        }
+        return true;
+    }
+
+    private boolean pesquisaDeclaracaoFuncao(String lexema) {
+        for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
+
+            if (item instanceof TabelaDeSimbolosFuncoes) {
+                if (item.getLexema().contentEquals(lexema)) {
+                    return false;
+                }
+            }
+
+        }
+        return true;
+    }
+
+     private void preencheTipoFuncaoProcedimento(Token tokenAux) {
+
+        for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
+
+            if (item instanceof TabelaDeSimbolosFuncoes) {
+                if (item.getLexema().contentEquals(tokenAux.getLexema())) {
+
+                    if (tokenAux.getSimbolo().contentEquals("sInteiro")) {
+                        ((TabelaDeSimbolosFuncoes) item).setTipo("sInteiro");
+
+                    } else {
+                        ((TabelaDeSimbolosFuncoes) item).setTipo("sBooleano");
+                    }
+                }
+            }
+
+        }
+    }
+
+    private boolean pesquisaTipoFuncao(Token tokenAux) {
+        for (TabelaDeSimbolos item : pilhaTabelaDeSimbolos) {
+
+            if (item instanceof TabelaDeSimbolosFuncoes) {
+                if (item.getLexema().contentEquals(tokenAux.getLexema())) {
+
+                    if (((TabelaDeSimbolosFuncoes) item).getTipo().contentEquals("sInteiro") || ((TabelaDeSimbolosFuncoes) item).getTipo().contentEquals("sBooleano")) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        
+        return false;
+    }
+    
     private void erroSemanticoVariavelDuplicada() {
         fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Variavel duplicada '" + token.getLexema() + "'");
         errosSintaticos = true;
@@ -569,9 +655,21 @@ public class AnalisadorSintatico {
         errosSintaticos = true;
     }
 
-    private void erroSemanticoVariavelFuncaoincompativel(String lexema) {
-       fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + lexema + " é incompatível, espera-se uma variavel ou uma funcao.");
-       errosSintaticos = true;
+    private void erroSemanticoVariavelFuncaoIncompativel(String lexema) {
+        fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + lexema + " é incompatível, espera-se uma variavel ou uma funcao.");
+        errosSintaticos = true;
     }
+
+    private void erroSemanticoProcedimentoIncompativel(String lexema) {
+        fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + lexema + " é incompatível, espera-se um procedimento.");
+        errosSintaticos = true;
+    }
+
+    private void erroSemanticoFuncaoIncompativel(String lexema) {
+        fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + lexema + " é incompatível, espera-se uma funcao.");
+        errosSintaticos = true;
+    }
+
+   
 
 }
