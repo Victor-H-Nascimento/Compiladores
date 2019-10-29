@@ -11,9 +11,8 @@ package compilador;
  */
 public class TabelaDeSimbolosVariaveis extends TabelaDeSimbolos {
    
-  /* private String lexema;
-   private boolean escopo;*/
-    private String tipo;
+  
+   private String tipo;
    private int memoria;    //endereço
 
     public String getTipo() {

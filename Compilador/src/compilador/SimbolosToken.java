@@ -50,6 +50,8 @@ public class SimbolosToken {
     private final String doisPontos = "sDoisPontos";
     private final String verdadeiro = "sVerdadeiro";
     private final String falso = "sFalso";
+    private final String maisUnitario = "sMaisUnitario";
+    private final String menosUnitario = "sMenosUnitario";
 
     public String getPrograma() {
         return programa;
@@ -205,6 +207,14 @@ public class SimbolosToken {
 
     public String getFalso() {
         return falso;
+    }
+
+    public String getMaisUnitario() {
+        return maisUnitario;
+    }
+
+    public String getMenosUnitario() {
+        return menosUnitario;
     }
     
     
