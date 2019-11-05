@@ -24,11 +24,11 @@ public class GeradorCodigo {
     }
 
     public void geraLDC(int valor) {
-        EscreveAssembly("LDC " + valor);
+        EscreveAssembly("LDC ".concat(Integer.toString(valor)));
     }
 
     public void geraLDV(int valor) {
-        EscreveAssembly("LDV " + valor);
+        EscreveAssembly("LDV ".concat(Integer.toString(valor)));
     }
 
     public void geraADD() {
@@ -96,19 +96,19 @@ public class GeradorCodigo {
     }
 
     public void geraSTR(int valor) {
-        EscreveAssembly("STR " + valor);
+        EscreveAssembly("STR ".concat(Integer.toString(valor)));
     }
 
     public void geraJMP(int valor) {
-        EscreveAssembly("STR " + valor);
+        EscreveAssembly("JMP ".concat(Integer.toString(valor)));
     }
 
     public void geraJMPF(int valor) {
-        EscreveAssembly("STR " + valor);
+        EscreveAssembly("JMPF ".concat(Integer.toString(valor)));
     }
 
     public void geraNULL(int valor) {
-        EscreveAssembly("L" + valor + " NULL");
+        EscreveAssembly("L".concat(Integer.toString(valor)).concat(" NULL"));
     }
 
     public void geraRD() {
@@ -120,15 +120,15 @@ public class GeradorCodigo {
     }
 
     public void geraALLOC(int indiceInicial, int quantidade) {
-        EscreveAssembly("ALLOC " + indiceInicial + "," + quantidade);
+        EscreveAssembly("ALLOC ".concat(Integer.toString(indiceInicial)).concat(",").concat(Integer.toString(quantidade)));
     }
 
     public void geraDALLOC(int indiceInicial, int quantidade) {
-        EscreveAssembly("DALLOC " + indiceInicial + "," + quantidade);
+         EscreveAssembly("DALLOC ".concat(Integer.toString(indiceInicial)).concat(",").concat(Integer.toString(quantidade)));
     }
 
     public void geraCALL(int valor) {
-        EscreveAssembly("CALL " + valor);
+        EscreveAssembly("CALL ".concat(Integer.toString(valor)));
     }
 
     public void geraRETURN() {
