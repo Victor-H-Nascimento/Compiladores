@@ -25,6 +25,9 @@ public class AnalisadorSintatico {
     private boolean erroNaAtribuicao = true;
     private Stack<Token> pilhaOperadores = new Stack();
     private ArrayList<ElementosPosFixa> filaPosFixa = new ArrayList();
+    private int rotuloLabel = 1;
+    private int posicaoMemoria = 0;
+    private final GeradorCodigo gerador = new GeradorCodigo();
 
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
@@ -35,6 +38,22 @@ public class AnalisadorSintatico {
         return token;
     }
 
+    public int getRotuloLabel() {
+        return rotuloLabel;
+    }
+
+    public void incrementaRotuloLabel() {
+        this.rotuloLabel = this.rotuloLabel + 1;
+    }
+
+    public int getPosicaoMemoria() {
+        return posicaoMemoria;
+    }
+
+    public void incrementaPosicaoMemoria() {
+        this.posicaoMemoria = this.posicaoMemoria + 1;
+    }
+ 
     public String getFraseContendoErro() {
         return fraseContendoErro;
     }
@@ -44,6 +63,7 @@ public class AnalisadorSintatico {
         token = analisadorLexico.lexico();
 
         if (token.getSimbolo().equalsIgnoreCase("sPrograma")) {
+            gerador.geraSTART();
             TabelaDeSimbolosProgramaProcedimentos programaTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
             pilhaTabelaDeSimbolos.push(programaTabelaSimbolos);
             token = analisadorLexico.lexico();
@@ -55,6 +75,7 @@ public class AnalisadorSintatico {
                 if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !analisadorLexico.contemErrosLexicos() && !errosSintaticos) {
                     analisaBloco();
                     if (token.getSimbolo().equalsIgnoreCase("sPonto")) {
+                        gerador.geraHLT();
                         //se acabou arquivo ou é comentário   então sucesso
                         //senao ERRO
 
