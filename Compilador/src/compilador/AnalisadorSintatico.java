@@ -30,6 +30,9 @@ public class AnalisadorSintatico {
     private final GeradorCodigo gerador = new GeradorCodigo();
     private int qtdVariaveisAlloc = 0;
     private int qtdVariaveisDalloc = 0;
+    private int flag = 0;
+    private int labelFlag;
+    private boolean primeiroRetorno = false;
 
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
@@ -405,10 +408,13 @@ public class AnalisadorSintatico {
 
     private void analisaSubRotinas() throws IOException {
         //semantico
-        int flag = 0;
-        if (token.getSimbolo().equalsIgnoreCase("sProcedimento") || token.getSimbolo().equalsIgnoreCase("sFuncao")) {
-            //semantico
 
+        if (token.getSimbolo().equalsIgnoreCase("sProcedimento") || token.getSimbolo().equalsIgnoreCase("sFuncao")) {
+            gerador.geraJMP(rotuloLabel);
+            labelFlag = rotuloLabel;
+            incrementaRotuloLabel();
+            flag = 1;
+            primeiroRetorno = true;
         }
         while (token.getSimbolo().equalsIgnoreCase("sProcedimento") || token.getSimbolo().equalsIgnoreCase("sFuncao")) {
             if (token.getSimbolo().equalsIgnoreCase("sProcedimento")) {
@@ -423,7 +429,12 @@ public class AnalisadorSintatico {
             }
         }
         if (flag == 1) {
-            //semantico
+
+            if (primeiroRetorno) {
+                primeiroRetorno = false;
+            } else {
+                //gerador.geraRETURN();
+            }
         }
     }
 
@@ -434,12 +445,15 @@ public class AnalisadorSintatico {
             //semantico
 
             if (pesquisaDeclaracaoProcedimento(token.getLexema())) {
-                TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema());
+                TabelaDeSimbolosProgramaProcedimentos procedimentoTabelaSimbolos = new TabelaDeSimbolosProgramaProcedimentos(token.getLexema(), rotuloLabel);
                 pilhaTabelaDeSimbolos.push(procedimentoTabelaSimbolos);
 
                 token = analisadorLexico.lexico();
                 if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula") && !errosSintaticos) {
+                    gerador.geraNULL(rotuloLabel);
+                    incrementaRotuloLabel();
                     analisaBloco();
+                    gerador.geraRETURN();
                 } else {
                     mostraErros(";");
                 }
@@ -460,7 +474,7 @@ public class AnalisadorSintatico {
             //semantico
 
             if (pesquisaDeclaracaoFuncao(token.getLexema())) {
-                TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema());
+                TabelaDeSimbolosFuncoes funcaoTabelaSimbolos = new TabelaDeSimbolosFuncoes(token.getLexema(), rotuloLabel);
                 pilhaTabelaDeSimbolos.push(funcaoTabelaSimbolos);
 
                 token = analisadorLexico.lexico();
@@ -473,6 +487,8 @@ public class AnalisadorSintatico {
 
                         token = analisadorLexico.lexico();
                         if (token.getSimbolo().equalsIgnoreCase("sPontoVirgula")) {
+                            gerador.geraNULL(rotuloLabel);
+                            incrementaRotuloLabel();
                             analisaBloco();
                         }
                     } else {
@@ -622,8 +638,13 @@ public class AnalisadorSintatico {
             }
         }
 
-        if (!erroNaAtribuicao) {
+        if (!erroNaAtribuicao) {// entra aqui se nao houve nenhum errado na declaracao do procedimento
             erroNaAtribuicao = true;
+            if (flag == 1) {
+                flag = 0;
+                gerador.geraNULL(labelFlag);
+            }
+            gerador.geraCALL(pesquisaLabelProcedimentoFuncao(tokenAuxiliar.getLexema()));
         } else {
             erroSemanticoLadoEsquerdoChamadaProcedimento();
         }
@@ -631,6 +652,9 @@ public class AnalisadorSintatico {
     }
 
     private void analisaChamadaFuncao() throws IOException {
+        
+        gerador.geraCALL(pesquisaLabelProcedimentoFuncao(tokenAuxiliar.getLexema()));
+        
         token = analisadorLexico.lexico();
     }
 
@@ -1037,6 +1061,22 @@ public class AnalisadorSintatico {
             }
         }
 
+        return -1;
+    }
+
+    private int pesquisaLabelProcedimentoFuncao(String lexema) {
+
+        for (int i = pilhaTabelaDeSimbolos.size(); i > 0; i--) {
+
+            if (pilhaTabelaDeSimbolos.get(i - 1) instanceof TabelaDeSimbolosProgramaProcedimentos) {
+                TabelaDeSimbolosProgramaProcedimentos aux = (TabelaDeSimbolosProgramaProcedimentos) pilhaTabelaDeSimbolos.get(i - 1);
+
+                if (aux.getLexema().contains(lexema)) {
+                    return aux.getLabel();
+                }
+
+            }
+        }
         return -1;
     }
 }

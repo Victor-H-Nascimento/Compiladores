@@ -128,7 +128,7 @@ public class GeradorCodigo {
     }
 
     public void geraCALL(int valor) {
-        EscreveAssembly("CALL ".concat(Integer.toString(valor)));
+        EscreveAssembly("CALL L".concat(Integer.toString(valor)));
     }
 
     public void geraRETURN() {
