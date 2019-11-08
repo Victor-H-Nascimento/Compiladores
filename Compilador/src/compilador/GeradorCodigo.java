@@ -100,11 +100,11 @@ public class GeradorCodigo {
     }
 
     public void geraJMP(int valor) {
-        EscreveAssembly("JMP ".concat(Integer.toString(valor)));
+        EscreveAssembly("JMP L".concat(Integer.toString(valor)));
     }
 
     public void geraJMPF(int valor) {
-        EscreveAssembly("JMPF ".concat(Integer.toString(valor)));
+        EscreveAssembly("JMPF L".concat(Integer.toString(valor)));
     }
 
     public void geraNULL(int valor) {
@@ -137,6 +137,7 @@ public class GeradorCodigo {
 
     public void EscreveAssembly(String Texto) {
         gravarArq.println(Texto.concat("\n"));
+        System.out.println(Texto);
     }
 
 }

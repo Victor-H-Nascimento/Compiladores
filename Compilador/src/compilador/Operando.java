@@ -13,6 +13,16 @@ public class Operando extends ElementosPosFixa {
     
     
     private String tipo;
+    private int memoria;
+
+    public int getMemoria() {
+        return memoria;
+    }
+
+    public void setMemoria(int memoria) {
+        this.memoria = memoria;
+    }
+    
 
     public String getTipo() {
         return tipo;

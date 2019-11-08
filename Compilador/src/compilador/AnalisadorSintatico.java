@@ -28,6 +28,8 @@ public class AnalisadorSintatico {
     private int rotuloLabel = 1;
     private int posicaoMemoria = 0;
     private final GeradorCodigo gerador = new GeradorCodigo();
+    private int qtdVariaveisAlloc = 0;
+    private int qtdVariaveisDalloc = 0;
 
     AnalisadorSintatico(AnalisadorLexico analisadorLexico) throws IOException {
         this.analisadorLexico = analisadorLexico;
@@ -36,10 +38,6 @@ public class AnalisadorSintatico {
 
     public Token getToken() {
         return token;
-    }
-
-    public int getRotuloLabel() {
-        return rotuloLabel;
     }
 
     public void incrementaRotuloLabel() {
@@ -53,7 +51,11 @@ public class AnalisadorSintatico {
     public void incrementaPosicaoMemoria() {
         this.posicaoMemoria = this.posicaoMemoria + 1;
     }
- 
+
+    public void decrementaPosicaoMemoria() {
+        this.posicaoMemoria = this.posicaoMemoria - 1;
+    }
+
     public String getFraseContendoErro() {
         return fraseContendoErro;
     }
@@ -104,25 +106,40 @@ public class AnalisadorSintatico {
 
     private void analisaBloco() throws IOException {
         token = analisadorLexico.lexico();
+        int posicaoIncialAlloc = getPosicaoMemoria();
+
         analisaEtapaVariaveis();
+
+        if (qtdVariaveisAlloc > 0) {
+            gerador.geraALLOC(posicaoIncialAlloc, qtdVariaveisAlloc);
+            qtdVariaveisAlloc = 0;
+        }
+
         analisaSubRotinas();
         analisaComandos();
 
         //remover da pilha
         //fazer condicao para executar este while, somente se for um fim de um procedimento/funcao.
+        int posicaoIncialDalloc = getPosicaoMemoria();
         while (!pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.isEmpty()) {//fazer logica para que se funcao nao tiver variaveis, nao dar pop nas variaveis de outras funcoes.
 
-            if (pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) {
+            if (pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) {//tira funcoes e procedimentos
                 pilhaTabelaDeSimbolos.pop();
-                break;
-            } else {
+            } else {//tira variaveis
                 pilhaTabelaDeSimbolos.pop();
+                decrementaPosicaoMemoria();
+                qtdVariaveisDalloc++;
             }
 
         }
 
-        if ((pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) && pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.lastElement().getLexema().equalsIgnoreCase("programa")) {
+        if ((pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosFuncoes || pilhaTabelaDeSimbolos.lastElement() instanceof TabelaDeSimbolosProgramaProcedimentos) && pilhaTabelaDeSimbolos.lastElement().isEscopo() && !pilhaTabelaDeSimbolos.lastElement().getLexema().contentEquals("programa")) {// muda escopo das funcoes pra falso, exceto se for o programa
             pilhaTabelaDeSimbolos.lastElement().setEscopo(false);
+        }
+
+        if (qtdVariaveisDalloc > 0) {
+            gerador.geraDALLOC(posicaoIncialDalloc - qtdVariaveisDalloc, qtdVariaveisDalloc);
+            qtdVariaveisDalloc = 0;
         }
 
     }
@@ -154,9 +171,10 @@ public class AnalisadorSintatico {
 
         do {
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {
-
                 if (pesquisaVariavelDuplicada(token.getLexema())) {
-                    TabelaDeSimbolosVariaveis variaveisTabelaSimbolos = new TabelaDeSimbolosVariaveis(token.getLexema());
+                    TabelaDeSimbolosVariaveis variaveisTabelaSimbolos = new TabelaDeSimbolosVariaveis(token.getLexema(), posicaoMemoria);
+                    incrementaPosicaoMemoria();
+                    qtdVariaveisAlloc++;
                     pilhaTabelaDeSimbolos.push(variaveisTabelaSimbolos);
                     token = analisadorLexico.lexico();
                     if (token.getSimbolo().equalsIgnoreCase("sVirgula") || token.getSimbolo().equalsIgnoreCase("sDoisPontos")) {
@@ -265,9 +283,9 @@ public class AnalisadorSintatico {
         if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses") && !errosSintaticos) {
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
-
                 if (pesquisaDeclaracaoVariavel(token.getLexema())) {
-
+                    gerador.geraRD();
+                    gerador.geraSTR(retornaPosicaoMemoria(token.getLexema()));
                     token = analisadorLexico.lexico();
                     if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses") && !errosSintaticos) {
                         token = analisadorLexico.lexico();
@@ -291,8 +309,15 @@ public class AnalisadorSintatico {
         if (token.getSimbolo().equalsIgnoreCase("sAbreParenteses") && !errosSintaticos) {
             token = analisadorLexico.lexico();
             if (token.getSimbolo().equalsIgnoreCase("sIdentificador") && !errosSintaticos) {
-
                 if (pesquisaDeclaracaoFuncaoVariavel(token.getLexema())) {
+
+                    if (pesquisaDeclaracaoVariavel(token.getLexema())) {// se variavel
+                        gerador.geraLDV(retornaPosicaoMemoria(token.getLexema()));
+                        gerador.geraPRN();
+                    } else {//se funcao
+
+                    }
+
                     token = analisadorLexico.lexico();
                     if (token.getSimbolo().equalsIgnoreCase("sFechaParenteses") && !errosSintaticos) {
                         token = analisadorLexico.lexico();
@@ -313,16 +338,26 @@ public class AnalisadorSintatico {
 
     private void analisaEnquanto() throws IOException {
         //semantico
+        gerador.geraNULL(rotuloLabel);
+        int labelEnquanto = rotuloLabel;
+        incrementaRotuloLabel();
+        int labelSeEnquanto = rotuloLabel;
+
         token = analisadorLexico.lexico();
+
         analisaExpressao();// ver condicao do retorno
         fimInFixa();
-        String retorno = verificaPosFixa();
 
+        String retorno = verificaPosFixa();
+        gerador.geraJMPF(rotuloLabel);
+        incrementaRotuloLabel();
         if (retorno.contentEquals(simbolos.getBooleano())) {
             if (token.getSimbolo().equalsIgnoreCase("sFaca") && !errosSintaticos) {
                 //semantico
                 token = analisadorLexico.lexico();
                 analisaComandoSimples();
+                gerador.geraJMP(labelEnquanto);
+                gerador.geraNULL(labelSeEnquanto);
                 //semantico
             } else {
                 mostraErros("faca");
@@ -334,6 +369,10 @@ public class AnalisadorSintatico {
     }
 
     private void analisaSe() throws IOException {
+        int labelSe = rotuloLabel;
+        int labelSenao = rotuloLabel;
+        incrementaRotuloLabel();
+
         token = analisadorLexico.lexico();
         analisaExpressao();// ver condicao do retorno
         fimInFixa();
@@ -341,12 +380,19 @@ public class AnalisadorSintatico {
 
         if (retorno.contentEquals(simbolos.getBooleano())) {
             if (token.getSimbolo().equalsIgnoreCase("sEntao") && !errosSintaticos) {
+                gerador.geraJMPF(labelSe);// gera jmpf
                 token = analisadorLexico.lexico();
                 analisaComandoSimples();
                 if (token.getSimbolo().equalsIgnoreCase("sSenao")) {
+                    labelSenao = rotuloLabel;
+                    incrementaRotuloLabel();
+                    gerador.geraJMP(labelSenao);
+                    gerador.geraNULL(labelSe);
+
                     token = analisadorLexico.lexico();
                     analisaComandoSimples();
                 }
+                gerador.geraNULL(labelSenao);
             } else {
                 mostraErros("entao");
             }
@@ -493,7 +539,7 @@ public class AnalisadorSintatico {
         if (token.getSimbolo().equalsIgnoreCase("sIdentificador")) {// se variavel ou funcao
             //semantico
             if (pesquisaDeclaracaoFuncaoVariavel(token.getLexema())) {//lexema
-                if (pesquisaTipoFuncao(token)) {
+                if (pesquisaTipoFuncao(token)) {//desnecessario(?)
                     analisaChamadaFuncao();
                 } else {
 
@@ -555,6 +601,7 @@ public class AnalisadorSintatico {
             analisaExpressao();// ver condicao do retorno
             fimInFixa();
             String retorno = verificaPosFixa();
+            gerador.geraSTR(retornaPosicaoMemoria(tokenAuxiliar.getLexema()));
             erroNaAtribuicao = true;
             if (!retorno.contentEquals(pesquisaTipoVariavel(tokenAuxiliar.getLexema()))) {// erro se o tipo da variavel/funcao do lado esquerdo for diferente do tipo da expressao
                 erroTipoExpressao();
@@ -639,7 +686,7 @@ public class AnalisadorSintatico {
             if (pilhaTabelaDeSimbolos.get(i - 1) instanceof TabelaDeSimbolosVariaveis && pilhaTabelaDeSimbolos.get(i - 1).getLexema().contentEquals(lexema)) {
                 TabelaDeSimbolosVariaveis item = (TabelaDeSimbolosVariaveis) pilhaTabelaDeSimbolos.get(i - 1);
                 String tipo = item.getTipo();
-
+                elemento.setMemoria(item.getMemoria());//coloca valor da memoria
                 if (tipo.contentEquals("inteiro")) {
                     elemento.setTipo(simbolos.getInteiro());
                 } else {
@@ -669,7 +716,7 @@ public class AnalisadorSintatico {
                 } else {
                     return simbolos.getBooleano();
                 }
-            } 
+            }
 
         }
         return "erro";
@@ -854,6 +901,8 @@ public class AnalisadorSintatico {
 
     private String verificaPosFixa() {
 
+        geraCodigoPosFixa(filaPosFixa);
+
         while (filaPosFixa.size() > 1) {
             int indice = 0;
             while (filaPosFixa.get(indice) instanceof Operando) {
@@ -911,4 +960,83 @@ public class AnalisadorSintatico {
         errosSintaticos = true;
     }
 
+    private void geraCodigoPosFixa(ArrayList<ElementosPosFixa> filaPosFixa) {
+        for (ElementosPosFixa item : filaPosFixa) {
+            if (item instanceof Operando) {
+                if (pesquisaDeclaracaoVariavel(item.getLexema())) {// se entrar aqui eh um identificador, entao gera LDV
+                    gerador.geraLDV(((Operando) item).getMemoria());
+                } else {// se entrar aqui eh um numero
+                    gerador.geraLDC(Integer.parseInt(item.getLexema()));//se entrar aqui eh um numero, entao gera LDC
+                }
+            } else {// se for operador entra aqui, entao identifica qual operador eh e chama o gerador pra ele
+
+                switch (item.getLexema()) {
+
+                    case "+":
+                        gerador.geraADD();
+                        break;
+                    case "-":
+                        gerador.geraSUB();
+                        break;
+                    case "*":
+                        gerador.geraMULT();
+                        break;
+                    case "div":
+                        gerador.geraDIVI();
+                        break;
+                    case "e":
+                        gerador.geraAND();
+                        break;
+                    case "ou":
+                        gerador.geraOR();
+                        break;
+                    case ">":
+                        gerador.geraCMA();
+                        break;
+                    case "<":
+                        gerador.geraCME();
+                        break;
+                    case ">=":
+                        gerador.geraCMAQ();
+                        break;
+                    case "<=":
+                        gerador.geraCMEQ();
+                        break;
+                    case "=":
+                        gerador.geraCEQ();
+                        break;
+                    case "!=":
+                        gerador.geraCDIF();
+                        break;
+                    case "nao":
+                        gerador.geraNEG();
+                        break;
+                    case "+u":
+                        gerador.geraINV();
+                        break;
+                    case "-u":
+                        gerador.geraINV();
+                        break;
+                }
+            }
+        }
+
+    }
+
+    private int retornaPosicaoMemoria(String lexema) {
+
+        for (int i = pilhaTabelaDeSimbolos.size(); i > 0; i--) {
+
+            if (pilhaTabelaDeSimbolos.get(i - 1) instanceof TabelaDeSimbolosVariaveis) {
+                TabelaDeSimbolosVariaveis aux = (TabelaDeSimbolosVariaveis) pilhaTabelaDeSimbolos.get(i - 1);
+
+                if (aux.getLexema().contains(lexema)) {
+                    return aux.getMemoria();
+                }
+
+            }
+        }
+
+        return -1;
+    }
 }
