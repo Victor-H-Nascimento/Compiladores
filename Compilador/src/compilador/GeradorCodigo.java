@@ -134,6 +134,14 @@ public class GeradorCodigo {
     public void geraRETURN() {
         EscreveAssembly("RETURN");
     }
+    
+    public void geraRETURNF(int indiceInicial, int quantidade) {
+         EscreveAssembly("RETURNF ".concat(Integer.toString(indiceInicial)).concat(",").concat(Integer.toString(quantidade)));
+    }
+    
+    public void geraRETURNF() {
+         EscreveAssembly("RETURNF");
+    }
 
     public void EscreveAssembly(String Texto) {
         gravarArq.println(Texto.concat("\n"));
