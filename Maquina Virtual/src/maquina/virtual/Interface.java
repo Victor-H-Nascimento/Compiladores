@@ -11,7 +11,6 @@ import static java.lang.String.valueOf;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
-import static javax.management.Query.value;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -37,7 +36,8 @@ public class Interface extends javax.swing.JFrame {
     public int indiceLinha = 0;
     private Scanner scanner = new Scanner(System.in);
     public int entrada;
-    Pilha pilha = new Pilha();
+     public Stack pilha = new Stack();
+   // Pilha pilha = new Pilha();
 
     public Interface(Funcoes c, MaquinaVirtual mv, ArrayList<ListaAuxiliar> filaJMP) {
         initComponents();
@@ -294,7 +294,7 @@ public class Interface extends javax.swing.JFrame {
         breakPoint = (boolean) tabelaExec.getModel().getValueAt(indiceLinha, 0); 
         String comando;
         //do {
-            comando = mv.executarFuncoes(c, filaJMP, breakPoint);
+          //  comando = mv.executarFuncoes(c, filaJMP, breakPoint);
             preencherPilha();
         // while (!"HLT".equals(comando));
     }//GEN-LAST:event_botaoExecutarMouseClicked
@@ -317,7 +317,7 @@ public class Interface extends javax.swing.JFrame {
         });
         
         //tabelaExec.setBackground(Color.red);
-        String comando = mv.executarFuncoes2(c, filaJMP);
+        String comando = mv.executarFuncoes(c, filaJMP);
         System.out.println("indice: "+indiceLinha);
         preencherPilha();
         indiceLinha++;
@@ -410,16 +410,16 @@ public class Interface extends javax.swing.JFrame {
     public void preencherPilha() {
          
          pilha = c.pilhaInteira();
-        int aux = pilha.topo();
+        int aux = pilha.size()-1;
         
         System.out.println("Tabela [" + (aux+1) + "] [1]");
         Object [][] tabelaDados = new Object [aux + 1][1];
         
-        for (int j = 0; j <= pilha.topo(); j++) {
-           int indice = pilha.topo() - j;
+        for (int j = 0; j <= pilha.size()-1; j++) {
+           int indice =pilha.size()-1 - j;
             System.out.println("Ind "+ indice);
-            System.out.println("Colocar " + pilha.busca(j));
-            tabelaDados[indice][0] = pilha.busca(j);
+            System.out.println("Colocar " + (int)pilha.get(j));
+            tabelaDados[indice][0] = (int) pilha.get(j);
         }
         
         pilhaDados.setModel(new javax.swing.table.DefaultTableModel(
@@ -467,31 +467,7 @@ public class Interface extends javax.swing.JFrame {
         return entrada;
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        //</editor-fold>
-    }
-
-
+  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoContinuar;
     private javax.swing.JButton botaoExecutar;

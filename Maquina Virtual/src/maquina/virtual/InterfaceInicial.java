@@ -186,7 +186,7 @@ public class InterfaceInicial extends javax.swing.JFrame {
             tabelaPreenchida.setLocationRelativeTo(this);
             tabelaPreenchida.setVisible(true);
             
-            for (int i = 0; i < c.tamanhoFila(); i++) {
+            for (int i = 0; i < c.fila.size(); i++) {
                 tabelaPreenchida.preencherTabela(c.getItemFila(i),i+1);
             }
             
@@ -233,10 +233,8 @@ public class InterfaceInicial extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InterfaceInicial().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new InterfaceInicial().setVisible(true);
         });
     }
 
