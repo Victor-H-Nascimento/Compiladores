@@ -19,7 +19,7 @@ public class Funcoes {
     private final int numeroNULL;
     public Stack pilha = new Stack();
     public ArrayList<Object> fila = new ArrayList();
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     //construtor
     public Funcoes() {
@@ -34,16 +34,6 @@ public class Funcoes {
 
     public void setI() {
         i++;
-    }
-
-    //metodos da pilha
-    public Stack pilhaInteira() {
-        return pilha;
-    }
-
-    public String getItemFila(int j) {
-        //return this.fila.getItemFila(j);
-        return fila.get(j).toString();
     }
 
     //metodos abstratos

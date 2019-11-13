@@ -5,20 +5,23 @@ import java.util.ArrayList;
 public class MaquinaVirtual {
 
     private String linha;
+    public Funcoes funcoes = new Funcoes();
+    public ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
+    private final Arquivo arq = new Arquivo();
 
 
-    public void leArquivo(String arquivoSelecionado, Funcoes c, Arquivo arq, ArrayList<ListaAuxiliar> filaJMP) {
-        arq.Read(arquivoSelecionado, c);
-        arq.EnderecaJMP(c, filaJMP);
+    public void leArquivo(String arquivoSelecionado) {
+        arq.Read(arquivoSelecionado, funcoes);
+        arq.EnderecaJMP(funcoes, filaJMP);
     }
 
-    public String executarFuncoes(Funcoes c, ArrayList<ListaAuxiliar> filaJMP) {
+    public String executarFuncoes() {
         String nomeFuncao = null;
         String primeiroParametro, segundoParametro;
         String aux;
 
         //do {
-        String retorno = c.getItemFila(c.getI());
+        String retorno = funcoes.fila.get(funcoes.getI()).toString();
         linha = String.valueOf(retorno);
         System.out.println("Lido " + linha);
 
@@ -37,13 +40,13 @@ public class MaquinaVirtual {
 
                 switch (nomeFuncao) {
                     case "ALLOC":
-                        c.ALLOC(Integer.parseInt(primeiroParametro), Integer.parseInt(segundoParametro));
+                        funcoes.ALLOC(Integer.parseInt(primeiroParametro), Integer.parseInt(segundoParametro));
                         break;
                     case "DALLOC":
-                        c.DALLOC(Integer.parseInt(primeiroParametro), Integer.parseInt(segundoParametro));
+                        funcoes.DALLOC(Integer.parseInt(primeiroParametro), Integer.parseInt(segundoParametro));
                         break;
                           case "RETURNF":
-                        c.RETURNF(Integer.parseInt(primeiroParametro), Integer.parseInt(segundoParametro));
+                        funcoes.RETURNF(Integer.parseInt(primeiroParametro), Integer.parseInt(segundoParametro));
                         break;
                     default:
                         System.err.println("Erro: Nenhuma funcao com 2 parametros foi chamada");
@@ -58,7 +61,7 @@ public class MaquinaVirtual {
                 System.out.println(primeiroParametro);
 
                 if ("NULL".equals(primeiroParametro)) {//Se ler alguma linha de NULL, Ex. L1 NULL
-                    c.NULL();
+                    funcoes.NULL();
                 } else {
 
                     switch (nomeFuncao) {
@@ -68,7 +71,7 @@ public class MaquinaVirtual {
                             for (ListaAuxiliar itemLista : filaJMP) {
                                 if (itemLista.getLabel().equals(primeiroParametro) && itemLista.getInstrucao().contains("CALL")) {
                                     System.out.println("Call para posicao " + itemLista.getIndice());
-                                    c.CALL(itemLista.getIndice());
+                                    funcoes.CALL(itemLista.getIndice());
                                 }
                             }
                             break;
@@ -76,25 +79,25 @@ public class MaquinaVirtual {
 
                             for (ListaAuxiliar itemLista : filaJMP) {
                                 if (itemLista.getLabel().equals(primeiroParametro) && itemLista.getInstrucao().contains("JMP")) {
-                                    c.JMP(itemLista.getIndice());
+                                    funcoes.JMP(itemLista.getIndice());
                                 }
                             }
                             break;
                         case "JMPF":
                             for (ListaAuxiliar itemLista : filaJMP) {
                                 if (itemLista.getLabel().equals(primeiroParametro) && itemLista.getInstrucao().contains("JMPF")) {
-                                    c.JMPF(itemLista.getIndice());
+                                    funcoes.JMPF(itemLista.getIndice());
                                 }
                             }
                             break;
                         case "LDC":
-                            c.LDC(Integer.parseInt(primeiroParametro));
+                            funcoes.LDC(Integer.parseInt(primeiroParametro));
                             break;
                         case "LDV":
-                            c.LDV(Integer.parseInt(primeiroParametro));
+                            funcoes.LDV(Integer.parseInt(primeiroParametro));
                             break;
                         case "STR":
-                            c.STR(Integer.parseInt(primeiroParametro));
+                            funcoes.STR(Integer.parseInt(primeiroParametro));
                             break;
                         default:
                             System.out.println("Erro: Nenhuma funcao com 1 parametro foi chamada " + nomeFuncao + " " + primeiroParametro);
@@ -110,70 +113,70 @@ public class MaquinaVirtual {
 
             switch (linha) {
                 case "ADD":
-                    c.ADD();
+                    funcoes.ADD();
                     break;
                 case "AND":
-                    c.AND();
+                    funcoes.AND();
                     break;
                 case "CDIF":
-                    c.CDIF();
+                    funcoes.CDIF();
                     break;
                 case "CEQ":
-                    c.CEQ();
+                    funcoes.CEQ();
                     break;
                 case "CMA":
-                    c.CMA();
+                    funcoes.CMA();
                     break;
                 case "CMAQ":
-                    c.CMAQ();
+                    funcoes.CMAQ();
                     break;
                 case "CME":
-                    c.CME();
+                    funcoes.CME();
                     break;
                 case "CMEQ":
-                    c.CMEQ();
+                    funcoes.CMEQ();
                     break;
                 case "DIVI":
-                    c.DIVI();
+                    funcoes.DIVI();
                     break;
                 case "HLT":
-                    c.HLT();
+                    funcoes.HLT();
                     break;
                 case "INV":
-                    c.INV();
+                    funcoes.INV();
                     break;
                 case "MULT":
-                    c.MULT();
+                    funcoes.MULT();
                     break;
                 case "NEG":
-                    c.NEG();
+                    funcoes.NEG();
                     break;
                 case "NULL":
-                    c.NULL();
+                    funcoes.NULL();
                     break;
                 case "OR":
-                    c.OR();
+                    funcoes.OR();
                     break;
                 case "PRN":
-                    c.PRN();
+                    funcoes.PRN();
                     break;
                 case "RD":
-                    c.RD();
+                    funcoes.RD();
                     break;
                 case "RETURN":
-                    c.RETURN();
+                    funcoes.RETURN();
                     break;
                 case "RETURNF":
-                    c.RETURNF();
+                    funcoes.RETURNF();
                     break;
                 case "START":
-                    c.START();
+                    funcoes.START();
                     break;
                 case "SUB":
-                    c.SUB();
+                    funcoes.SUB();
                     break;
                 case "PRINTAPILHA":
-                    c.PRINTAPILHA();
+                    funcoes.PRINTAPILHA();
                     break;
 
                 default:
@@ -181,9 +184,9 @@ public class MaquinaVirtual {
             }
         }
 
-        c.fila.add(linha);
-        c.setI();
-        c.PRINTAPILHA();
+        funcoes.fila.add(linha);
+        funcoes.setI();
+        funcoes.PRINTAPILHA();
         System.out.println("" + "******************************************************************************************" + "");
         //} while (!linha.contains("HLT"));
         //sempre que executar uma linha, atualizar o i com a funcao setI 

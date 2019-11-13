@@ -8,9 +8,7 @@ package maquina.virtual;
 import java.awt.Color;
 import java.awt.Component;
 import static java.lang.String.valueOf;
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Stack;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -23,28 +21,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Interface extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Interface
-     *
-     * @param c
-     * @param mv
-     * @param filaJMP
-     */
-    public MaquinaVirtual mv = new MaquinaVirtual();
-    public ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
-    public Funcoes c = new Funcoes();
+    private final MaquinaVirtual mv;
     public int indiceLinha = 0;
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     public int entrada;
-     public Stack pilha = new Stack();
-   // Pilha pilha = new Pilha();
 
-    public Interface(Funcoes c, MaquinaVirtual mv, ArrayList<ListaAuxiliar> filaJMP) {
+    public Interface(MaquinaVirtual mv) {
         initComponents();
         inicializaStatusComponentes();
         this.mv = mv;
-        this.filaJMP = filaJMP;
-        this.c = c;
     }
 
     /**
@@ -291,21 +276,17 @@ public class Interface extends javax.swing.JFrame {
     private void botaoExecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoExecutarMouseClicked
         // TODO add your handling code here:
         boolean breakPoint = false;
-        breakPoint = (boolean) tabelaExec.getModel().getValueAt(indiceLinha, 0); 
+        breakPoint = (boolean) tabelaExec.getModel().getValueAt(indiceLinha, 0);
         String comando;
-        //do {
-          //  comando = mv.executarFuncoes(c, filaJMP, breakPoint);
-            preencherPilha();
-        // while (!"HLT".equals(comando));
+        preencherPilha();
     }//GEN-LAST:event_botaoExecutarMouseClicked
 
-    
-    
+
     private void passoApassoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passoApassoMouseClicked
         // TODO add your handling code here:
         //descobrir em qual linha esta
-        
-        tabelaExec.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+
+        tabelaExec.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -313,20 +294,18 @@ public class Interface extends javax.swing.JFrame {
                 return c;
                 //row == indiceLinha? Color.green : Color.white
             }
-            
+
         });
-        
+
         //tabelaExec.setBackground(Color.red);
-        String comando = mv.executarFuncoes(c, filaJMP);
-        System.out.println("indice: "+indiceLinha);
+        String comando = mv.executarFuncoes();
+        System.out.println("indice: " + indiceLinha);
         preencherPilha();
         indiceLinha++;
-        
-        
+
+
     }//GEN-LAST:event_passoApassoMouseClicked
-        
-    
-    
+
     public void preencherTabela(String linha, int numLinha) {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -341,8 +320,6 @@ public class Interface extends javax.swing.JFrame {
         for (int i = 1; i < tabelaExec.getColumnCount(); i++) {//1 pois nao queremos centralizar o break point
             tabelaExec.getColumnModel().getColumn(i).setCellRenderer(centerRenderer); //centraliza o conteudo de cada coluna
         }
-        
-        
 
         //coluna 0 contem o breakpoint.
         if (linha.contains(" ")) {
@@ -406,39 +383,37 @@ public class Interface extends javax.swing.JFrame {
         //botaoExecutar.setEnabled(false);
     }
 
-    
     public void preencherPilha() {
-         
-         pilha = c.pilhaInteira();
-        int aux = pilha.size()-1;
+
         
-        System.out.println("Tabela [" + (aux+1) + "] [1]");
-        Object [][] tabelaDados = new Object [aux + 1][1];
-        
-        for (int j = 0; j <= pilha.size()-1; j++) {
-           int indice =pilha.size()-1 - j;
-            System.out.println("Ind "+ indice);
-            System.out.println("Colocar " + (int)pilha.get(j));
-            tabelaDados[indice][0] = (int) pilha.get(j);
+        int aux = mv.funcoes.pilha.size() - 1;
+
+        System.out.println("Tabela [" + (aux + 1) + "] [1]");
+        Object[][] tabelaDados = new Object[aux + 1][1];
+
+        for (int j = 0; j <= mv.funcoes.pilha.size() - 1; j++) {
+            int indice = mv.funcoes.pilha.size() - 1 - j;
+            System.out.println("Ind " + indice);
+            System.out.println("Colocar " + (int) mv.funcoes.pilha.get(j));
+            tabelaDados[indice][0] = (int) mv.funcoes.pilha.get(j);
         }
-        
+
         pilhaDados.setModel(new javax.swing.table.DefaultTableModel(
-           tabelaDados,
-            new String [] {
-                "Dados"
-            }
+                tabelaDados,
+                new String[]{
+                    "Dados"
+                }
         ) {
-            boolean[] canEdit = new boolean [] {
+            boolean[] canEdit = new boolean[]{
                 false
             };
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
-        
-        
+
         /*DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         
@@ -460,14 +435,14 @@ public class Interface extends javax.swing.JFrame {
         }
         System.out.println("Linhas = "+model.getRowCount());*/
     }
-    
-    public static int entradaDados(){
+
+    public static int entradaDados() {
         String input = JOptionPane.showInputDialog("Digite um numero:");
         int entrada = Integer.parseInt(input);
         return entrada;
     }
 
-  
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoContinuar;
     private javax.swing.JButton botaoExecutar;
