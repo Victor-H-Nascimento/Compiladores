@@ -3,7 +3,6 @@
 // esses comandos continuaram funcionando pq na Maquina Virtual nos atualizamos o i a cada iteraçao
 package maquina.virtual;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -11,16 +10,18 @@ import java.util.Stack;
  *
  * @author victor
  */
-public class Funcoes {
+public class Funcoes implements EncapsulamentoFuncoes {
 
     //atributos
     private int s;//topo da plha
     private int i;//indice proxima instrucao
     private final int numeroNULL;
-    public Stack pilha = new Stack();
-    public ArrayList<Object> fila = new ArrayList();
-    private final Scanner scanner = new Scanner(System.in);
-
+    private Pilha pilha = new Pilha();
+    private Fila fila = new Fila();
+    private Scanner scanner = new Scanner(System.in);
+    
+    
+    
     //construtor
     public Funcoes() {
         this.i = 0;
@@ -33,330 +34,402 @@ public class Funcoes {
     }
 
     public void setI() {
-        i++;
+        this.i = this.i + 1;
+    }
+    //metodos da pilha
+    public Pilha pilhaInteira() {
+        return this.pilha.retornaPilha();
+    }
+    //metodos da fila
+    public void insereNaFila(Object x) {
+        this.fila.insere(x);
+    }
+
+    public int tamanhoFila() {
+        return this.fila.tamanhoFila();
+    }
+
+    public String getItemFila(int j) {
+        return this.fila.getItemFila(j);
     }
 
     //metodos abstratos
+    @Override
     public void PRINTAPILHA() {
-        for (int j = pilha.size() - 1; j >= 0; j--) {
-            int primeiroValor = (int) pilha.elementAt(j);
+        for (int j = this.pilha.topo(); j >= 0; j--) {
+            int primeiroValor = this.pilha.busca(j);
             System.out.println(" s-> " + j + "       " + "|" + primeiroValor + "|");
         }
     }
 
+    @Override
     public void LDC(int k) {//carrega constante
         //S:=s + 1 ; M [s]: = k 
-        s++;
-        pilha.add(k);//M[s]: = k
+        this.s = this.s + 1;//posicao do Topo
+        this.pilha.insere(k); //M[s]: = k
+        //   System.out.println("VALOR S " + this.s);
+        // this.pilha.inserePosicaoEspecifica(k,this.s);
     }
 
+    @Override
     public void LDV(int n) {//carrega valor
         //S:=s + 1 ; M [s]: = M[n] 
-        s++;
-        int aux = (int) pilha.elementAt(n);
-        pilha.add(aux); //M[s]: = M[n]  
+        this.s = this.pilha.topo() + 1;//posicao do Topo
+        int aux = this.pilha.busca(n);
+        this.pilha.insere(aux); //M[s]: = M[n]  
     }
 
+    @Override
     public void ADD() {  //somar  
         //M[s-1]:=M[s-1] + M[s]; s:=s - 1
-        pilha.add((int) pilha.elementAt(pilha.size() - 1) + (int) pilha.elementAt(pilha.size() - 2));
-        pilha.pop();
-        pilha.pop();
-        s = pilha.size() - 1; //atualiza s
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//remove o topo
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+
+        int soma = primeiroValor + segundoValor;
+
+        this.pilha.insere(soma);
+
+        this.s = this.pilha.topo(); //atualiza s
+
     }
 
+    @Override
     public void SUB() {
         //M[s-1]:=M[s-1] - M[s]; s:=s - 1
-        pilha.add((int) pilha.elementAt(pilha.size() - 1) - (int) pilha.elementAt(pilha.size() - 2));
-        pilha.pop();
-        pilha.pop();
-        s = pilha.size() - 1; //atualiza s
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//remove o topo
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+
+        int subtracao = primeiroValor - segundoValor;
+
+        this.pilha.insere(subtracao);
+
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void MULT() {
         //M[s-1]:=M[s-1] * M[s]; s:=s - 1
-        pilha.add((int) pilha.elementAt(pilha.size() - 1) * (int) pilha.elementAt(pilha.size() - 2));
-        pilha.pop();
-        pilha.pop();
-        s = pilha.size() - 1; //atualiza s
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//remove o topo
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+
+        int multiplicacao = primeiroValor * segundoValor;
+
+        this.pilha.insere(multiplicacao);
+
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void DIVI() {
         //M[s-1]:=M[s-1] / M[s]; s:=s - 1
 
-        pilha.add((int) pilha.elementAt(pilha.size() - 1) / (int) pilha.elementAt(pilha.size() - 2));
-        pilha.pop();
-        pilha.pop();
-        s = pilha.size() - 1; //atualiza s
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//remove o topo
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+
+        int divisao = primeiroValor / segundoValor;
+
+        this.pilha.insere(divisao);
+
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void INV() {
         // M[s]:= -M[s] 
-        pilha.add((int) pilha.elementAt(pilha.size() - 1) * -1);
-        pilha.pop();//remove o topo
+        int primeiroValor = this.pilha.retornaTopo();
+        int valor = primeiroValor * -1;//inverte
+        this.pilha.remove();//remove o topo
+        this.pilha.insere(valor);
+
     }
 
+    @Override
     public void AND() {
         //se M [s-1] = 1 e M[s] = 1  então M[s-1]:=1  senão M[s-1]:=0;  s:=s - 1 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//remove o topo
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores 
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//remove o topo
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores 
 
         if (primeiroValor == segundoValor && primeiroValor == 1) {
-            pilha.add(primeiroValor);
+            this.pilha.insere(primeiroValor);
         } else {
             if (segundoValor == 0) {
-                pilha.add(segundoValor);
+                this.pilha.insere(segundoValor);
             } else {
-                pilha.add(primeiroValor);
+                this.pilha.insere(primeiroValor);
             }
         }
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
 
     }
 
+    @Override
     public void OR() {
         //e M[s-1] = 1  ou M[s] = 1  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1 
 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//remove o topo
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores 
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//remove o topo
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores 
 
         if (primeiroValor == 1) {
-            pilha.add(primeiroValor);
+            this.pilha.insere(primeiroValor);
         } else {
-            pilha.add(segundoValor);
+            this.pilha.insere(segundoValor);
         }
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void NEG() {
         // M[s]:=1 - M[s] 
-        pilha.add(1 - (int) pilha.elementAt(s));
-        pilha.pop();//remove o topo
+        int primeiroValor = this.pilha.busca(s);
+        int valor = 1 - primeiroValor;//inverte valores binarios
+        this.pilha.remove();//remove o topo
+        this.pilha.insere(valor);
+
     }
 
+    @Override
     public void CME() {
         //se M[s-1] < M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1 
 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//remove o topo
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//remove o topo
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
 
         if (segundoValor < primeiroValor) {
-            pilha.add(1);
+            this.pilha.insere(1);
         } else {
-            pilha.add(0);
+            this.pilha.insere(0);
         }
 
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
 
     }
 
+    @Override
     public void CMA() {
         //se M[s-1] > M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
 
         if (segundoValor > primeiroValor) {
-            pilha.add(1);
+            this.pilha.insere(1);
         } else {
-            pilha.add(0);
+            this.pilha.insere(0);
         }
 
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void CEQ() {
         //se M[s-1] = M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
 
         if (primeiroValor == segundoValor) {
-            pilha.add(1);
+            this.pilha.insere(1);
         } else {
-            pilha.add(0);
+            this.pilha.insere(0);
         }
 
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void CDIF() {
         //se M[s-1] != M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
 
         if (primeiroValor != segundoValor) {
-            pilha.add(1);
+            this.pilha.insere(1);
         } else {
-            pilha.add(0);
+            this.pilha.insere(0);
         }
 
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void CMEQ() {
         //se M[s-1] <= M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
 
         if (segundoValor <= primeiroValor) {
-            pilha.add(1);
+            this.pilha.insere(1);
         } else {
-            pilha.add(0);
+            this.pilha.insere(0);
         }
 
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void CMAQ() {
         //se M[s-1] >= M[s]  então M[s-1]:=1  senão M[s-1]:=0; s:=s - 1
 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
-        int segundoValor = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();//duas vezes para tirar os 2 valores somados
+        int primeiroValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
+        int segundoValor = this.pilha.retornaTopo();
+        this.pilha.remove();//duas vezes para tirar os 2 valores somados
 
         if (segundoValor >= primeiroValor) {
-            pilha.add(1);
+            this.pilha.insere(1);
         } else {
-            pilha.add(0);
+            this.pilha.insere(0);
         }
 
-        s = pilha.size() - 1; //atualiza s
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void START() {
         this.s = -1;
     }
 
+    @Override
     public void HLT() {
         //  “Para a execução da MVD”
         //como parar?
     }
 
+    @Override
     public void STR(int n) {
         //M[n]:=M[s]; s:=s-1
-        if (pilha.size() - 1 >= 1 && n <= pilha.size() - 1) {
-            int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-            pilha.remove(n);// se this.s == 1, entao n tem q ser obrigatoriamente 0
-            pilha.insertElementAt(primeiroValor, n);
-            pilha.pop();
-            s = pilha.size() - 1; //atualiza s   
+        if (this.pilha.topo() >= 1 && n <= this.pilha.topo()) {
+            int primeiroValor = this.pilha.retornaTopo();
+            this.pilha.armazena(n, primeiroValor);// se this.s == 1, entao n tem q ser obrigatoriamente 0
+            this.pilha.remove();
+            this.s = this.pilha.topo(); //atualiza s   
         } else {
-            System.out.println("Nao chamou funcao STR " + s);
+            System.out.println("Nao chamou funcao STR " + this.s);
         }
 
     }
 
+    @Override
     public void JMP(int t) {
-        i = t;
+        this.i = this.fila.avancaPara(t);
     }
 
+    @Override
     public void JMPF(int t) {
         //se M[s] = 0 então i:=t senão i:=i + 1;s:=s-1
-        if ((int) pilha.elementAt(pilha.size() - 1) == 0) {
-            i = t;
+        int primeiroValor = this.pilha.retornaTopo();
+
+        if (primeiroValor == 0) {
+            this.i = this.fila.avancaPara(t);
+            System.out.println("Entrou if ");
+        } else {
+            //this.i = this.i + 1;
+            System.out.println("Entrou else");
         }
-        pilha.pop();//remove o topo
-        s = pilha.size() - 1; //atualiza s
+        this.pilha.remove();//remove o topo
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void NULL() {
     }
 
+    @Override
     public void RD() {
-        s = pilha.size(); //atualiza s
+        int indiceAtual = this.pilha.topo();
+        this.s = this.pilha.topo() + 1; //atualiza s
         System.out.println("Entrada de dados: ");
-        pilha.add(Interface.entradaDados());
+        //this.pilha.insere(scanner.nextInt());// entrada de dados
+        this.pilha.insere(Interface.entradaDados());
+        //confirmar se precisa diferenciar bool e int
     }
 
+    @Override
     public void PRN() {
 
-        int primeiroValor = (int) pilha.elementAt(pilha.size() - 1);
-        System.out.println(" PRN s-> " + s + "       " + "|" + primeiroValor + "|");
-        pilha.pop();//remove o topo
-        s = pilha.size() - 1; //atualiza s
+        int primeiroValor = this.pilha.retornaTopo();
+        System.out.println(" PRN s-> " + this.s + "       " + "|" + primeiroValor + "|");
+        this.pilha.remove();//remove o topo
+        this.s = this.pilha.topo(); //atualiza s
     }
 
+    @Override
     public void ALLOC(int m, int n) {
         //ALLOC     m,n      (Alocar memória): Para k:=0 até n-1 faça {s:=s + 1; M[s]:=M[m+k]}
 
-        if (!pilha.isEmpty() && m <= this.s) {// se nao estiver vazia, entao faca alloc
+        if (!this.pilha.vazia() && m <= this.s) {// se nao estiver vazia, entao faca alloc
 
             for (int k = 0; k < n; k++) {
-                s++;
-                int aux = (int) pilha.elementAt(m + k);
-                pilha.add(aux);
-                pilha.remove(m + k);
-                pilha.insertElementAt(numeroNULL, m + k);
+                this.s = this.s + 1;
+                int aux = this.pilha.procuraM(m + k);
+                this.pilha.insere(aux);
+                this.pilha.armazena(m + k, this.numeroNULL);
             }
         } else {
             for (int j = 0; j < n; j++) {
-                s++;
-                pilha.add(numeroNULL);// -999999 eh o nosso null
+                this.s = this.s + 1;
+                this.pilha.insere(this.numeroNULL);// -999999 eh o nosso null
             }
         }
 
     }
 
+    @Override
     public void DALLOC(int m, int n) {
         //DALLOC  m,n      (Desalocar memória): Para  k:=n-1  até 0  faça       {M[m+k]:=M[s]; s:=s - 1} 
         for (int k = 0; k <= n - 1; k++) {
 
-            if (m + k <= pilha.size() - 1) {
-                int aux = (int) pilha.elementAt(pilha.size() - 1);
-                pilha.remove(m + k);
-                pilha.insertElementAt(aux, m + k);
-                pilha.pop();
-                s = pilha.size() - 1;
+            if (m + k <= this.pilha.topo()) {
+                int aux = this.pilha.retornaTopo();
+                this.pilha.armazena(m + k, aux);
+                this.pilha.remove();
+                this.s = this.pilha.topo();
             } else {
-                pilha.pop();// excluir o topo caso o m+k seja maior q o topo, pois caso contrario o topo da pilha tera NULL
+                this.pilha.remove();// excluir o topo caso o m+k seja maior q o topo, pois caso contrario o topo da pilha tera NULL
             }
         }
     }
 
+    @Override
     public void CALL(int t) {
         //CALL   t   (Chamar procedimento ou função):  S:=s + 1; M[s]:=i + 1; i:=t 
-        s = pilha.size();
-        pilha.add(i); // no noso caso inserimos a posicao i, ao inves de i+1.
-        i = t;
+        this.s = this.pilha.topo() + 1;
+        this.pilha.insere(this.i); // no noso caso inserimos a posicao i, ao inves de i+1.
+       
+        this.i = this.fila.avancaPara(t);
+
     }
 
+    @Override
     public void RETURN() {
         // i:=M[s]; s:=s - 1 
 
-        i = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();
-        s = pilha.size() - 1;
-    }
-
-    public void RETURNF(int m, int n) {
-        // i:=M[s]; s:=s - 1 // Dalloc (m,n) // 
-        int aux = (int) pilha.elementAt(pilha.size() - 1);
-        pilha.pop();
-        DALLOC(m, n);
-        s++;//posicao do Topo
-        pilha.add(aux);
-        RETURN();
-    }
-
-    public void RETURNF() {
-        RETURN();
+        this.i = this.pilha.retornaTopo();
+        this.pilha.remove();
+        this.s = this.pilha.topo();
     }
 
 }
