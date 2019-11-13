@@ -966,7 +966,8 @@ public class AnalisadorSintatico {
 
         geraCodigoPosFixa(filaPosFixa);
 
-        while (filaPosFixa.size() > 1) {
+        int retorno = 0;
+        while (filaPosFixa.size() > 1 && errosSintaticos == false) {
             int indice = 0;
             while (filaPosFixa.get(indice) instanceof Operando) {
                 indice++;
@@ -975,41 +976,65 @@ public class AnalisadorSintatico {
             FuncoesPosFixa posFixa = new FuncoesPosFixa();
 
             int prioridade = getPrioridade(filaPosFixa.get(indice).getLexema());
-
+            
             switch (prioridade) {
 
                 case 0:
-                    posFixa.trataEOu(filaPosFixa, indice);
+                    retorno = posFixa.trataEOu(filaPosFixa, indice);
                     break;
 
                 case 1:
-                    posFixa.trataEOu(filaPosFixa, indice);
+                    retorno = posFixa.trataEOu(filaPosFixa, indice);
                     break;
                 case 2:
                     if (filaPosFixa.get(indice).getLexema().contentEquals("!=") || filaPosFixa.get(indice).getLexema().contentEquals("=")) {
-                        posFixa.trataIgualDiferente(filaPosFixa, indice);
+                        retorno = posFixa.trataIgualDiferente(filaPosFixa, indice);
                     } else {
-                        posFixa.trataRelacionais(filaPosFixa, indice);
+                        
+                        retorno = posFixa.trataRelacionais(filaPosFixa, indice);
                     }
                     break;
                 case 3:
-                    posFixa.trataMultDivSomaSub(filaPosFixa, indice);
+                    retorno = posFixa.trataMultDivSomaSub(filaPosFixa, indice);
                     break;
                 case 4:
-                    posFixa.trataMultDivSomaSub(filaPosFixa, indice);
+                    retorno = posFixa.trataMultDivSomaSub(filaPosFixa, indice);
                     break;
                 case 5:
                     if (filaPosFixa.get(indice).getLexema().contentEquals("nao")) {
-                        posFixa.trataNaoUnitario(filaPosFixa, indice);
+                        retorno = posFixa.trataNaoUnitario(filaPosFixa, indice);
                     } else {
-                        posFixa.trataUnitario(filaPosFixa, indice);
+                        retorno = posFixa.trataUnitario(filaPosFixa, indice);
                     }
                     break;
 
             }
-
+            if (retorno != 1){  //erro
+            errosSintaticos = true;
+            switch(retorno){
+                case -1:
+                    fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Para um operador unitario espera-se um inteiro");
+                    break;
+                case -2:
+                    fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Para o comando 'nao' espera-se um booleano");
+                    break;
+                case -3:
+                    fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Para um operador (+,-,div e mult) espera-se dois inteiros");
+                    break;
+                case -4:
+                    fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Para operadores relacionais espera-se dois inteiros");
+                    break;
+                case -5:
+                    fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Para 'e' e 'ou' espera-se dois booleanos");
+                    break;
+                case -6:
+                    fraseContendoErro = fraseContendoErro.concat("Linha " + Integer.toString(token.getLinhaCodigo()) + " - Erro Semantico: " + "Para '=' ou '!=' espera-se elementos do mesmo tipo (dois inteiros ou dois booleanos)");
+                    break;
+            }
         }
 
+        }
+        
         Operando resposta = (Operando) filaPosFixa.get(0);
 
         filaPosFixa.clear();;// reseta fila da pos fixa apos fim da expressao
