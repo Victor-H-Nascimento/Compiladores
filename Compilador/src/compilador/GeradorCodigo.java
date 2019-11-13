@@ -100,11 +100,11 @@ public class GeradorCodigo {
     }
 
     public void geraJMP(int valor) {
-        EscreveAssembly("JMP ".concat(Integer.toString(valor)));
+        EscreveAssembly("JMP L".concat(Integer.toString(valor)));
     }
 
     public void geraJMPF(int valor) {
-        EscreveAssembly("JMPF ".concat(Integer.toString(valor)));
+        EscreveAssembly("JMPF L".concat(Integer.toString(valor)));
     }
 
     public void geraNULL(int valor) {
@@ -128,15 +128,24 @@ public class GeradorCodigo {
     }
 
     public void geraCALL(int valor) {
-        EscreveAssembly("CALL ".concat(Integer.toString(valor)));
+        EscreveAssembly("CALL L".concat(Integer.toString(valor)));
     }
 
     public void geraRETURN() {
         EscreveAssembly("RETURN");
     }
+    
+    public void geraRETURNF(int indiceInicial, int quantidade) {
+         EscreveAssembly("RETURNF ".concat(Integer.toString(indiceInicial)).concat(",").concat(Integer.toString(quantidade)));
+    }
+    
+    public void geraRETURNF() {
+         EscreveAssembly("RETURNF");
+    }
 
     public void EscreveAssembly(String Texto) {
         gravarArq.println(Texto.concat("\n"));
+        System.out.println(Texto);
     }
 
 }

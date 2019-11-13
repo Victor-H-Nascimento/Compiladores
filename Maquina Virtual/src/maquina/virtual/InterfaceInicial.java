@@ -6,7 +6,6 @@
 package maquina.virtual;
 
 import java.io.File;
-import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -16,6 +15,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author victor
  */
 public class InterfaceInicial extends javax.swing.JFrame {
+
+    MaquinaVirtual mv = new MaquinaVirtual();
 
     /**
      * Creates new form InterfaceInicial
@@ -166,39 +167,36 @@ public class InterfaceInicial extends javax.swing.JFrame {
 
     private void menuFileAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileAbrirActionPerformed
         // TODO add your handling code here:
-        Arquivo arq = new Arquivo();
-        Funcoes c = new Funcoes();
-        ArrayList<ListaAuxiliar> filaJMP = new ArrayList();
-        MaquinaVirtual mv = new MaquinaVirtual();
+
         JFileChooser fileChooser = new JFileChooser();//e possivel escolher uma pasta para inicializar (/home/desktop....)
         fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivos txt", "txt"));//alterar para obj
-        
+
         int retornoArquivo = fileChooser.showOpenDialog(null);  //abre a pasta para escolher o arquivo
-        if(retornoArquivo == JFileChooser.APPROVE_OPTION){ //arquivo selecionado
+        if (retornoArquivo == JFileChooser.APPROVE_OPTION) { //arquivo selecionado
             File arquivo = fileChooser.getSelectedFile();
- 
-           String path = arquivo.getAbsolutePath();
-            mv.leArquivo(path, c, arq,filaJMP);
-            
-            Interface tabelaPreenchida = new Interface(c,mv,filaJMP);
+
+            String path = arquivo.getAbsolutePath();
+            mv.leArquivo(path);
+
+            Interface tabelaPreenchida = new Interface(mv);
             tabelaPreenchida.setResizable(false);
             tabelaPreenchida.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             tabelaPreenchida.setLocationRelativeTo(this);
             tabelaPreenchida.setVisible(true);
-            
-            for (int i = 0; i < c.tamanhoFila(); i++) {
-                tabelaPreenchida.preencherTabela(c.getItemFila(i),i+1);
+
+            for (int i = 0; i < mv.funcoes.fila.size(); i++) {
+                tabelaPreenchida.preencherTabela(mv.funcoes.fila.get(i).toString(), i + 1);
             }
-            
-            for (ListaAuxiliar itemLista : filaJMP) {
-                tabelaPreenchida.preencherJumps(itemLista.getInstrucao(),itemLista.getLabel(),itemLista.getIndice());
+
+            for (ListaAuxiliar itemLista : mv.filaJMP) {
+                tabelaPreenchida.preencherJumps(itemLista.getInstrucao(), itemLista.getLabel(), itemLista.getIndice());
             }
-            
+
             dispose();
-            
+
         }
 
-        
+
     }//GEN-LAST:event_menuFileAbrirActionPerformed
 
     private void menuFileExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileExportarActionPerformed
@@ -233,10 +231,8 @@ public class InterfaceInicial extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InterfaceInicial().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new InterfaceInicial().setVisible(true);
         });
     }
 

@@ -10,7 +10,17 @@ package compilador;
  * @author 16000465
  */
 public class TabelaDeSimbolosFuncoes extends TabelaDeSimbolos {
+
     String tipo;
+    private int label;
+
+    public int getLabel() {
+        return label;
+    }
+
+    public void setLabel(int label) {
+        this.label = label;
+    }
 
     public String getTipo() {
         return tipo;
@@ -20,18 +30,12 @@ public class TabelaDeSimbolosFuncoes extends TabelaDeSimbolos {
         this.tipo = tipo;
     }
 
-    
-    public TabelaDeSimbolosFuncoes(String lexema, String tipo) {//  vai usar esse construtor?
+    public TabelaDeSimbolosFuncoes(String lexema,int label) {
         this.setLexema(lexema);
         this.setEscopo(true);
-        this.tipo = tipo;
+        this.setLabel(label);
     }
+    
+    
 
-    public TabelaDeSimbolosFuncoes(String lexema) {
-        this.setLexema(lexema);
-        this.setEscopo(true);
-    }
-    
-    
-    
 }

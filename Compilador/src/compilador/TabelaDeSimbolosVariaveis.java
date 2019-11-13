@@ -31,17 +31,11 @@ public class TabelaDeSimbolosVariaveis extends TabelaDeSimbolos {
         this.memoria = memoria;
     }
 
-    public TabelaDeSimbolosVariaveis(String lexema, String tipo, int memoria) {//  vai usar esse construtor?
-        this.setLexema(lexema);
-        this.setEscopo(false);
-        this.tipo = tipo;
-        this.memoria = memoria;
-    }
-
-    public TabelaDeSimbolosVariaveis(String lexema) {
+    public TabelaDeSimbolosVariaveis(String lexema, int memoria) {
         this.setLexema(lexema);
         this.setEscopo(false);
         this.setTipo("");
+        this.setMemoria(memoria);
     }
     
     

@@ -11,9 +11,26 @@ package compilador;
  */
 public class TabelaDeSimbolosProgramaProcedimentos extends TabelaDeSimbolos {
     
-    public TabelaDeSimbolosProgramaProcedimentos(String lexema) {
+   private int label;
+
+    public int getLabel() {
+        return label;
+    }
+
+    public void setLabel(int label) {
+        this.label = label;
+    }
+   
+    public TabelaDeSimbolosProgramaProcedimentos(String lexema,int label) {
         this.setLexema(lexema);
         this.setEscopo(true);
+        this.setLabel(label);
+    }
+    
+    public TabelaDeSimbolosProgramaProcedimentos(String lexema) {// so para o programa
+        this.setLexema(lexema);
+        this.setEscopo(true);
+        this.setLabel(label);
     }
     
 }

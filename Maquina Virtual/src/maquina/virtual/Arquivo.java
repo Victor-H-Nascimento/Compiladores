@@ -28,7 +28,7 @@ public class Arquivo {
                 do {
                     linha = lerArq.readLine();
 
-                    c.insereNaFila(linha);
+                    c.fila.add(linha);
                 } while (!linha.contains("HLT"));
 
                 arq.close();
@@ -43,8 +43,9 @@ public class Arquivo {
 
     public void EnderecaJMP(Funcoes c, ArrayList<ListaAuxiliar> fila) {
 
-        for (int x = 0; x < c.tamanhoFila(); x++) {
-            String linhaComInstrucao = c.getItemFila(x);
+        for (int x = 0; x < c.fila.size(); x++) {
+            String linhaComInstrucao = c.fila.get(x).toString();
+            
 
             /*
                 Transformar os parametros L%d (Ex. L3) em um valor inteiro que aponte para o indice da fila principal
@@ -54,8 +55,8 @@ public class Arquivo {
                 String instrucao = linhaComInstrucao.split(" ")[0];
                 String label = linhaComInstrucao.split(" ")[1];
 
-                for (int i = 0; i < c.tamanhoFila(); i++) {
-                    String a = c.getItemFila(i);
+                for (int i = 0; i < c.fila.size(); i++) {
+                    String a = c.fila.get(i).toString();
 
                     if (a.startsWith(label.concat(" "))) {
 
